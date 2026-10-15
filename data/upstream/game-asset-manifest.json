@@ -1,0 +1,656 @@
+[
+  {
+    "path": "assets/backgrounds/battle_cave_pixel.jpg",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/backgrounds/battle_cave_pixel.jpg",
+    "bytes": 2370072,
+    "sha256": "cfa77c9ccdbe05c78a90d9dd7b24523857ae7465c597faccef8e90fd0b380b57"
+  },
+  {
+    "path": "assets/backgrounds/battle_crypt_pixel.jpg",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/backgrounds/battle_crypt_pixel.jpg",
+    "bytes": 2287139,
+    "sha256": "4a3b400b92ae03080ea19d4b6f15066c2167d12a86352932419274b04936ad2f"
+  },
+  {
+    "path": "assets/backgrounds/battle_forest_pixel.jpg",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/backgrounds/battle_forest_pixel.jpg",
+    "bytes": 2945037,
+    "sha256": "56e7fbf98c05f07265242e470c6f116fc54869fada0d2f22cab17c28276b17ae"
+  },
+  {
+    "path": "assets/backgrounds/battle_frozen_peak_pixel.jpg",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/backgrounds/battle_frozen_peak_pixel.jpg",
+    "bytes": 3072294,
+    "sha256": "a0d57e78263845ac16d7cbc70aa1d68b8767b49ab99e2512206a9d6210a92027"
+  },
+  {
+    "path": "assets/backgrounds/battle_ruins_pixel.jpg",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/backgrounds/battle_ruins_pixel.jpg",
+    "bytes": 2534899,
+    "sha256": "149732cee1df9caf10f5949444f59f73f0a23124286dbf3b3b47417c571eeef7"
+  },
+  {
+    "path": "assets/backgrounds/battle_volcano_pixel.jpg",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/backgrounds/battle_volcano_pixel.jpg",
+    "bytes": 2483262,
+    "sha256": "1a80ff17887fe7b8fc3a1468bb42dabb3d1b4f0fafab78d4172d9b78ca89ab94"
+  },
+  {
+    "path": "assets/backgrounds/inventory_background_pixel.jpg",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/backgrounds/inventory_background_pixel.jpg",
+    "bytes": 1693560,
+    "sha256": "20d86d78d93eec5236d59496ea02d0bea3f4d31873d560124e4e0a1145646b19"
+  },
+  {
+    "path": "assets/backgrounds/main_game_pixel_background.jpg",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/backgrounds/main_game_pixel_background.jpg",
+    "bytes": 2700854,
+    "sha256": "ab24d1b498895af74b2d8b93b96560c3ab647fae3a1540da8b9628957f56432d"
+  },
+  {
+    "path": "assets/backgrounds/shop_background_pixel.jpg",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/backgrounds/shop_background_pixel.jpg",
+    "bytes": 2831844,
+    "sha256": "d544b1589564904c470b5e17a7d600d12e2e27dad2339ef0a67e9ed0ff67aadc"
+  },
+  {
+    "path": "assets/backgrounds/world_map_pixel.jpg",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/backgrounds/world_map_pixel.jpg",
+    "bytes": 2743146,
+    "sha256": "21fd521a34001d37a5206de7644dcfba8f3cb869e6518ef2c46a1702cef0bdcf"
+  },
+  {
+    "path": "assets/character/Injuried-1.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/character/Injuried-1.png",
+    "bytes": 1109703,
+    "sha256": "07aa813104b1f938832c2d1bb96e4f607d0f51067b3d8f2f445a470cd7463d24"
+  },
+  {
+    "path": "assets/character/Injuried-2.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/character/Injuried-2.png",
+    "bytes": 947074,
+    "sha256": "f485a99db7793c14a11c87a9ba7b80e8ec19811ccbd3501e2af369fd917343ba"
+  },
+  {
+    "path": "assets/character/Injuried-3.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/character/Injuried-3.png",
+    "bytes": 1054185,
+    "sha256": "7747fdccc39016c4a6cf72d5d31b5b65f4b72d830555ca6e9ae496118c6badfb"
+  },
+  {
+    "path": "assets/character/Injuried-4.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/character/Injuried-4.png",
+    "bytes": 1025474,
+    "sha256": "0821fd271a444052a166c72e0546eb4301af9dcef62434ae80359ee317d7e34a"
+  },
+  {
+    "path": "assets/character/attack-1.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/character/attack-1.png",
+    "bytes": 1078828,
+    "sha256": "a532f0c006f55e361d5da7a538075f8309e63dbccd70bb1908a0e72aba474d3d"
+  },
+  {
+    "path": "assets/character/attack-2.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/character/attack-2.png",
+    "bytes": 1018556,
+    "sha256": "ea51eb802e5891302f4a191be55e7160189fd565509be14b26d7a4b14e35b66c"
+  },
+  {
+    "path": "assets/character/attack-3.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/character/attack-3.png",
+    "bytes": 1356865,
+    "sha256": "e2165a4a85f67e7611ed2c472d030f5593c87cde96ad1d6f1791b1ac6ffc7dcf"
+  },
+  {
+    "path": "assets/character/attack-4.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/character/attack-4.png",
+    "bytes": 1029087,
+    "sha256": "7b460467ab3c66796fdcc1d97e6072e0afa2eedfcfd489a1bdf5dfe87ece7514"
+  },
+  {
+    "path": "assets/character/defense-1.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/character/defense-1.png",
+    "bytes": 1064947,
+    "sha256": "ec5b818643d5fe5f13dc2f2f4b0b5f49d09884045d9a0aa1dc85f3d77c1c6eae"
+  },
+  {
+    "path": "assets/character/defense-2.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/character/defense-2.png",
+    "bytes": 918004,
+    "sha256": "388fa8c727ac1ef119a767583475e4b3798fbd607054f92a18e90fa9e367b61e"
+  },
+  {
+    "path": "assets/character/defense-3.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/character/defense-3.png",
+    "bytes": 923515,
+    "sha256": "33b1d316f296ce81b27ee2e99da6a3013fae00c2781e204c30125a1d1415421d"
+  },
+  {
+    "path": "assets/character/defense-4.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/character/defense-4.png",
+    "bytes": 1064768,
+    "sha256": "ad727ede58e1b3da75e22d0f9bcf746ce12c1b34c88ade3d564af68c9fa48e09"
+  },
+  {
+    "path": "assets/character/jump-1.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/character/jump-1.png",
+    "bytes": 977384,
+    "sha256": "ede6f0f97d61f17cbc6be4fc5aa3679600e892bc9e36f17169c2763e743ccf88"
+  },
+  {
+    "path": "assets/character/jump-2.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/character/jump-2.png",
+    "bytes": 956460,
+    "sha256": "79c8093921a79fafbbbc33571bacac6470e7b3e035563ad1f8d5c1600c7f837d"
+  },
+  {
+    "path": "assets/character/jump-3.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/character/jump-3.png",
+    "bytes": 1045859,
+    "sha256": "5f347e9bd09bf51805889b707694780e83508a01d84af9ac16e0e25bfe0e5d5a"
+  },
+  {
+    "path": "assets/character/jump-4.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/character/jump-4.png",
+    "bytes": 976108,
+    "sha256": "1e2cf750b32130e0c76647683393cd03d32ac910d93691629517f178e9673960"
+  },
+  {
+    "path": "assets/character/run-1.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/character/run-1.png",
+    "bytes": 1036259,
+    "sha256": "c668965e5771ed0029cfca9e61c9b35f380ce606522277a0d7df2d66b7596623"
+  },
+  {
+    "path": "assets/character/run-2.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/character/run-2.png",
+    "bytes": 910382,
+    "sha256": "bba73fb1efba07bacf566377a7f7659a4fe2575310514d6c7eb74a4c886fd963"
+  },
+  {
+    "path": "assets/character/run-3.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/character/run-3.png",
+    "bytes": 914465,
+    "sha256": "87b9c574b5509c8027dc7ebb34adb62ea7add4dcf052e1aea9c4611aa3b98c8d"
+  },
+  {
+    "path": "assets/character/run-4.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/character/run-4.png",
+    "bytes": 974109,
+    "sha256": "33b49f357b0bd293be69b9b8ef216795a8dd13d12880df3a8b3a6e29b3237e7a"
+  },
+  {
+    "path": "assets/character/stand-1.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/character/stand-1.png",
+    "bytes": 928421,
+    "sha256": "8ad01305be563e9a953eed525487a1ac8555870ccb53a6e2a87ec66279c72e2d"
+  },
+  {
+    "path": "assets/character/stand-2.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/character/stand-2.png",
+    "bytes": 951858,
+    "sha256": "b1e48f68dc1092b93b993d9148847233f045e6d4880c29452f8b5d28994dd0b9"
+  },
+  {
+    "path": "assets/character/stand-3.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/character/stand-3.png",
+    "bytes": 974621,
+    "sha256": "c2ab64220e26539a5a1e3c6205a0161d73dd876febf0ee4e3c16ba60ca3ab431"
+  },
+  {
+    "path": "assets/character/stand-4.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/character/stand-4.png",
+    "bytes": 927028,
+    "sha256": "e7e18847c3f1a9f08afa7a1f9f90c4e98865d2ba1d1d21c365a02bcd1c44edab"
+  },
+  {
+    "path": "assets/effects/effect_levelup_animation.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/effects/effect_levelup_animation.gif",
+    "bytes": 540269,
+    "sha256": "18f156eb7a5b5e9790aafc7e5734dce88e24f361f7964e5c4da91a5c42f4b969"
+  },
+  {
+    "path": "assets/game_logo_title.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/game_logo_title.png",
+    "bytes": 2322493,
+    "sha256": "33086a20552d96150a5ff80319353376c164af8fd231df2a2b4d58c3b2d25fd4"
+  },
+  {
+    "path": "assets/monsters/boar_angry.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/boar_angry.gif",
+    "bytes": 824671,
+    "sha256": "eef1eaac606bab6e41292804d4a122b608643eb444cb6516ca4195fc781a6e4e"
+  },
+  {
+    "path": "assets/monsters/boar_angry_elite.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/boar_angry_elite.gif",
+    "bytes": 1292182,
+    "sha256": "e8cf2487656acdbbe6b2208be6dd2c0a9237e0000ec3e122afdc1a3635148a1c"
+  },
+  {
+    "path": "assets/monsters/cave_troll_boss.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/cave_troll_boss.gif",
+    "bytes": 1297211,
+    "sha256": "3726e900cd0d33910f830a64db75cd13b0d248ef9cba964b6088da169f04b03f"
+  },
+  {
+    "path": "assets/monsters/corrupted_treant.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/corrupted_treant.gif",
+    "bytes": 899094,
+    "sha256": "b469eab29b27c9f38d74420a5cc92bcc54717d7ddc3117b182d0a73b940095f9"
+  },
+  {
+    "path": "assets/monsters/corrupted_treant_elite.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/corrupted_treant_elite.gif",
+    "bytes": 725247,
+    "sha256": "d1c53e5386dd287e8a71c43f30a80c48ac7f6479d71e1c61c53ac8de0bf4ec05"
+  },
+  {
+    "path": "assets/monsters/crazed_scholar.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/crazed_scholar.gif",
+    "bytes": 1275083,
+    "sha256": "e9aa15c18fe43639d148cc39f764bea5ee380c45e310a9a994ab705decff817a"
+  },
+  {
+    "path": "assets/monsters/crazed_scholar_elite.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/crazed_scholar_elite.gif",
+    "bytes": 783963,
+    "sha256": "1ae0b3478c69f74eac43aad3e1379c291156d7098820b8ebf9a597b167fc8770"
+  },
+  {
+    "path": "assets/monsters/flying_eye.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/flying_eye.gif",
+    "bytes": 373630,
+    "sha256": "93e7e14dcad66eb001b6aa77dc14e748edd4b4b9608560f2f9a8f83c9c84f18f"
+  },
+  {
+    "path": "assets/monsters/flying_eye_elite.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/flying_eye_elite.gif",
+    "bytes": 1140436,
+    "sha256": "3b431ede85031473fd1fa550a51a41d3c5587a5e3bbc4f5b8a9094c09c1aa223"
+  },
+  {
+    "path": "assets/monsters/forest_guardian_boss.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/forest_guardian_boss.gif",
+    "bytes": 1065799,
+    "sha256": "4ab0d30d67a9d5495ff095fc346c71fd45fe1823f3b68982244ced1ec7cfff6e"
+  },
+  {
+    "path": "assets/monsters/forest_spirit.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/forest_spirit.gif",
+    "bytes": 503745,
+    "sha256": "344a7f9979c1e80ce23a5d6f7e37d64761101b916758a92ec8a565af09955dc0"
+  },
+  {
+    "path": "assets/monsters/forest_spirit_elite.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/forest_spirit_elite.gif",
+    "bytes": 1367196,
+    "sha256": "44c976dd9fcef9f1d82cbdb1c59eafadd95eb6ec565ed4c2cecd8de04ef6f27a"
+  },
+  {
+    "path": "assets/monsters/frost_wyrm_boss.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/frost_wyrm_boss.gif",
+    "bytes": 1053176,
+    "sha256": "7f1360e6bed3b04e2a918a5d4f1ceb54c049a2fb12ddbafd4e28de287864dcdb"
+  },
+  {
+    "path": "assets/monsters/ice_spirit.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/ice_spirit.gif",
+    "bytes": 821779,
+    "sha256": "41e7567b41b3fff9337b385ae31c07fdef788be252e57af2d779561162acba28"
+  },
+  {
+    "path": "assets/monsters/ice_spirit_elite.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/ice_spirit_elite.gif",
+    "bytes": 532871,
+    "sha256": "5d2c6370a477cb0a183976afe743aa27ddd5793435d2da635f324f5b38b6ead9"
+  },
+  {
+    "path": "assets/monsters/lava_elemental_boss.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/lava_elemental_boss.gif",
+    "bytes": 1349245,
+    "sha256": "c73781d090338037863f9798cb6e05c80a1151b54ced33ccf5cec10a0cd74813"
+  },
+  {
+    "path": "assets/monsters/lich_apprentice.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/lich_apprentice.gif",
+    "bytes": 857436,
+    "sha256": "dbbfd66b532ba15819331bec4d3f5ae04a371f683bffd322b7a65280b13c2f3b"
+  },
+  {
+    "path": "assets/monsters/lich_apprentice_elite.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/lich_apprentice_elite.gif",
+    "bytes": 732231,
+    "sha256": "ff6d89739d4e86ae86c35080397de51c25d5d7d10d99b0094f9206772afc2ff3"
+  },
+  {
+    "path": "assets/monsters/mountain_bandit.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/mountain_bandit.gif",
+    "bytes": 564281,
+    "sha256": "0f39dad0eadfbd892d1ee53abefbcfcba34a304d93196cfee03b976b8eb3339a"
+  },
+  {
+    "path": "assets/monsters/mountain_bandit_elite.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/mountain_bandit_elite.gif",
+    "bytes": 956543,
+    "sha256": "5b31df0e272552333097a1cfc75082b19540bfb2c59d3b72387410c556d1bbaf"
+  },
+  {
+    "path": "assets/monsters/nether_lord_boss.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/nether_lord_boss.gif",
+    "bytes": 1037015,
+    "sha256": "c3c17a9e70635369b5d6d6d0ec5cbc1fe1e7ef7cd816acedc505c44233fe8ea0"
+  },
+  {
+    "path": "assets/monsters/placeholder_monster.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/placeholder_monster.gif",
+    "bytes": 367092,
+    "sha256": "11461c9e62b4adf6df9c6ea3cc46947f60a620457b3f8e8e66102d54c888a135"
+  },
+  {
+    "path": "assets/monsters/ruins_guardian_boss.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/ruins_guardian_boss.gif",
+    "bytes": 994074,
+    "sha256": "aa26c92f1cf92413b124ae6496cb7c0215453ae837960b8eec33e2baf26c351f"
+  },
+  {
+    "path": "assets/monsters/shadow_imp.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/shadow_imp.gif",
+    "bytes": 1401922,
+    "sha256": "7e45b195b037500de2c698798d43bc65ad888fb384bed8b806897e15c5961516"
+  },
+  {
+    "path": "assets/monsters/shadow_imp_elite.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/shadow_imp_elite.gif",
+    "bytes": 644889,
+    "sha256": "741b2fd31e3035f6f6a8adfcf14cfc50b5c5ce22852208c87998ae8653c65bef"
+  },
+  {
+    "path": "assets/monsters/snakelet_bamboo.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/snakelet_bamboo.gif",
+    "bytes": 1016251,
+    "sha256": "a3fe2e64b53cce9d60e80cc1a3e114239e1261597a5aff251284d9ecc2ec3184"
+  },
+  {
+    "path": "assets/monsters/stone_golem.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/stone_golem.gif",
+    "bytes": 703025,
+    "sha256": "c14da981e267ada03cf20fbb59aafd43497d911ab33091f8c768d37e55435ecb"
+  },
+  {
+    "path": "assets/monsters/stone_golem_elite.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/stone_golem_elite.gif",
+    "bytes": 912260,
+    "sha256": "153ab6990e78f74b811891343b8949801bdce0be1c1aa0d9cd88204d7a201081"
+  },
+  {
+    "path": "assets/monsters/undead_warrior.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/undead_warrior.gif",
+    "bytes": 1062898,
+    "sha256": "ced9f3c583290ffc516052d1ca32fa6c6459608c441618b04d41f190571a9edc"
+  },
+  {
+    "path": "assets/monsters/wolf_cub.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/wolf_cub.gif",
+    "bytes": 1582323,
+    "sha256": "09efce511a6a125df841ef74edb29f71ad91531b3958bbad0281f0eeaf15aba4"
+  },
+  {
+    "path": "assets/monsters/wolf_cub_elite.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/wolf_cub_elite.gif",
+    "bytes": 581111,
+    "sha256": "3a3677bbf6ebede69b9a7d878d684c7bb4f0b5cb768b5b59ec8e1431b2628669"
+  },
+  {
+    "path": "assets/monsters/yeti.gif",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/monsters/yeti.gif",
+    "bytes": 1279388,
+    "sha256": "17ea803f7084ce50aa373cef3bc11021671ea85a61569c10aa8d34252cddcdcf"
+  },
+  {
+    "path": "assets/pets/kunpeng_icon.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/pets/kunpeng_icon.png",
+    "bytes": 1419179,
+    "sha256": "b9730d7eea05233a2196d0de187c6e317883b915900705f4b9b40558b22f25d6"
+  },
+  {
+    "path": "assets/pets/pet_nether_whelp_icon.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/pets/pet_nether_whelp_icon.png",
+    "bytes": 1697110,
+    "sha256": "9e9d08aaf9e6f11d272705b0200cd535eaf1644497491f577e74f8c5a3695c55"
+  },
+  {
+    "path": "assets/pets/qinglong_icon.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/pets/qinglong_icon.png",
+    "bytes": 1466711,
+    "sha256": "d6479005ea0e11fe05e2a2e7001dc7b20cf9a602559a593e581f2309f4df0e53"
+  },
+  {
+    "path": "assets/pets/zhuque_icon.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/pets/zhuque_icon.png",
+    "bytes": 646069,
+    "sha256": "34f017f379d634d4da38526cdc5ca73c7e0585902d0871217cbf08fe49cfd20b"
+  },
+  {
+    "path": "assets/title_background_inkwash.jpg",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/title_background_inkwash.jpg",
+    "bytes": 2909219,
+    "sha256": "1b310ba27f87307d59010550ba3ae60417963815e42892679635ac4190fec4b1"
+  },
+  {
+    "path": "assets/ui/button_wood_texture.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/ui/button_wood_texture.png",
+    "bytes": 1218734,
+    "sha256": "e059dd32316c932cf66f9c47c964b306a2c7b5ddf825e8883da04e8e12d28769"
+  },
+  {
+    "path": "assets/ui/icon_atk_pixel.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/ui/icon_atk_pixel.png",
+    "bytes": 1374702,
+    "sha256": "ede817e8654fbc43f98008ce7db55bb3e039a2d82ff0a1c7cfb45b5a0cc102e5"
+  },
+  {
+    "path": "assets/ui/icon_def_pixel.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/ui/icon_def_pixel.png",
+    "bytes": 1365076,
+    "sha256": "d6ad89fdb700a10dae6c47e4952e43e157758abac7868e03b8f096437b9316a6"
+  },
+  {
+    "path": "assets/ui/icon_hp_pixel.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/ui/icon_hp_pixel.png",
+    "bytes": 1439728,
+    "sha256": "0b50b9535a461d5958f200e7fc80432375f3cbd515c0803b930bf7cefede0c8c"
+  },
+  {
+    "path": "assets/ui/icon_mp_pixel.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/ui/icon_mp_pixel.png",
+    "bytes": 1434733,
+    "sha256": "8cb4d4853a87a72b1216b4ec9b7c371b14392a8660dbb280681293d52468c225"
+  },
+  {
+    "path": "assets/ui/icon_scroll_pixel.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/ui/icon_scroll_pixel.png",
+    "bytes": 973367,
+    "sha256": "0692fae1ae5317eab70a91cf279f34a4d5eab66deb10f6f18b1b49bef8676648"
+  },
+  {
+    "path": "assets/ui/icon_settings_pixel.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/ui/icon_settings_pixel.png",
+    "bytes": 1364089,
+    "sha256": "ee95cdb05c48f8016d7420b3125bf7405737ffc9783e1a2cebb367fc2b024bee"
+  },
+  {
+    "path": "assets/ui/icon_sword_pixel.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/ui/icon_sword_pixel.png",
+    "bytes": 646082,
+    "sha256": "123f3a2dcb295c26ba9b5c19de420d0d5b75b59f7e66dea57cae22f60dc645c5"
+  },
+  {
+    "path": "assets/ui/location_thumb_crypt.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/ui/location_thumb_crypt.png",
+    "bytes": 1212464,
+    "sha256": "441dbcf05246138cf0140b33c1d63fe87def41bc6cdd68fb33e81fec4f86a2b4"
+  },
+  {
+    "path": "assets/ui/location_thumb_forest.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/ui/location_thumb_forest.png",
+    "bytes": 1928739,
+    "sha256": "28fff50a82277dda7ea96d9cec7a454d9306430ed095b7525f4b40817e86c90f"
+  },
+  {
+    "path": "assets/ui/location_thumb_frozen_peak.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/ui/location_thumb_frozen_peak.png",
+    "bytes": 1384291,
+    "sha256": "581a37beea3f32cef3fa1d01efa963865a89a2d91a9466d751120a7a865399e3"
+  },
+  {
+    "path": "assets/ui/location_thumb_ruins.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/ui/location_thumb_ruins.png",
+    "bytes": 2000578,
+    "sha256": "0cd6a14ff02afba2812d204f135580008afc86f4089b9db98998dd96e9d6e02d"
+  },
+  {
+    "path": "assets/ui/location_thumb_volcano.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/ui/location_thumb_volcano.png",
+    "bytes": 1541432,
+    "sha256": "87a54e7d3a3d454ff2d050d02e9dacc8b03ed73a9d8d0c4eb3cae2428b1130f8"
+  },
+  {
+    "path": "assets/ui/portrait.png",
+    "url": "https://html-classic.itch.zone/html/16593187/assets/ui/portrait.png",
+    "bytes": 1422419,
+    "sha256": "281d1221c5a561f51df1d8dfc4b88cace74bbda0a727fa32e2e871798d7a79b9"
+  },
+  {
+    "path": "audio/bgm_battle.mp3",
+    "url": "https://html-classic.itch.zone/html/16593187/audio/bgm_battle.mp3",
+    "bytes": 1918007,
+    "sha256": "e5eb2f3b3cce7702ff1d934fe62bffcdf0c713d7939d71e669b1a2fac3ae6f2a"
+  },
+  {
+    "path": "audio/bgm_main_game.mp3",
+    "url": "https://html-classic.itch.zone/html/16593187/audio/bgm_main_game.mp3",
+    "bytes": 2527042,
+    "sha256": "484b570cdaea2db67e62c9e5adee4a3726d4ee804f346100e9338ba84e00a1f4"
+  },
+  {
+    "path": "audio/bgm_title_screen.mp3",
+    "url": "https://html-classic.itch.zone/html/16593187/audio/bgm_title_screen.mp3",
+    "bytes": 986195,
+    "sha256": "d768c36a90c0faf8f51f3d856b5f73432667a6d4e1ed10b8fb9673d2f9c0b75d"
+  },
+  {
+    "path": "audio/sfx_answer_correct.mp3",
+    "url": "https://html-classic.itch.zone/html/16593187/audio/sfx_answer_correct.mp3",
+    "bytes": 14062,
+    "sha256": "cb61c6c731a58c98b3ea29ebbd99a02c7d998a42ca8a28f57a1bde621bedcfbc"
+  },
+  {
+    "path": "audio/sfx_answer_wrong.mp3",
+    "url": "https://html-classic.itch.zone/html/16593187/audio/sfx_answer_wrong.mp3",
+    "bytes": 8327,
+    "sha256": "c1685e3b2bc2758a40ef998441c0ad1bf62f9a4fe5b5e0abd5f3e612cc5d18f6"
+  },
+  {
+    "path": "audio/sfx_attack_crit.mp3",
+    "url": "https://html-classic.itch.zone/html/16593187/audio/sfx_attack_crit.mp3",
+    "bytes": 11692,
+    "sha256": "b83e5562a8fb95c7549914253b68ee95f2b51d6187394cea8ddc18330395347e"
+  },
+  {
+    "path": "audio/sfx_battle_lose.mp3",
+    "url": "https://html-classic.itch.zone/html/16593187/audio/sfx_battle_lose.mp3",
+    "bytes": 126423,
+    "sha256": "fb9fe89e51dad18884c4d3acaa995bbdb6bb74c8375651bba5bbaf72d1c20a15"
+  },
+  {
+    "path": "audio/sfx_buff_positive.mp3",
+    "url": "https://html-classic.itch.zone/html/16593187/audio/sfx_buff_positive.mp3",
+    "bytes": 28937,
+    "sha256": "e5b8ae0cf39d2438ee97e50b457304fd00311560addb66ef5952845793b1a098"
+  },
+  {
+    "path": "audio/sfx_button_click.mp3",
+    "url": "https://html-classic.itch.zone/html/16593187/audio/sfx_button_click.mp3",
+    "bytes": 17898,
+    "sha256": "3f3cc5113e03fcae6862b5eaf6dc70d531d98356f93717197e7013d49c80f83c"
+  },
+  {
+    "path": "audio/sfx_button_hover.mp3",
+    "url": "https://html-classic.itch.zone/html/16593187/audio/sfx_button_hover.mp3",
+    "bytes": 8849,
+    "sha256": "a29a8bfeaa8e755f3155eeac080e5407551d42326142236e2228f6f46234ffd1"
+  },
+  {
+    "path": "audio/sfx_buy_item.mp3",
+    "url": "https://html-classic.itch.zone/html/16593187/audio/sfx_buy_item.mp3",
+    "bytes": 55858,
+    "sha256": "97a1175032ab2f5e47818fa1d9ce11f4c8424dadf6b455254efe2f792a25ecaf"
+  },
+  {
+    "path": "audio/sfx_debuff_negative.mp3",
+    "url": "https://html-classic.itch.zone/html/16593187/audio/sfx_debuff_negative.mp3",
+    "bytes": 11051,
+    "sha256": "7df2256b88f0b7054d9e2f293e50d34c6363557a30f515cf6d88d3928e69630f"
+  },
+  {
+    "path": "audio/sfx_fire_effect.mp3",
+    "url": "https://html-classic.itch.zone/html/16593187/audio/sfx_fire_effect.mp3",
+    "bytes": 10338,
+    "sha256": "64ed5671b99aee6fc3e2bc44f7bbca073f6afd957572cdac2d65b61d501b6bf8"
+  },
+  {
+    "path": "audio/sfx_heal_effect.mp3",
+    "url": "https://html-classic.itch.zone/html/16593187/audio/sfx_heal_effect.mp3",
+    "bytes": 15377,
+    "sha256": "ab46befa58dcdc86b1251be4d3733ab9c5b4804cb49c6fedf2c92f7132fbe6ce"
+  },
+  {
+    "path": "audio/sfx_ice_effect.mp3",
+    "url": "https://html-classic.itch.zone/html/16593187/audio/sfx_ice_effect.mp3",
+    "bytes": 17022,
+    "sha256": "d203b8baeed1ad0a222f5fb023b1db1482ec21ff8b18e6027c938299a2a61c87"
+  },
+  {
+    "path": "audio/sfx_level_up.mp3",
+    "url": "https://html-classic.itch.zone/html/16593187/audio/sfx_level_up.mp3",
+    "bytes": 28635,
+    "sha256": "6557793a535131b5ec48bc3498d2d26290c79d779df3b602a33f5fdfd943fbd7"
+  },
+  {
+    "path": "audio/sfx_monster_attack.mp3",
+    "url": "https://html-classic.itch.zone/html/16593187/audio/sfx_monster_attack.mp3",
+    "bytes": 14863,
+    "sha256": "e7618b8daf89336994550167761a6bb267d92efcc46c0a9435b6e83acdf346ed"
+  },
+  {
+    "path": "audio/sfx_player_attack.mp3",
+    "url": "https://html-classic.itch.zone/html/16593187/audio/sfx_player_attack.mp3",
+    "bytes": 13374,
+    "sha256": "f7161aa136fffc9e89fb2c68e2a6a75d1175a68dde1cca184a2592ec8e7bd86c"
+  },
+  {
+    "path": "audio/sfx_poison_tick.mp3",
+    "url": "https://html-classic.itch.zone/html/16593187/audio/sfx_poison_tick.mp3",
+    "bytes": 6491,
+    "sha256": "383f86791fba512d25582d95548a81dd32df649d776ef2bb9c56f27f266635cf"
+  },
+  {
+    "path": "audio/sfx_shield_block.mp3",
+    "url": "https://html-classic.itch.zone/html/16593187/audio/sfx_shield_block.mp3",
+    "bytes": 9171,
+    "sha256": "ce47c84764a1bfecfa4b8d24f5fb347dcef7bbe9e58b63844b629e02305185a5"
+  },
+  {
+    "path": "audio/sfx_skill_cast.mp3",
+    "url": "https://html-classic.itch.zone/html/16593187/audio/sfx_skill_cast.mp3",
+    "bytes": 160926,
+    "sha256": "8da4fb13d5168392103fdeeb891572ee6d5340dc3f1acb19873321c0378fde3d"
+  },
+  {
+    "path": "fonts/font_wuxia_title.woff2.ttf",
+    "url": "https://html-classic.itch.zone/html/16593187/fonts/font_wuxia_title.woff2.ttf",
+    "bytes": 9917076,
+    "sha256": "6d0e19bfee5b481b69cdf338ee848c48a4775ca4ed999606eb59a2feb26a9d22"
+  }
+]

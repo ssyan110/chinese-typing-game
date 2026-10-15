@@ -1,0 +1,10 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import vm from 'node:vm';
+const scope=vm.createContext({});vm.runInContext(fs.readFileSync(new URL('../src/reference/input-state.js',import.meta.url),'utf8'),scope);
+const check=scope.assessRowInput;
+const words=[['a',{text:'水'}],['s',{text:'水果'}],['d',{text:'火车'}]];
+test('水 does not steal the first committed character of 水果',()=>{assert.equal(check('水',words,words).kind,'confirm');assert.equal(check('水果',words,words).key,'s');assert.equal(check('水',words,words,true).key,'a');});
+test('a visible word remains typable one committed character at a time',()=>{assert.equal(check('水',[words[1]],words).kind,'partial');assert.equal(check('水果',[words[1]],words).kind,'match');});
+test('an inactive known word is unavailable, not incorrect',()=>{assert.equal(check('水果',[words[0]],words).kind,'unavailable');assert.equal(check('水',[words[0]],words).kind,'confirm');});
+test('non-IME Latin preedit is not counted as an error until explicit submit',()=>{assert.equal(check('shuiguo',words,words).kind,'preedit');assert.equal(check('shuiguo',words,words,true).kind,'wrong');});
+test('wrong Hanzi is rejected and whitespace is normalized',()=>{assert.equal(check('苹果',words,words).kind,'wrong');assert.equal(check(' 水 果 ',words,words).key,'s');});
+test('only live objects are targets, ordered by threat proximity',()=>{const d={rowTokens:Object.fromEntries(words),objects:[{char:'a',y:20,x:80},{char:'d',y:90,x:20}]};assert.equal(scope.rowTargetEntries(d,'homefall')[0][0],'d');assert.equal(scope.rowTargetEntries(d,'bottom_defense')[0][0],'d');assert.equal(scope.rowTargetEntries(d,'homefall').some(x=>x[0]==='s'),false);d.expectedKey='s';d.expectedType='anchor';assert.equal(scope.rowTargetEntries(d,'top_anchor').length,0);});

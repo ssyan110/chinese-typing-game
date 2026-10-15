@@ -1,0 +1,46 @@
+async(page)=>{
+ const checks=[];const verify=(yes,label)=>{if(!yes)throw Error(label);checks.push(label);};
+ await page.goto('http://127.0.0.1:4186');await page.bringToFront();await page.setViewportSize({width:1440,height:1000});await page.locator('#practice-setup.show').waitFor({timeout:40000});
+ await page.locator('[data-practice-mode=simplified]').click();await page.locator('#enter-original-game').click();await page.locator('#btn-start').click();await page.locator('[data-stage-play="0"]').click();
+ for(let i=0;i<7;i++){if(await page.evaluate(()=>game.mode)==='dialogue')await page.locator('#dialogue-next').click();else break;}await page.waitForFunction(()=>game.mode==='playing');
+ await page.waitForFunction(()=>game.stageData.objects.length>0);
+ verify(await page.evaluate(()=>getAdaptiveSpawnCap('homefall')===2),'Hanzi rune stage starts with two concurrent threats');
+ verify(await page.locator('#prompt-stage').innerText()==='GÕ TỪ NÀY','Prominent Vietnamese instruction names exactly what to type');
+ const target=await page.evaluate(()=>getKeyVisualLabel(game.stageData.objects[0].char));verify(await page.locator('#prompt-main').innerText()===target,'Main cue matches live moving object, not inactive word list');
+ verify(await page.evaluate(()=>game.stageData.objects[0].hanziPaced),'Hanzi target receives word-length-aware combat pacing');
+ await page.evaluate(()=>{window.__runeNode=el.projectileLayer.firstElementChild;});await page.waitForTimeout(150);
+ verify(await page.evaluate(()=>window.__runeNode===el.projectileLayer.firstElementChild),'Projectile node reused across animation frames');
+ await page.waitForTimeout(1000);await page.screenshot({path:'output/playwright/experience-target-desktop.png'});
+ await page.evaluate(()=>{
+  PROFILE_STORAGE_KEY='wuxia_experience_test';const d=game.stageData;d.rowTokens={a:{text:'水',phonetic:'shuǐ'},s:{text:'水果',phonetic:'shuǐguǒ'}};d.allKeys=['a','s'];d.allowed=['a','s'];d.objects=[{id:801,char:'s',x:800,y:120,speed:0,drift:0,hanziPaced:true}];d.spawnTimer=999;d.runeHits=0;d.charge=0;renderProjectiles();renderPromptForStage();
+ });
+ await page.locator('#ime-input').fill('水');verify(await page.evaluate(()=>game.stageData.runeHits===0),'Partial 水 waits when active word is 水果');
+ await page.locator('#ime-input').fill('水果');verify(await page.evaluate(()=>game.stageData.runeHits===1),'Complete 水果 hits correct rune');
+ await page.evaluate(()=>{const d=game.stageData;d.objects=[{id:802,char:'a',x:800,y:120,speed:0,drift:0,hanziPaced:true}];d.spawnTimer=999;renderProjectiles();});
+ const typedBefore=await page.evaluate(()=>game.totalTyped);await page.locator('#ime-input').fill('水果');
+ verify(await page.evaluate(()=>game.totalTyped)===typedBefore,'Inactive known word does not become an incorrect answer');
+ verify(!(await page.locator('#prompt-main').innerText()).includes('水果'),'Inactive 水果 is not advertised as the target');
+ await page.locator('#ime-input').fill('水');verify((await page.locator('#typing-status').innerText()).includes('Enter'),'Ambiguous short word offers explicit confirmation');
+ await page.locator('#ime-confirm').click();verify(await page.evaluate(()=>game.stageData.runeHits===2),'Xuất chiêu button confirms intended 水');
+ await page.evaluate(()=>{game.stageData.objects=[];game.stageData.spawnTimer=999;damagePlayer(12,'Bỏ lỡ mục tiêu.');updateHud();});
+ verify((await page.locator('#hero-health').innerText()).includes('−12 HP'),'Actual player damage has explicit numeric hit feedback');
+ verify((await page.locator('#combat-damage-message').innerText()).includes('Bạn mất 12 HP'),'Player damage shows a clear Vietnamese reason');
+ verify((await page.locator('[data-combat-bar="hp-text"]').innerText()).includes('HP của bạn'),'Top HP bar identifies player');
+ await page.evaluate(()=>{damageEnemy(3);updateHud();});
+ verify((await page.locator('#enemy-health').innerText()).includes('−3 HP'),'Opponent damage has explicit numeric hit feedback');
+ verify(await page.locator('#enemy-health .health-loss-trail').evaluate(el=>parseFloat(el.style.width)>parseFloat(el.nextElementSibling.style.width)),'Opponent HP bar retains a visible lost-health trail');
+ await page.waitForTimeout(150);await page.screenshot({path:'output/playwright/experience-damage-desktop.png'});
+ verify(await page.evaluate(()=>{const a=el.arena.getBoundingClientRect(),p=el.promptBoard.getBoundingClientRect();return el.arena.scrollTop===0&&p.top>=a.top;}),'Typing/confirmation cannot scroll the target out of its arena');
+ verify(await page.locator('#ime-panel').evaluate(el=>getComputedStyle(el).display==='grid'),'Confirmation button keeps its intended input-row layout');
+ await page.evaluate(()=>{damageEnemy(game.enemyHp);updateHud();});
+ verify((await page.locator('#combat-damage-message').innerText()).includes('Đã hạ'),'Defeating an opponent explains why next opponent has full HP');
+ await page.locator('#btn-pause').click();verify((await page.locator('#enemy-text').innerText())!=='--','Opponent numeric HP stays visible while paused');await page.locator('#btn-resume').click();
+ await page.evaluate(()=>{damagePlayer(100,'Bỏ lỡ mục tiêu.');updateHud();});
+ verify(await page.locator('#hero-health').evaluate(el=>el.classList.contains('low-health')),'Low player HP has persistent danger styling');
+ verify((await page.locator('#hero-health .health-warning').innerText()).includes('NGUY HIỂM'),'Low HP warning is textual, not color-only');
+ await page.waitForTimeout(200);await page.screenshot({path:'output/playwright/experience-low-hp-desktop.png'});
+ await page.setViewportSize({width:390,height:844});await page.screenshot({path:'output/playwright/experience-mobile.png'});
+ verify(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'New health/input controls do not introduce horizontal overflow');
+ verify(await page.evaluate(()=>{const h=document.querySelector('#top-hud').getBoundingClientRect(),a=el.arena.getBoundingClientRect();return a.top>=h.bottom;}),'Mobile health HUD does not overlap the battlefield');
+ await page.evaluate(result=>{window.__experienceChecks=result;},{passed:checks.length,checks});
+}

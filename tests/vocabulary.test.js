@@ -1,0 +1,12 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+const read=name=>JSON.parse(fs.readFileSync(new URL('../public/data/'+name+'.json',import.meta.url),'utf8'));
+const hsk=read('hsk'),tocfl=read('tocfl'),manifest=read('manifest');
+const map={'ㄅ':'1','ㄆ':'q','ㄇ':'a','ㄈ':'z','ㄉ':'2','ㄊ':'w','ㄋ':'s','ㄌ':'x','ㄍ':'e','ㄎ':'d','ㄏ':'c','ㄐ':'r','ㄑ':'f','ㄒ':'v','ㄓ':'5','ㄔ':'t','ㄕ':'g','ㄖ':'b','ㄗ':'y','ㄘ':'h','ㄙ':'n','ㄧ':'u','ㄨ':'j','ㄩ':'m','ㄚ':'8','ㄛ':'i','ㄜ':'k','ㄝ':',','ㄞ':'9','ㄟ':'o','ㄠ':'l','ㄡ':'.','ㄢ':'0','ㄣ':'p','ㄤ':';','ㄥ':'/','ㄦ':'-','ˇ':'3','ˋ':'4','ˊ':'6','˙':'7'};
+test('HSK preserves source IDs and shared advanced band',()=>{assert.equal(hsk.length,11000);assert.equal(new Set(hsk.map(w=>w.id)).size,11000);assert.deepEqual(Object.fromEntries(['1','2','3','4','5','6','7-9'].map(l=>[l,hsk.filter(w=>w.level===l).length])),{'1':300,'2':200,'3':500,'4':1000,'5':1600,'6':1800,'7-9':5600});});
+test('TOCFL matches seven official workbook entry counts',()=>{assert.equal(tocfl.length,7517);assert.equal(new Set(tocfl.map(w=>w.id)).size,7517);assert.deepEqual(['N1','N2','A1','A2','B1','B2','C1'].map(l=>tocfl.filter(w=>w.level===l).length),[160,234,347,485,1173,2342,2776]);});
+test('every emitted Zhuyin prompt has a complete physical key mapping',()=>{for(const w of [...hsk,...tocfl].filter(w=>w.keys))assert.equal([...w.z.replace(/\s/g,'')].map(c=>map[c]).join(''),w.keys,w.id);assert.equal(tocfl.find(w=>w.t==='你').keys,'su3');});
+test('script forms remain distinct and vocabulary only contains playable Hanzi',()=>{assert.equal(hsk.find(w=>w.s==='学习').t,'學習');for(const w of [...hsk,...tocfl]){assert.match(w.s,/^[\p{Script=Han}]+$/u);assert.match(w.t,/^[\p{Script=Han}]+$/u);assert.ok(w.p);}});
+test('manifest matches actual counts and exclusions',()=>{for(const [name,list]of [['hsk',hsk],['tocfl',tocfl]]){const source=manifest.sources.find(s=>s.id===name);assert.equal(source.playableCount,list.length);assert.equal(source.zhuyinCount,list.filter(w=>w.keys).length);}assert.deepEqual(hsk.filter(w=>!w.keys).map(w=>w.s),['嗯']);});
+test('reference asset files match their recorded hashes',async()=>{const{createHash}=await import('node:crypto');const assets=JSON.parse(fs.readFileSync(new URL('../data/upstream/game-asset-manifest.json',import.meta.url)));assert.equal(assets.length,109);for(const a of assets){const bytes=fs.readFileSync(new URL('../public/game/'+a.path,import.meta.url));assert.equal(createHash('sha256').update(bytes).digest('hex'),a.sha256,a.path);}});

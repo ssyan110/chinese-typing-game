@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.playwright-cli/
+rea/
+reference-page.html
+output/
+
+data/upstream/*.zip
+
+# Local editor/authentication files
+.env
+.env.*
+.DS_Store

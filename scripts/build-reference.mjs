@@ -1,0 +1,38 @@
+import fs from 'node:fs';
+const root=new URL('../',import.meta.url);
+const read=p=>fs.readFileSync(new URL(p,root),'utf8');
+const translations=Object.fromEntries(read('src/reference/ui-vi.tsv').trim().split('\n').map(l=>l.split('\t')));
+let html=read('reference-game.html');
+const originalScript=html.match(/<script>([\s\S]*?)<\/script>/)[1];
+let runtime=originalScript.replace(/const ZH_TYPING_WORD_BANK = \{[\s\S]*?\n        \};/,'const ZH_TYPING_WORD_BANK = {easy:[],middle:[],hard:[]};');
+runtime=runtime.replace(/const PROFILE_STORAGE_KEY = "typegame_profile_v2";/,'let PROFILE_STORAGE_KEY = "wuxia_vi_profile_v1";');
+runtime=runtime.replace(/const DEFAULT_CLOUD_WEBHOOK_URL = "[^"]*";/,'const DEFAULT_CLOUD_WEBHOOK_URL = "";');
+runtime=runtime.replace(/\n        bootstrap\(\);\s*$/,'');
+const translate=s=>s.replace(/[\u3400-\u9fff][\u3400-\u9fff，。！？、：；「」『』【】（）・／…“”～]*/g,part=>translations[part]??part).replaceAll('。','.').replaceAll('，',', ').replaceAll('：',': ').replaceAll('；','; ').replaceAll('【','[').replaceAll('】',']');
+runtime=translate(runtime);
+runtime=runtime.replaceAll('DEFEND','ĐỠ ĐÒN').replace(/\bPhase\b/g,'Giai đoạn').replaceAll('BossTừ','Từ của ma vương').replaceAll('Boss：','Ma vương: ').replaceAll('Boss có','Ma vương có').replaceAll('Boss Đấu','Ma vương đấu');
+runtime=runtime.replace(/Ải \$\{stage\.id\} tắt/g,'Ải ${stage.id}').replace(/Ải\$\{stageId\}tắt/g,'Ải ${stageId}').replace(/Ải\$\{stage\.id\}tắt/g,'Ải ${stage.id}');
+runtime=runtime.replace('const allowBossSpaceThroughIme = imeActive &&','const allowBossSpaceThroughIme = !game.imeComposing && !event.isComposing && !el.imeInput.value.trim() && imeActive &&');
+runtime=runtime.replace('if (!imeActive && ["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Tab"].includes(event.code))','if (game.mode === "playing" && !imeActive && ["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.code))');
+
+// Keep assets complete after moving the runtime out of inline HTML.
+runtime=runtime.replace('let urls = collectPreloadAssetUrls();','let urls = '+JSON.stringify(JSON.parse(read('data/upstream/game-assets.json')).filter(s=>!s.startsWith('fonts/')))+';');
+runtime=runtime.replaceAll('Focus Keys:','Phím cần luyện:').replaceAll('Focus Words Combo','Liên chiêu ôn từ');
+runtime=runtime.replaceAll('Ải${item.id}ải:','Ải ${item.id}: ').replaceAll('Đã hoàn thành ải ${stage?.id || 1} ải ·','Đã hoàn thành ải ${stage?.id || 1} ·');
+runtime=runtime.replaceAll('char: pick(data.allowed),','char: drawRowTarget(data),');
+runtime += '\n'+read('src/reference/vocabulary-deck.js')+'\n'+read('src/reference/result-details.js')+'\n'+read('src/reference/input-state.js')+'\n'+read('src/reference/adapter.js');
+html=html.replace(/<script>[\s\S]*?<\/script>/,'<script defer src="/game/runtime.js"></script>');
+html=html.replace(/<script defer src="https:\/\/static.itch.io\/htmlgame.js"[^>]*><\/script>/,'');
+html=translate(html).replaceAll('DEFEND','ĐỠ ĐÒN').replace('<html lang="zh-Hant">','<html lang="vi">').replace('<head>','<head>\n<base href="/game/">\n<link rel="icon" href="/favicon.svg">');
+html=html.replace('</head>','<link rel="stylesheet" href="/game/adaptation.css">\n</head>');
+html=html.replace(/<img class="logo"[^>]*>/,'<div class="vn-wordmark">VÕ LÂM GÕ PHÍM</div>');
+html=html.replace(/(["'(])((?:assets|fonts|audio)\/)/g,'$1/game/$2');
+html=html.replace('Đầy nội lực 100 rồi bấm','Ải 5: đầy nội lực 100 rồi bấm');
+html=html.replace('<div id="toast"></div>',read('src/reference/setup.html')+'\n<div id="toast"></div>');
+fs.mkdirSync(new URL('public/game/',root),{recursive:true});
+fs.writeFileSync(new URL('public/game/runtime.js',root),runtime);
+fs.writeFileSync(new URL('public/game/adaptation.css',root),read('src/reference/adaptation.css'));
+fs.writeFileSync(new URL('index.html',root),html);
+const remaining=[...new Set((runtime+html).match(/[\u3400-\u9fff]+/g)||[])];
+fs.writeFileSync(new URL('output/ui-remaining.json',root),JSON.stringify(remaining,null,2));
+console.log('Reference game built; remaining Han fragments:',remaining.length);

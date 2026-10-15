@@ -1,0 +1,33 @@
+async(page)=>{
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ const checks=[];const verify=(ok,label)=>{if(!ok)throw Error(label);checks.push(label);};
+ await page.goto('http://127.0.0.1:4186/');await page.bringToFront();await page.setViewportSize({width:1440,height:1000});await page.locator('#practice-setup.show').waitFor({timeout:40000});
+ await page.evaluate(()=>{PROFILE_STORAGE_KEY='wuxia_balance_test';});
+ await page.locator('[data-practice-mode=simplified]').click();await page.locator('#enter-original-game').click();await page.locator('#btn-start').click();await page.locator('[data-stage-play="0"]').click();
+ for(let i=0;i<7;i++){if(await page.evaluate(()=>game.mode)==='dialogue')await page.locator('#dialogue-next').click();else break;}await page.waitForFunction(()=>game.mode==='playing');
+ verify(await page.evaluate(()=>getAdaptiveSpawnCap('homefall')===2),'Hanzi starts with two concurrent threats');
+ await page.waitForTimeout(3500);verify(await page.evaluate(()=>game.stageData.objects.length===2),'Two real targets appear without fixture spawning');
+ verify(await page.evaluate(()=>game.stageData.graceLeft===0),'Combat does not silently absorb missed attacks');
+ verify(await page.evaluate(()=>{const d=game.stageData;return d.objects.every(o=>(el.arena.clientHeight-38-o.y)/o.speed<8); }),'Target travel time is bounded for combat');
+ const before=await page.evaluate(()=>game.playerHp);await page.waitForTimeout(14000);
+ verify(await page.evaluate(()=>game.playerHp)<=before-20,'Doing nothing for 14 seconds causes at least 20 HP damage');
+ verify(await page.locator('#combat-pressure').isVisible(),'Attack countdown and damage are visible');
+ await page.screenshot({path:'output/playwright/combat-idle-damage.png'});
+ await page.evaluate(()=>{game.playerHp=80;rewardAction({enemyDamage:0,heal:10});});verify(await page.evaluate(()=>game.playerHp)===80,'Correct input cannot heal away combat damage');
+ await page.evaluate(()=>{game.stageStart=performance.now()-70000;});verify(await page.evaluate(()=>getAdaptiveSpawnCap('homefall')===3),'Pressure rises to three targets after first minute');
+ await page.evaluate(()=>{loadStage(3,true);});await page.waitForFunction(()=>game.mode==='playing');
+ verify(await page.locator('#word-progress').evaluate(n=>!/[\p{Script=Han}]/u.test(n.textContent)&&n.textContent.trim().length>0),'Only one Hanzi target row is shown, with pronunciation below');
+ const wordHp=await page.evaluate(()=>game.playerHp);await page.evaluate(()=>{game.stageData.wordTimeLeft=.01;updateGameplay(.05);});
+ verify(await page.evaluate(()=>game.playerHp)===wordHp-10,'Ignoring whole-word target triggers actual 10 HP enemy attack');
+ verify(await page.evaluate(()=>game.stageData.wordTimeLeft>2),'Word timeout starts a fresh target window');
+ await page.screenshot({path:'output/playwright/combat-word-countdown.png'});
+ await page.evaluate(()=>{game.playerHp=90;el.imeInput.value='';softMistake('Chưa đúng từ.');});verify(await page.evaluate(()=>game.playerHp)===86,'Judged wrong answer costs 4 HP');
+ const hp=await page.evaluate(()=>game.playerHp);await page.locator('#ime-input').fill('shuiguo');verify(await page.evaluate(()=>game.playerHp)===hp,'Uncommitted Latin IME text does not cost HP');
+ await page.locator('#btn-pause').click();const left=await page.evaluate(()=>game.stageData.wordTimeLeft);await page.waitForTimeout(700);verify(await page.evaluate(()=>game.stageData.wordTimeLeft)===left,'Pause freezes added word deadline');
+ verify(await page.evaluate(()=>{loadStage(1,true);const hp=game.playerHp;game.stageData.expectedType='anchor';stage2NextPrompt();game.stageData.deadline=performance.now()-1;updateTopAnchor();return hp-game.playerHp;})===12,'Missing F/J guard costs 12 HP');
+ verify(await page.evaluate(()=>{loadStage(1,true);const hp=game.playerHp;game.stageData.expectedType='top';stage2NextPrompt();game.stageData.deadline=performance.now()-1;updateTopAnchor();return hp-game.playerHp;})===12,'Missing jump word deadline costs 12 HP');
+ verify(await page.evaluate(()=>{loadStage(2,true);const hp=game.playerHp,d=game.stageData;d.spawnTimer=999;d.objects=[{id:987,char:d.allowed[0],x:125,y:180,speed:20,hanziPaced:true}];updateBottomDefense(.01);return hp-game.playerHp;})===12,'Escaped projectile costs 12 HP');
+ verify(await page.evaluate(()=>{loadStage(4,true);const hp=game.playerHp;startBossGuardPhase('Thử đỡ đòn');game.stageData.guardDeadline=performance.now()-1;updateBossRaid(.01);return hp-game.playerHp;})===16,'Missing boss guard costs 16 HP');
+ verify(errors.length===0,'No application runtime errors during combat checks');
+ await page.evaluate(result=>{window.__balanceChecks=result;},{passed:checks.length,checks});
+}

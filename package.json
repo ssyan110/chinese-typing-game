@@ -1,0 +1,21 @@
+{
+  "name": "vo-lam-go-phim",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "node scripts/build-reference.mjs && vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "node --test tests/*.test.js",
+    "build:vocabulary": "node scripts/build-vocabulary.mjs"
+  },
+  "devDependencies": {
+    "vite": "^6.1.0"
+  },
+  "dependencies": {
+    "csv-parse": "^7.0.3",
+    "opencc-js": "^1.4.2",
+    "pinyin-to-zhuyin": "^1.1.0"
+  }
+}
