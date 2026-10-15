@@ -420,11 +420,18 @@ damageEnemy=function(amount){
   }
  }
 };
-const nativeDamagePlayer=damagePlayer;
+// A depleted HP bar ends the round. Timed scoring must never revive the player.
 damagePlayer=function(amount,reason=''){
+ if(game.mode!=='playing'||game.playerHp<=0)return;
  const before=game.playerHp,max=game.maxPlayerHp;
- nativeDamagePlayer(amount,reason);
+ game.playerHp=Math.max(0,before-amount);
+ if(reason)showToast(reason,1000);
  if(amount>0&&before>0)showCombatDamage('hero',Math.min(amount,before),before,max,reason,'Bạn');
+ if(game.playerHp===0){
+  game.stageMisses+=1;game.stagePerfect=false;
+  failStage('HP = 0. '+(reason||''));
+  updateHud();
+ }
 };
 const nativeCombatHud=updateHud;
 updateHud=function(){nativeCombatHud();updateCombatHealthUI();renderCombatPressure();};
