@@ -2,6 +2,12 @@
 
 A direct adaptation of [TypeGameWuxia by changsheng0612](https://changsheng0612.itch.io/typegamewuxia), preserving its game UI, pixel characters, animated monsters, backgrounds, sound, effects and five distinct combat mechanics. The earlier illustrated prototype was superseded and its source is retained under `output/previous-version/`.
 
+## Play online
+
+Student link: **https://ssyan110.github.io/chinese-typing-game/**
+
+No account is required. Settings and scores are saved in the current browser; they do not synchronize between devices. GitHub Pages serves this public repository with HTTPS. The `Publish student game` workflow tests, builds and publishes `main` automatically. `scripts/prepare-pages.mjs` rewrites only the deployment artifact to the repository subpath; ordinary local builds retain root URLs.
+
 ## Run
 
 ```sh
