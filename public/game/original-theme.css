@@ -1,6 +1,9 @@
+@font-face{font-family:"Be Vietnam Pro";font-style:normal;font-weight:400;font-display:swap;src:url("/original/fonts/BeVietnamPro-Regular.woff") format("woff")}
+@font-face{font-family:"Be Vietnam Pro";font-style:normal;font-weight:600;font-display:swap;src:url("/original/fonts/BeVietnamPro-SemiBold.woff") format("woff")}
+@font-face{font-family:"Be Vietnam Pro";font-style:normal;font-weight:700;font-display:swap;src:url("/original/fonts/BeVietnamPro-Bold.woff") format("woff")}
 /* Lantern Atlas — original interface art direction. Loaded after functional CSS. */
-:root{--atlas-ink:#101c38;--atlas-panel:#142744;--atlas-line:#83bdb33d;--atlas-teal:#77e0c7;--atlas-amber:#ffce83;--atlas-white:#f4f8f6;--atlas-muted:#b3cbd2;--ink:#101c38;--glass:#10243de8}
-html,body,#app{font-family:system-ui,-apple-system,'Segoe UI','PingFang TC','Microsoft JhengHei',sans-serif!important;color:var(--atlas-white);background:#101c38}
+:root{--ui-font:"Be Vietnam Pro",Arial,sans-serif;--atlas-ink:#101c38;--atlas-panel:#142744;--atlas-line:#83bdb33d;--atlas-teal:#77e0c7;--atlas-amber:#ffce83;--atlas-white:#f4f8f6;--atlas-muted:#b3cbd2;--ink:#101c38;--glass:#10243de8}
+html,body,#app{font-family:var(--ui-font)!important;color:var(--atlas-white);background:#101c38}
 #app{background:radial-gradient(ellipse at 15% 5%,#27565e 0,transparent 48%),linear-gradient(145deg,#101c38,#172e49)!important}
 #bg-vignette{background:linear-gradient(180deg,#101c3812,#101c3855)!important}
 #bg-aurora{opacity:.35}
@@ -13,7 +16,7 @@ html,body,#app{font-family:system-ui,-apple-system,'Segoe UI','PingFang TC','Mic
 #practice-setup,#loading-screen,#stage-select-screen,#leaderboard-screen{background:radial-gradient(ellipse at 15% 15%,#2e726e99,transparent 55%),radial-gradient(ellipse at 90% 85%,#d89c4826,transparent 40%),linear-gradient(145deg,#101c38f5,#18374cef)!important}
 .screen-card,#practice-card,#stage-select-card,#leaderboard-card,#loading-card,#result-card{background:linear-gradient(135deg,#1a3552f7,#12243df7)!important;border:1px solid #a0d9cb66!important;border-radius:28px!important;box-shadow:0 28px 90px #050e244d,inset 0 1px #ffffff12!important;color:var(--atlas-white);padding:28px}
 #practice-card{max-width:1080px}
-.vn-wordmark,#title-name,#stage-select-title,#result-title,#leaderboard-title,#loading-title,#practice-heading,#dialogue-speaker,.stage-node-title,#prompt-stage{font-family:system-ui,-apple-system,'Segoe UI',sans-serif!important;text-shadow:none!important;letter-spacing:-.025em!important;color:var(--atlas-white)!important;font-weight:750}
+.vn-wordmark,#title-name,#stage-select-title,#result-title,#leaderboard-title,#loading-title,#practice-heading,#dialogue-speaker,.stage-node-title,#prompt-stage{font-family:var(--ui-font)!important;text-shadow:none!important;letter-spacing:0!important;color:var(--atlas-white)!important;font-weight:750}
 .vn-wordmark{font-size:clamp(29px,4vw,47px);line-height:1.2;color:var(--atlas-amber)!important;margin:8px 0 22px}
 #title-name{font-weight:500;font-size:24px!important;color:var(--atlas-muted)!important}
 #practice-heading{font-size:clamp(25px,3vw,35px)}
@@ -69,12 +72,12 @@ body.high-contrast .screen-card,body.high-contrast .glass{background:#071629!imp
 @media(max-width:520px){.screen{padding:10px}.screen-card,#practice-card,#stage-select-card,#leaderboard-card,#result-card{width:100%;max-width:100%;padding:17px 13px;border-radius:20px!important}.vn-wordmark{font-size:29px;line-height:1.25;margin-bottom:17px}.practice-mode{min-height:110px!important;border-radius:17px!important}.practice-mode>b{font-size:29px}.practice-mode[data-practice-mode=zhuyin]>b{font-size:22px}.practice-mode>strong{font-size:18px}.practice-mode>span{font-size:12px}#practice-modes{gap:10px}#top-hud,#bottom-hud,#arena{border-radius:16px!important}#hero-card .portrait{border-radius:11px!important}#ime-panel{border-radius:14px!important}#ime-input{padding:7px 9px!important}#dialogue-text{font-size:13px}#dialogue-speaker{font-size:15px}#result-actions .wood-btn{font-size:12px;padding:9px}.combat-health{border-radius:10px!important}.combat-health-label strong{font-size:9px}#result-metrics{gap:5px}.stage-node-title{font-size:18px!important}.wood-btn:hover{transform:none!important}.practice-review-table{font-size:11px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
 /* Remaining source-specific surfaces and inline title fonts. */
-#app :where(div,span,p,label,summary,small,strong,h1,h2,h3){font-family:system-ui,-apple-system,'Segoe UI','PingFang TC','Microsoft JhengHei',sans-serif!important}
+#app :where(div,span,p,label,summary,small,strong,h1,h2,h3){font-family:var(--ui-font)!important}
 #help-panel,#objective-panel{background:#10243bdf!important;border:1px solid #91c4c32c!important;border-radius:14px!important}
 .stage-select-node{background:linear-gradient(160deg,#20445a,#142b45)!important;border:1px solid #8cc5b949!important;border-radius:20px!important;box-shadow:none!important;padding:12px}
 .stage-select-node.pass{border-color:#77e0c7aa!important}.stage-select-node:hover{border-color:#ffce83!important}
 .stage-node-thumb{object-fit:cover;border-radius:12px!important}.stage-select-node .stage-node-play{margin-top:auto}
-#pause-screen .screen-card>div:first-child,#fail-screen .screen-card>div:first-child{font-family:system-ui,-apple-system,'Segoe UI',sans-serif!important;font-weight:750;color:var(--atlas-amber)!important;font-size:clamp(28px,4vw,40px)!important}
+#pause-screen .screen-card>div:first-child,#fail-screen .screen-card>div:first-child{font-family:var(--ui-font)!important;font-weight:750;color:var(--atlas-amber)!important;font-size:clamp(28px,4vw,40px)!important}
 /* Dedicated typing lane: no input overlay or panel inside the battlefield. */
 #typing-dock{display:none}
 #app.in-combat{display:grid!important;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(360px,1fr) 88px 166px;gap:10px;padding:10px;box-sizing:border-box;height:max(100dvh,780px)!important;min-height:780px;overflow:visible!important}
@@ -129,3 +132,6 @@ html:has(#app.in-combat),body:has(#app.in-combat){overflow:auto!important}
 html:has(#app.in-combat){height:auto!important;min-height:100%;overflow-x:hidden!important;overflow-y:auto!important}
 body:has(#app.in-combat){height:auto!important;min-height:100dvh;overflow:visible!important}
 #app.in-combat{overflow:clip!important}
+
+/* Keep Vietnamese form controls consistent with the screen interface. */
+#app button,#app input,#app select,#app summary,#app [style*="font-family"]{font-family:var(--ui-font)!important}

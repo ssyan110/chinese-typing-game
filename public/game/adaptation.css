@@ -1,8 +1,7 @@
 /* Typography and setup additions; original battle geometry and art are preserved. */
-@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap');
-html,body,button,input,select{font-family:'Be Vietnam Pro',Arial,sans-serif!important}
+html,body,button,input,select{font-family:var(--ui-font)!important}
 button{cursor:pointer}button:disabled{cursor:wait;opacity:.6}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #ffe2a0;outline-offset:4px}
-#title-name,#stage-select-title,#result-title,#leaderboard-title,#loading-title,#practice-heading,.vn-wordmark{font-family:Georgia,'Times New Roman',serif!important}
+#title-name,#stage-select-title,#result-title,#leaderboard-title,#loading-title,#practice-heading,.vn-wordmark{font-family:var(--ui-font)!important}
 [hidden]{display:none!important}
 #practice-setup{z-index:60;background:linear-gradient(180deg,rgba(3,10,15,.25),rgba(3,8,14,.72)),url('/original/art/title_background_inkwash.svg') center/cover}
 #practice-card{width:min(1120px,96vw);max-height:94dvh;overflow:auto;padding:30px 36px;background:linear-gradient(145deg,rgba(17,24,29,.95),rgba(6,13,21,.94));border:2px solid #b8874b;box-shadow:0 0 0 5px #231a15b8,0 24px 90px #000c;border-radius:12px;text-align:center}
@@ -26,9 +25,9 @@ button{cursor:pointer}button:disabled{cursor:wait;opacity:.6}button:focus-visibl
 .setup-buttons{display:flex;justify-content:center;gap:16px;margin-top:25px}.setup-buttons .wood-btn{font-size:16px}
 .adaptation-credit{font-size:11px;color:#a9b8b7;display:block;margin-top:18px}.adaptation-credit a{color:#d8bf8d;text-underline-offset:3px}
 #stage-select-sub{line-height:1.7}#stage-select-title{font-size:clamp(25px,3.6vw,38px)!important}
-#stage-select-summary{font-size:13px;line-height:1.9}#stage-select-grid .stage-node-title{font-family:Georgia,serif!important;font-size:19px;line-height:1.35;min-height:52px}#stage-select-grid .stage-node-play{white-space:normal;font-size:15px}
+#stage-select-summary{font-size:13px;line-height:1.9}#stage-select-grid .stage-node-title{font-family:var(--ui-font)!important;font-size:19px;line-height:1.35;min-height:52px}#stage-select-grid .stage-node-play{white-space:normal;font-size:15px}
 #title-sub{line-height:1.8}#control-hints{max-width:850px;line-height:1.85}#title-controls{flex-wrap:wrap}
-#prompt-stage{font-family:Georgia,serif!important;font-size:17px}#objective-main{line-height:1.6}#objective-progress{line-height:1.6}#learning-live,#learning-tip{line-height:1.7}#dialogue-text{line-height:1.65}#dialogue-speaker{font-family:Georgia,serif!important}
+#prompt-stage{font-family:var(--ui-font)!important;font-size:17px}#objective-main{line-height:1.6}#objective-progress{line-height:1.6}#learning-live,#learning-tip{line-height:1.7}#dialogue-text{line-height:1.65}#dialogue-speaker{font-family:var(--ui-font)!important}
 #prompt-main.hanzi-row-prompt{font-size:clamp(18px,2vw,28px);line-height:1.6;word-break:break-word;letter-spacing:3px}.rune-orb,.shadow-bolt{min-width:54px;width:auto!important;max-width:150px;padding:3px 9px;font-size:22px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #ime-title{font-size:14px!important}#ime-hint{font-size:12px!important;line-height:1.6}#ime-input{font-size:20px!important}#result-title{font-size:clamp(26px,3.5vw,38px)}#certificate{line-height:1.85}
 #cloud-settings,#cloud-upload-panel{display:none!important}#title-leaderboard-grid .rankboard{padding:16px;border:1px solid #9d7a45;border-radius:7px;background:#09121bcb;color:#e8d5ad;line-height:1.7}#title-leaderboard-grid .rankboard p{font-size:13px;margin:6px 0}
@@ -38,7 +37,7 @@ button{cursor:pointer}button:disabled{cursor:wait;opacity:.6}button:focus-visibl
 @media(max-width:520px){.practice-mode[data-practice-mode="zhuyin"]>b{font-size:20px;letter-spacing:-1px;word-spacing:-3px}.vocabulary-level{padding:12px 6px!important}.vocabulary-level strong{font-size:15px;letter-spacing:0;white-space:nowrap}.vocabulary-level small{font-size:10px;letter-spacing:0;white-space:nowrap}}
 /* One live target, committed-word confirmation and persistent input guidance. */
 #prompt-board.single-hanzi-target{min-width:340px;max-width:min(680px,70vw);padding:12px 24px}
-#prompt-board.single-hanzi-target #prompt-stage{display:block!important;color:#ffe2a0;font:700 13px 'Be Vietnam Pro',Arial,sans-serif!important;letter-spacing:2px;margin-bottom:5px}
+#prompt-board.single-hanzi-target #prompt-stage{display:block!important;color:#ffe2a0;font:700 13px var(--ui-font)!important;letter-spacing:2px;margin-bottom:5px}
 #prompt-board.single-hanzi-target #prompt-main{font-size:clamp(32px,3.8vw,50px)!important;line-height:1.3;letter-spacing:5px}
 #prompt-board.single-hanzi-target #prompt-sub{display:block!important;font-size:12px;color:#eef6ee;line-height:1.6;margin:5px 0}
 #prompt-board.single-hanzi-target #word-progress{font-size:14px;line-height:1.5;color:#a8edf2;margin-top:4px}
@@ -99,7 +98,7 @@ button{cursor:pointer}button:disabled{cursor:wait;opacity:.6}button:focus-visibl
 
 /* Whole-word Hanzi input has no per-letter cursor. */
 #prompt-board.hanzi-whole-word #word-progress .current{text-decoration:none;color:inherit}
-#combat-pressure{margin-top:6px;font:700 13px/1.5 'Be Vietnam Pro',Arial,sans-serif;color:#ffe3a0;letter-spacing:0}
+#combat-pressure{margin-top:6px;font:700 13px/1.5 var(--ui-font);color:#ffe3a0;letter-spacing:0}
 #combat-pressure.urgent{color:#ff8b84;text-shadow:0 0 9px #ff443344}
 #combat-pressure[hidden]{display:none}
 @media(max-width:520px){#combat-pressure{font-size:10px;margin-top:3px}}
@@ -132,7 +131,7 @@ button{cursor:pointer}button:disabled{cursor:wait;opacity:.6}button:focus-visibl
 @media(max-width:520px){
  #app.in-combat .hero-health,#app.in-combat .enemy-health{bottom:250px}
 }
-.result-disclosure{margin:12px 0;padding:11px 13px;border:1px solid #b7b3a066;border-radius:9px;background:#101b23e8;color:#f1f1e8;text-align:left;font:13px/1.6 'Be Vietnam Pro',Arial,sans-serif}
+.result-disclosure{margin:12px 0;padding:11px 13px;border:1px solid #b7b3a066;border-radius:9px;background:#101b23e8;color:#f1f1e8;text-align:left;font:13px/1.6 var(--ui-font)}
 .result-disclosure summary{cursor:pointer;color:#ffe1a1;font-weight:700;min-height:24px}
 .result-disclosure p{margin:9px 0}.practice-review-table{width:100%;border-collapse:collapse;font-size:13px}
 .practice-review-table th,.practice-review-table td{padding:8px 6px;border-bottom:1px solid #ffffff24;text-align:left;overflow-wrap:anywhere}
