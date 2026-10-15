@@ -34,5 +34,6 @@ fs.writeFileSync(new URL('public/game/runtime.js',root),runtime);
 fs.writeFileSync(new URL('public/game/adaptation.css',root),read('src/reference/adaptation.css'));
 fs.writeFileSync(new URL('index.html',root),html);
 const remaining=[...new Set((runtime+html).match(/[\u3400-\u9fff]+/g)||[])];
+fs.mkdirSync(new URL('output/',root),{recursive:true});
 fs.writeFileSync(new URL('output/ui-remaining.json',root),JSON.stringify(remaining,null,2));
 console.log('Reference game built; remaining Han fragments:',remaining.length);
