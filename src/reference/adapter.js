@@ -262,12 +262,29 @@ function tuneHanziObjects(){
  for(const obj of data.objects||[]){
   if(obj.hanziPaced)continue;obj.hanziPaced=true;obj.hanziBornAt=performance.now();
   const seconds=combatTargetSeconds(data.rowTokens?.[obj.char]?.text.length||1);
-  if(mechanic==='homefall'){obj.y=Math.max(95,obj.y);obj.x=rect.width*(.43+(obj.id%3)*.19);obj.speed=Math.max(.1,(rect.height-38-obj.y)/seconds);obj.drift=0;}
+  if(mechanic==='homefall'){obj.y=Math.max(95,obj.y);obj.x=rect.width*(.43+(obj.id%3)*.19);obj.speed=Math.max(.1,(rect.height-38-obj.y)/seconds);obj.drift=0;obj.flightLayout={boundary:rect.height-38,origin:obj.y,width:rect.width,lane:obj.x/rect.width};}
   else if(mechanic==='bottom_defense'){obj.y=110+(obj.id%3)*Math.max(58,(rect.height-300)/3);obj.speed=Math.max(.1,(obj.x-126)/seconds);}
  }
 }
+// Arena resizing must not shorten or extend an already flying target's response window.
+function reflowHomefallObjects(){
+ if(getStage()?.mechanic!=='homefall')return;
+ const rect=el.arena.getBoundingClientRect(),boundary=rect.height-38;
+ if(!(rect.width>0&&boundary>0))return;
+ for(const obj of game.stageData?.objects||[]){
+  const prior=obj.flightLayout;if(!prior)continue;
+  if(prior.boundary===boundary&&prior.width===rect.width)continue;
+  const remaining=Math.max(0,(prior.boundary-obj.y)/obj.speed);
+  const progress=Math.max(0,Math.min(1,(obj.y-prior.origin)/Math.max(1,prior.boundary-prior.origin)));
+  const origin=Math.min(95,boundary-1);
+  obj.y=origin+progress*(boundary-origin);
+  obj.x=rect.width*prior.lane;
+  if(remaining>0)obj.speed=(boundary-obj.y)/remaining;
+  obj.flightLayout={boundary,origin,width:rect.width,lane:prior.lane};
+ }
+}
 const nativeHomefallUpdate=updateHomefall;
-updateHomefall=function(dt){const data=game.stageData,before=[...(data?.objects||[])];nativeHomefallUpdate(dt);recordExpiredRowWords(data,before);tuneHanziObjects();};
+updateHomefall=function(dt){reflowHomefallObjects();const data=game.stageData,before=[...(data?.objects||[])];nativeHomefallUpdate(dt);recordExpiredRowWords(data,before);tuneHanziObjects();};
 const nativeBottomUpdate=updateBottomDefense;
 updateBottomDefense=function(dt){const data=game.stageData,before=[...(data?.objects||[])];nativeBottomUpdate(dt);recordExpiredRowWords(data,before);tuneHanziObjects();};
 function recordExpiredRowWords(data,before){
@@ -307,6 +324,7 @@ function renderActiveTypingCue(){
 const nativeProjectileRenderer=renderProjectiles;
 const projectileNodes=new Map();let projectileOwner=null,projectileSignature='';
 renderProjectiles=function(){
+ reflowHomefallObjects();
  const stage=getStage(),data=game.stageData;
  if(!data||!['homefall','bottom_defense'].includes(stage?.mechanic)){projectileOwner=null;projectileNodes.clear();projectileSignature='';nativeProjectileRenderer();return;}
  if(projectileOwner!==data){el.projectileLayer.replaceChildren();projectileNodes.clear();projectileOwner=data;projectileSignature='';}
@@ -524,6 +542,7 @@ let targetSeconds=5;const combatSpeed=1;
 try{const saved=Number(localStorage.getItem('wuxia_target_seconds_v1'));if(Number.isInteger(saved)&&saved>=1&&saved<=60)targetSeconds=saved;}catch{}
 function setTargetSeconds(value){
  const seconds=Number(value);if(!Number.isInteger(seconds)||seconds<1||seconds>60)return false;
+ reflowHomefallObjects();
  targetSeconds=seconds;try{localStorage.setItem('wuxia_target_seconds_v1',String(seconds));}catch{}
  const input=$('#target-seconds');if(input)input.value=String(seconds);
  document.querySelectorAll('[data-target-seconds]').forEach(button=>button.setAttribute('aria-pressed',String(Number(button.dataset.targetSeconds)===seconds)));

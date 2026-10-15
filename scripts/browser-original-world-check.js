@@ -16,7 +16,7 @@ async(page)=>{
  };
  for(const width of [1440,768,390])await verifyGeometry(width);
  await page.screenshot({path:'output/playwright/original-bubbles-mobile.png',fullPage:true});
- await page.setViewportSize({width:1440,height:1000});await page.screenshot({path:'output/playwright/original-bubbles-desktop.png'});
+ await page.setViewportSize({width:1440,height:1000});await page.waitForTimeout(180);await page.screenshot({path:'output/playwright/original-bubbles-desktop.png'});
  // Isolated layout/mechanic fixtures after the real menu/answer path above.
  for(const index of [1,2,3,4]){
   await page.evaluate(i=>{closeOverlays();resetRun(false);loadStage(i,true);if(i===2){game.stageData.spawnTimer=0;updateBottomDefense(.01);renderProjectiles();}},index);
