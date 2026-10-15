@@ -1,0 +1,23 @@
+{
+  "audio/bgm_title_screen.mp3": "original/audio/lantern-courtyard.mp3",
+  "audio/bgm_main_game.mp3": "original/audio/jade-postroad.mp3",
+  "audio/bgm_battle.mp3": "original/audio/inkstorm-duel.mp3",
+  "audio/sfx_answer_correct.mp3": "original/audio/cue-answer_correct.mp3",
+  "audio/sfx_answer_wrong.mp3": "original/audio/cue-answer_wrong.mp3",
+  "audio/sfx_attack_crit.mp3": "original/audio/cue-attack_crit.mp3",
+  "audio/sfx_battle_lose.mp3": "original/audio/cue-battle_lose.mp3",
+  "audio/sfx_buff_positive.mp3": "original/audio/cue-buff_positive.mp3",
+  "audio/sfx_button_click.mp3": "original/audio/cue-button_click.mp3",
+  "audio/sfx_button_hover.mp3": "original/audio/cue-button_hover.mp3",
+  "audio/sfx_buy_item.mp3": "original/audio/cue-buy_item.mp3",
+  "audio/sfx_debuff_negative.mp3": "original/audio/cue-debuff_negative.mp3",
+  "audio/sfx_fire_effect.mp3": "original/audio/cue-fire_effect.mp3",
+  "audio/sfx_heal_effect.mp3": "original/audio/cue-heal_effect.mp3",
+  "audio/sfx_ice_effect.mp3": "original/audio/cue-ice_effect.mp3",
+  "audio/sfx_level_up.mp3": "original/audio/cue-level_up.mp3",
+  "audio/sfx_monster_attack.mp3": "original/audio/cue-monster_attack.mp3",
+  "audio/sfx_player_attack.mp3": "original/audio/cue-player_attack.mp3",
+  "audio/sfx_poison_tick.mp3": "original/audio/cue-poison_tick.mp3",
+  "audio/sfx_shield_block.mp3": "original/audio/cue-shield_block.mp3",
+  "audio/sfx_skill_cast.mp3": "original/audio/cue-skill_cast.mp3"
+}

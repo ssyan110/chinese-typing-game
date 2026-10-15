@@ -4,7 +4,7 @@ html,body,button,input,select{font-family:'Be Vietnam Pro',Arial,sans-serif!impo
 button{cursor:pointer}button:disabled{cursor:wait;opacity:.6}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #ffe2a0;outline-offset:4px}
 #title-name,#stage-select-title,#result-title,#leaderboard-title,#loading-title,#practice-heading,.vn-wordmark{font-family:Georgia,'Times New Roman',serif!important}
 [hidden]{display:none!important}
-#practice-setup{z-index:60;background:linear-gradient(180deg,rgba(3,10,15,.25),rgba(3,8,14,.72)),url('/game/assets/title_background_inkwash.jpg') center/cover}
+#practice-setup{z-index:60;background:linear-gradient(180deg,rgba(3,10,15,.25),rgba(3,8,14,.72)),url('/original/art/title_background_inkwash.svg') center/cover}
 #practice-card{width:min(1120px,96vw);max-height:94dvh;overflow:auto;padding:30px 36px;background:linear-gradient(145deg,rgba(17,24,29,.95),rgba(6,13,21,.94));border:2px solid #b8874b;box-shadow:0 0 0 5px #231a15b8,0 24px 90px #000c;border-radius:12px;text-align:center}
 .vn-wordmark{font-size:clamp(28px,4vw,52px);font-weight:bold;letter-spacing:3px;color:#ffe3a8;text-shadow:0 3px 0 #40251a,0 0 30px #b87937a0;margin:6px 0 18px}
 #title-name{font-size:clamp(22px,3vw,36px)!important}

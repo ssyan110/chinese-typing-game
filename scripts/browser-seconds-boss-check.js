@@ -33,7 +33,7 @@ async(page)=>{
  await page.screenshot({path:'output/playwright/seconds-control-desktop.png'});
  await page.setViewportSize({width:390,height:844});await page.waitForTimeout(150);
  check(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Mobile seconds controls do not overflow');
- check(await page.evaluate(()=>{const r=id=>document.getElementById(id).getBoundingClientRect();return r('bar-stack').bottom<=r('metric-card').top&&r('top-hud').bottom<=r('arena').top;}),'Mobile HUD sections remain separated');
+ check(await page.evaluate(()=>{const r=id=>document.getElementById(id).getBoundingClientRect();const a=r('bar-stack'),b=r('metric-card');return (a.bottom<=b.top||b.bottom<=a.top)&&r('top-hud').bottom<=r('arena').top;}),'Mobile HUD sections remain separated');
  await page.screenshot({path:'output/playwright/seconds-control-mobile.png'});
  check(errors.length===0,'No browser runtime errors');await page.evaluate(r=>window.__secondsBossVerification=r,{passed:checks.length,checks,initial,afterWord,afterGuard,errors});
 }

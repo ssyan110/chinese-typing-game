@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import {createHash} from 'node:crypto';
 const root=new URL('../',import.meta.url);
 const read=p=>fs.readFileSync(new URL(p,root),'utf8');
 const translations=Object.fromEntries(read('src/reference/ui-vi.tsv').trim().split('\n').map(l=>l.split('\t')));
@@ -20,18 +21,35 @@ runtime=runtime.replace('let urls = collectPreloadAssetUrls();','let urls = '+JS
 runtime=runtime.replaceAll('Focus Keys:','Phím cần luyện:').replaceAll('Focus Words Combo','Liên chiêu ôn từ');
 runtime=runtime.replaceAll('Ải${item.id}ải:','Ải ${item.id}: ').replaceAll('Đã hoàn thành ải ${stage?.id || 1} ải ·','Đã hoàn thành ải ${stage?.id || 1} ·');
 runtime=runtime.replaceAll('char: pick(data.allowed),','char: drawRowTarget(data),');
-runtime += '\n'+read('src/reference/vocabulary-deck.js')+'\n'+read('src/reference/result-details.js')+'\n'+read('src/reference/input-state.js')+'\n'+read('src/reference/adapter.js');
+runtime += '\n'+read('src/reference/vocabulary-deck.js')+'\n'+read('src/reference/result-details.js')+'\n'+read('src/reference/input-state.js')+'\n'+read('src/reference/adapter.js')+'\n'+read('src/reference/original-runtime.js');
+runtime=runtime.replace('bindPracticeControls();mountCombatSpeedControls();','bindPracticeControls();mountCombatSpeedControls();mountOriginalWorld();');
 html=html.replace(/<script>[\s\S]*?<\/script>/,'<script defer src="/game/runtime.js"></script>');
 html=html.replace(/<script defer src="https:\/\/static.itch.io\/htmlgame.js"[^>]*><\/script>/,'');
 html=translate(html).replaceAll('DEFEND','ĐỠ ĐÒN').replace('<html lang="zh-Hant">','<html lang="vi">').replace('<head>','<head>\n<base href="/game/">\n<link rel="icon" href="/favicon.svg">');
-html=html.replace('</head>','<link rel="stylesheet" href="/game/adaptation.css">\n</head>');
+html=html.replace('</head>','<link rel="stylesheet" href="/game/adaptation.css">\n<link rel="stylesheet" href="/game/bubble-mode.css">\n<link rel="stylesheet" href="/game/original-theme.css">\n</head>');
 html=html.replace(/<img class="logo"[^>]*>/,'<div class="vn-wordmark">VÕ LÂM GÕ PHÍM</div>');
 html=html.replace(/(["'(])((?:assets|fonts|audio)\/)/g,'$1/game/$2');
 html=html.replace('Đầy nội lực 100 rồi bấm','Ải 5: đầy nội lực 100 rồi bấm');
 html=html.replace('<div id="toast"></div>',read('src/reference/setup.html')+'\n<div id="toast"></div>');
+// Re-route every source illustration and recording to the authored replacement pack.
+const mediaMap={...JSON.parse(read('public/original/art-map.json')),...JSON.parse(read('public/original/audio-map.json'))};
+const rewriteMedia=text=>{for(const [old,replacement]of Object.entries(mediaMap)){text=text.replaceAll('/game/'+old,'/'+replacement).replaceAll(old,'/'+replacement);}return text;};
+runtime=runtime.replace(/const HERO_FRAMES = \{[\s\S]*?\n        \};/,'const HERO_FRAMES = '+JSON.stringify(Object.fromEntries(['stand','run','jump','attack','defense','Injuried'].map(state=>[state,[1,2,3,4].map(i=>'/'+mediaMap[`assets/character/${state}-${i}.png`])])) )+';');
+html=html.replace(/@font-face\s*\{[\s\S]*?\}/g,'');
+runtime=rewriteMedia(runtime);html=rewriteMedia(html);
+html=html.replaceAll('Võ lâm gõ phím · Ngũ ải phi thăng','Đèn Sao · Hành trình chữ Hán').replaceAll('VÕ LÂM GÕ PHÍM','ĐÈN SAO');
+for(const [old,label]of [['Đệ tử nhập môn kiếm phái','Sứ giả tập sự Đèn Sao'],['Minh chủ võ lâm gõ phím','Người giữ Đèn Sao']]){html=html.replaceAll(old,label);runtime=runtime.replaceAll(old,label);}
 fs.mkdirSync(new URL('public/game/',root),{recursive:true});
 fs.writeFileSync(new URL('public/game/runtime.js',root),runtime);
-fs.writeFileSync(new URL('public/game/adaptation.css',root),read('src/reference/adaptation.css'));
+fs.writeFileSync(new URL('public/game/adaptation.css',root),rewriteMedia(read('src/reference/adaptation.css')));
+for(const name of ['bubble-mode.css','original-theme.css'])fs.writeFileSync(new URL('public/game/'+name,root),read('src/reference/'+name));
+// Content versions prevent an older cached runtime/CSS from mixing with new art/layout.
+for(const name of ['runtime.js','adaptation.css','bubble-mode.css','original-theme.css']){
+ const bytes=fs.readFileSync(new URL('public/game/'+name,root));
+ const version=createHash('sha256').update(bytes).digest('hex').slice(0,12);
+ html=html.replaceAll('/game/'+name,'/game/'+name+'?v='+version);
+}
+html=html.replace(/[ \t]+$/gm,'');
 fs.writeFileSync(new URL('index.html',root),html);
 const remaining=[...new Set((runtime+html).match(/[\u3400-\u9fff]+/g)||[])];
 fs.mkdirSync(new URL('output/',root),{recursive:true});

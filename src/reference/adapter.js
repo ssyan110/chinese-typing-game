@@ -54,8 +54,8 @@ updateImePanelHint=function(){
  if(practice.mode!=='zhuyin'&&isChineseTypingStage()){
   el.imeTitle.textContent=`${practiceModes[practice.mode]} · dùng bộ gõ tiếng Trung`;
   el.imeInput.placeholder='Gõ và chọn đúng chữ Hán';
-  const data=game.stageData,target=getTokenText(data.currentToken||data.currentWord),phonetic=getTokenPhonetic(data.currentToken||data.currentWord);
-  el.imeHint.textContent=game.imeComposing?`Đang chọn chữ. Từ cần nhập: ${target}`:`Từ cần nhập: ${target}${phonetic?' · Phiên âm: '+phonetic:''}`;
+  const data=game.stageData,target=getTokenText(data.currentToken||data.currentWord);
+  el.imeHint.textContent=game.imeComposing?`Đang chọn chữ. Từ cần nhập: ${target}`:'Nhập từ trên ấn của đối thủ.';
  }
 };
 const nativeHanziInput=handleChineseWordComboImeInput;
@@ -80,9 +80,9 @@ handleChineseWordComboImeInput=function(confirm=false){
   }
   if(result.kind==='confirm'){setTypingStatus(`Gõ tiếp nếu chưa hết từ. Nếu muốn nhập ${result.text}, bấm Enter hoặc Xuất chiêu.`, 'pending');return;}
   if(result.kind==='partial'||result.kind==='preedit'){setTypingStatus('Gõ tiếp cho đủ từ rồi chọn chữ trong bộ gõ.', 'pending');return;}
-  if(result.kind==='unavailable'){setTypingStatus(`Từ ${result.text} chưa xuất hiện hoặc đã hết lượt. Gõ mục tiêu đang được tô sáng.`, 'pending');return;}
+  if(result.kind==='unavailable'){setTypingStatus(`Từ ${result.text} chưa xuất hiện hoặc đã hết lượt. Nhìn các mục tiêu đang bay.`, 'pending');return;}
   if(entries[0])recordWordStat(entries[0][1].text,0,false);
-  recordAttempt(false);softMistake('Chưa đúng từ mục tiêu. Nhìn từ tô sáng và chọn lại chữ nhé.');
+  recordAttempt(false);softMistake('Chưa đúng từ mục tiêu. Nhìn các mục tiêu đang bay và chọn lại chữ nhé.');
   setTypingStatus('Chưa đúng từ mục tiêu. Bạn có thể sửa lại trong ô nhập.', 'error');return;
  }
  if(confirm!==true&&el.imeInput.value&&!/\p{Script=Han}/u.test(el.imeInput.value)){setTypingStatus('Đang nhập phiên âm; hãy chọn chữ trong bộ gõ.', 'pending');return;}
@@ -95,7 +95,7 @@ stage2NextPrompt=function(){nativeTopPrompt();const data=game.stageData;if(data?
 
 const nativeLoadStage=loadStage;
 loadStage=function(index,skipOpening=false){
- resetDamageIndicators();setTypingStatus('Nhìn mục tiêu được tô sáng rồi bắt đầu gõ.');applyTypingMode();
+ resetDamageIndicators();setTypingStatus('Nhìn mục tiêu trong trận đấu rồi bắt đầu gõ.');applyTypingMode();
  nativeLoadStage(index,skipOpening);
  if(game.practiceMode&&game.stageData&&getStage()?.mechanic==='word_combo'){
   const pool=practice.mode==='zhuyin'?practice.bopomofo:practice.tokens;
@@ -130,9 +130,9 @@ updateObjectiveUI=function(){
  nativeObjective();
  if(game.stageData?.rowTokens){
   const descriptions={
-   homefall:'Ưu tiên phù văn tô sáng. Bỏ lỡ mất 10 HP; gõ sai mất 4 HP. Đủ 3 lần đúng sẽ tự xuất kiếm.',
+   homefall:'Nhập bất kỳ phù văn nào đang rơi. Bỏ lỡ mất 10 HP; gõ sai mất 4 HP. Đủ 3 lần đúng sẽ tự xuất kiếm.',
    top_anchor:'Nhập từ để nhảy và tích vân khí. Bấm đúng F hoặc J được nhắc để đỡ đòn; đủ 2 nấc khí sẽ kích nổ mây.',
-   bottom_defense:'Ưu tiên ám khí tô sáng. Lọt đòn mất 12 HP; gõ sai mất 4 HP. Đủ 3 nấc khiên sẽ tự phản kích.'
+   bottom_defense:'Nhập bất kỳ ám khí nào đang bay. Lọt đòn mất 12 HP; gõ sai mất 4 HP. Đủ 3 nấc khiên sẽ tự phản kích.'
   };
   el.objectiveMain.textContent=descriptions[getStage()?.mechanic]||el.objectiveMain.textContent;
  }
@@ -166,6 +166,10 @@ renderPromptForStage=function(){
  nativeRenderPrompt();
  const hanzi=practice.mode!=='zhuyin',data=game.stageData,mechanic=getStage()?.mechanic;
  el.promptBoard.classList.toggle('hanzi-whole-word',hanzi);
+ el.arena.dataset.mechanic=mechanic||'';
+ el.arena.classList.toggle('world-guard',!!data&&(data.guardMode||mechanic==='top_anchor'&&data.expectedType==='anchor'));
+ el.arena.classList.toggle('hanzi-gameplay',hanzi);
+ if(hanzi){el.promptBoard.removeAttribute('title');el.promptBoard.removeAttribute('aria-label');}
  if(hanzi&&data&&['word_combo','boss_raid'].includes(mechanic)&&!data.guardMode){
   el.wordProgress.textContent=getTokenPhonetic(data.currentToken||data.currentWord);
  }
@@ -249,7 +253,7 @@ function bindPracticeControls(){
  el.imeInput.addEventListener('keydown',event=>{if(event.key==='Enter'&&!event.isComposing&&event.keyCode!==229&&!game.imeComposing){event.preventDefault();handleChineseWordComboImeInput(true);}});
  el.imeInput.addEventListener('paste',event=>{event.preventDefault();showToast('Hãy tự gõ để luyện tay nhé.',1000);});
 }
-// Keep one recommended target clear while concurrent threats create combat pressure.
+// Concurrent targets are read directly from the moving objects in the arena.
 const nativeSpawnCap=getAdaptiveSpawnCap;
 getAdaptiveSpawnCap=function(mechanic){return game.stageData?.rowTokens&&['homefall','bottom_defense'].includes(mechanic)?(game.practiceMode?1:combatPressureTier()+2):nativeSpawnCap(mechanic);};
 function tuneHanziObjects(){
@@ -308,14 +312,20 @@ renderProjectiles=function(){
  if(projectileOwner!==data){el.projectileLayer.replaceChildren();projectileNodes.clear();projectileOwner=data;projectileSignature='';}
  const objects=data.objects||[],live=new Set(objects.map(obj=>obj.id));
  for(const [id,node]of projectileNodes)if(!live.has(id)){node.remove();projectileNodes.delete(id);}
- const preferred=displayRowEntries(data,stage.mechanic)[0]?.[0];
  for(const obj of objects){
   let node=projectileNodes.get(obj.id);
-  if(!node){node=document.createElement('div');node.className=(stage.mechanic==='homefall'?'rune-orb':'shadow-bolt')+' hanzi-object';node.style.left='0';node.style.top='0';node.textContent=getKeyVisualLabel(obj.char);el.projectileLayer.append(node);projectileNodes.set(obj.id,node);}
-  node.style.transform=`translate3d(${obj.x}px,${obj.y}px,0)`;node.classList.toggle('target-highlight',obj.char===preferred);
+  if(!node){node=document.createElement('div');node.className=(stage.mechanic==='homefall'?'rune-orb':'shadow-bolt')+' hanzi-object';node.style.left='0';node.style.top='0';const word=document.createElement('span');word.className='bubble-word';word.textContent=getKeyVisualLabel(obj.char);node.append(word);const timer=document.createElement('small');timer.className='bubble-seconds';node.append(timer);el.projectileLayer.append(node);projectileNodes.set(obj.id,node);}
+  const rect=el.arena.getBoundingClientRect();
+  // Keep the whole label and countdown visible without changing collision positions.
+  const displayX=stage.mechanic==='homefall'?Math.max(8,Math.min(obj.x,rect.width-node.offsetWidth-8)):obj.x;
+  const displayY=Math.max(8,Math.min(obj.y,rect.height-node.offsetHeight-8));
+  node.style.transform=`translate3d(${displayX}px,${displayY}px,0)`;node.classList.remove('target-highlight');
+  const seconds=stage.mechanic==='homefall'?(rect.height-38-obj.y)/obj.speed:(obj.x-126)/obj.speed;
+  const time=Math.max(0,seconds);writeText(node.querySelector('.bubble-seconds'),`${time.toFixed(1)}s`);node.classList.toggle('bubble-urgent',time<=2);
+  node.setAttribute('aria-label',`${getKeyVisualLabel(obj.char)} · ${time.toFixed(1)} giây`);
  }
  const signature=objects.map(o=>o.id+':'+o.char).join('|');
- if(signature!==projectileSignature){projectileSignature=signature;renderActiveTypingCue();if(!el.imeInput.value&&!game.imeComposing&&performance.now()>typingSuccessUntil)setTypingStatus(objects.length?'Gõ từ đang được tô sáng. Không cần gõ theo danh sách.':'Đang chờ mục tiêu tiếp theo.');}
+ if(signature!==projectileSignature){projectileSignature=signature;renderActiveTypingCue();if(!el.imeInput.value&&!game.imeComposing&&performance.now()>typingSuccessUntil)setTypingStatus(objects.length?'Nhập bất kỳ mục tiêu nào đang bay. Không cần theo thứ tự.':'Đang chờ mục tiêu tiếp theo.');}
 };
 // Damage feedback is driven by actual damage calls, not guessed from score or combo.
 const combatFeedback={hero:{until:0,loss:0,before:0,max:1,reason:''},enemy:{until:0,loss:0,before:0,max:1,reason:''}};

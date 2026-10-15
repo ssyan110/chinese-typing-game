@@ -5,12 +5,9 @@
 <link rel="icon" href="/favicon.svg">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Võ lâm gõ phím · Ngũ ải phi thăng</title>
+    <title>Đèn Sao · Hành trình chữ Hán</title>
     <style>
-        @font-face {
-            font-family: "WuxiaTitle";
-            src: url("/game/fonts/font_wuxia_title.woff2.ttf") format("truetype");
-        }
+
 
         :root {
             --ink: #070b10;
@@ -67,13 +64,13 @@
             font-size: 14px;
             background:
                 linear-gradient(180deg, rgba(5, 9, 15, 0.85), rgba(5, 9, 15, 0.85)),
-                url("/game/assets/backgrounds/main_game_pixel_background.jpg") center / cover;
+                url("/original/art/backgrounds-main_game_pixel_background.svg") center / cover;
         }
 
         #bg-layer {
             position: absolute;
             inset: 0;
-            background-image: url("/game/assets/title_background_inkwash.jpg");
+            background-image: url("/original/art/title_background_inkwash.svg");
             background-size: cover;
             background-position: center;
             transition: background-image 0.85s ease, transform 1.2s ease;
@@ -1191,7 +1188,7 @@
         #objective-panel {
             background:
                 linear-gradient(180deg, rgba(8, 14, 24, 0.76), rgba(6, 11, 18, 0.62)),
-                url("/game/assets/backgrounds/inventory_background_pixel.jpg") center / cover;
+                url("/original/art/backgrounds-inventory_background_pixel.svg") center / cover;
         }
 
         .panel-title {
@@ -1280,7 +1277,7 @@
         #help-panel {
             background:
                 linear-gradient(135deg, rgba(8, 14, 24, 0.8), rgba(10, 20, 30, 0.72)),
-                url("/game/assets/backgrounds/shop_background_pixel.jpg") center / cover;
+                url("/original/art/backgrounds-shop_background_pixel.svg") center / cover;
         }
 
         #help-text {
@@ -1359,7 +1356,7 @@
             border-radius: 10px;
             background:
                 linear-gradient(135deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.2)),
-                url("/game/assets/ui/button_wood_texture.png") center / cover;
+                url("/original/art/ui-button_wood_texture.svg") center / cover;
             color: #fff4d0;
             font-family: "WuxiaTitle", "Noto Serif TC", serif;
             letter-spacing: 1px;
@@ -1402,7 +1399,7 @@
             z-index: 130;
             background:
                 linear-gradient(180deg, rgba(5, 10, 16, 0.72), rgba(4, 8, 13, 0.9)),
-                url("/game/assets/title_background_inkwash.jpg") center / cover;
+                url("/original/art/title_background_inkwash.svg") center / cover;
         }
 
         #loading-card {
@@ -1479,7 +1476,7 @@
         #title-screen {
             background:
                 linear-gradient(180deg, rgba(6, 10, 16, 0.42), rgba(4, 8, 13, 0.78)),
-                url("/game/assets/title_background_inkwash.jpg") center / cover;
+                url("/original/art/title_background_inkwash.svg") center / cover;
         }
 
         #title-screen .logo {
@@ -1751,13 +1748,13 @@
         #stage-select-screen {
             background:
                 linear-gradient(180deg, rgba(7, 11, 16, 0.5), rgba(6, 9, 14, 0.82)),
-                url("/game/assets/backgrounds/world_map_pixel.jpg") center / cover;
+                url("/original/art/backgrounds-world_map_pixel.svg") center / cover;
         }
 
         #leaderboard-screen {
             background:
                 linear-gradient(180deg, rgba(7, 11, 16, 0.52), rgba(6, 9, 14, 0.84)),
-                url("/game/assets/backgrounds/world_map_pixel.jpg") center / cover;
+                url("/original/art/backgrounds-world_map_pixel.svg") center / cover;
         }
 
         #leaderboard-card {
@@ -2017,7 +2014,7 @@
             overflow-y: auto;
             background:
                 linear-gradient(180deg, rgba(8, 16, 26, 0.84), rgba(9, 10, 17, 0.76)),
-                url("/game/assets/backgrounds/world_map_pixel.jpg") center / cover;
+                url("/original/art/backgrounds-world_map_pixel.svg") center / cover;
             border: 2px solid rgba(255, 219, 139, 0.8);
             text-align: left;
             color: #fff6df;
@@ -2203,7 +2200,7 @@
             max-width: 540px;
             background:
                 linear-gradient(180deg, rgba(8, 12, 22, 0.84), rgba(5, 9, 16, 0.76)),
-                url("/game/assets/backgrounds/battle_crypt_pixel.jpg") center / cover;
+                url("/original/art/backgrounds-battle_crypt_pixel.svg") center / cover;
         }
 
         #fail-reason {
@@ -2589,7 +2586,9 @@
             }
         }
     </style>
-<link rel="stylesheet" href="/game/adaptation.css">
+<link rel="stylesheet" href="/game/adaptation.css?v=ca5f7139e70c">
+<link rel="stylesheet" href="/game/bubble-mode.css?v=0ad80e333b76">
+<link rel="stylesheet" href="/game/original-theme.css?v=3413ac4e0577">
 </head>
 <body>
     <div id="app">
@@ -2599,37 +2598,37 @@
 
         <div id="top-hud" class="glass">
             <div id="hero-card">
-                <img class="portrait" src="/game/assets/ui/portrait.png" alt="Chân dung kiếm khách">
+                <img class="portrait" src="/original/art/ui-portrait.svg" alt="Chân dung kiếm khách">
                 <div>
-                    <div class="title">Đệ tử nhập môn kiếm phái</div>
+                    <div class="title">Sứ giả tập sự Đèn Sao</div>
                     <div class="subtitle" id="stage-name">Chờ bắt đầu thử thách</div>
                     <div id="companion-row">
-                        <img src="/game/assets/pets/qinglong_icon.png" alt="Thanh long">
-                        <img src="/game/assets/pets/kunpeng_icon.png" alt="Côn bằng">
-                        <img src="/game/assets/pets/zhuque_icon.png" alt="Chu tước">
-                        <img src="/game/assets/pets/pet_nether_whelp_icon.png" alt="Ấu long u hỏa">
+                        <img src="/original/art/pets-qinglong_icon.svg" alt="Thanh long">
+                        <img src="/original/art/pets-kunpeng_icon.svg" alt="Côn bằng">
+                        <img src="/original/art/pets-zhuque_icon.svg" alt="Chu tước">
+                        <img src="/original/art/pets-pet_nether_whelp_icon.svg" alt="Ấu long u hỏa">
                     </div>
                 </div>
             </div>
 
             <div id="bar-stack">
                 <div class="bar-item">
-                    <img src="/game/assets/ui/icon_hp_pixel.png" alt="HP">
+                    <img src="/original/art/ui-icon_hp_pixel.svg" alt="HP">
                     <div class="bar-shell"><div id="hp-fill" class="bar-fill"></div></div>
                     <div id="hp-text">140/140</div>
                 </div>
                 <div class="bar-item">
-                    <img src="/game/assets/ui/icon_sword_pixel.png" alt="Đối thủ">
+                    <img src="/original/art/ui-icon_sword_pixel.svg" alt="Đối thủ">
                     <div class="bar-shell"><div id="enemy-fill" class="bar-fill"></div></div>
                     <div id="enemy-text">--</div>
                 </div>
                 <div class="bar-item">
-                    <img src="/game/assets/ui/icon_mp_pixel.png" alt="Nội lực">
+                    <img src="/original/art/ui-icon_mp_pixel.svg" alt="Nội lực">
                     <div class="bar-shell"><div id="qi-fill" class="bar-fill"></div></div>
                     <div id="qi-text">0/100</div>
                 </div>
                 <div class="bar-item">
-                    <img src="/game/assets/ui/icon_scroll_pixel.png" alt="Tiến độ">
+                    <img src="/original/art/ui-icon_scroll_pixel.svg" alt="Tiến độ">
                     <div class="bar-shell"><div id="timer-fill" class="bar-fill"></div></div>
                     <div id="timer-text">0%</div>
                 </div>
@@ -2659,11 +2658,11 @@
             </div>
 
             <div id="hero-wrap">
-                <img id="hero-sprite" src="/game/assets/character/stand-1.png" alt="Kiếm khách">
+                <img id="hero-sprite" src="/original/art/character-stand-1.svg" alt="Kiếm khách">
             </div>
 
             <div id="enemy-wrap">
-                <img id="enemy-sprite" src="/game/assets/monsters/forest_spirit.gif" alt="Đối thủ">
+                <img id="enemy-sprite" src="/original/art/monsters-forest_spirit.svg" alt="Đối thủ">
             </div>
 
             <div id="prompt-board" class="glass">
@@ -2710,13 +2709,13 @@
             <div id="projectile-layer"></div>
             <div id="effect-layer"></div>
             <div id="combo-float"></div>
-            <img id="stage-clear-fx" src="/game/assets/effects/effect_levelup_animation.gif" alt="Hiệu ứng thăng cấp">
+            <img id="stage-clear-fx" src="/original/art/effects-effect_levelup_animation.svg" alt="Hiệu ứng thăng cấp">
             <div id="hit-line"></div>
         </div>
 
         <div id="bottom-hud" class="glass">
             <div id="objective-panel">
-                <div class="panel-title"><img src="/game/assets/ui/icon_scroll_pixel.png" alt="Nhiệm vụ">Nhiệm vụ hiện tại</div>
+                <div class="panel-title"><img src="/original/art/ui-icon_scroll_pixel.svg" alt="Nhiệm vụ">Nhiệm vụ hiện tại</div>
                 <div id="objective-main">Chờ bắt đầu thử thách.</div>
                 <div id="objective-guide"></div>
                 <div id="objective-progress"></div>
@@ -2724,13 +2723,13 @@
             </div>
 
             <div id="help-panel">
-                <div class="panel-title"><img src="/game/assets/ui/icon_settings_pixel.png" alt="Gợi ý">Bí quyết chiến đấu</div>
+                <div class="panel-title"><img src="/original/art/ui-icon_settings_pixel.svg" alt="Gợi ý">Bí quyết chiến đấu</div>
                 <div id="help-text">
-                    <img src="/game/assets/ui/icon_scroll_pixel.png" alt="Nhìn chữ" style="width:14px;height:14px;vertical-align:-2px;"> Nhìn chữ trên màn hình. Chậm trước, nhanh sau.<br>
-                    <img src="/game/assets/ui/icon_mp_pixel.png" alt="Tích năng lượng" style="width:14px;height:14px;vertical-align:-2px;"> Ba ải đầu: tích năng lượng trước, xuất chiêu sau.<br>
-                    <img src="/game/assets/ui/icon_sword_pixel.png" alt="Phá bùa" style="width:14px;height:14px;vertical-align:-2px;"> Ở ải 4 và 5, gõ đủ cả từ mới gây sát thương.<br>
-                    <img src="/game/assets/ui/icon_def_pixel.png" alt="Đỡ đòn" style="width:14px;height:14px;vertical-align:-2px;"> khi thấy <b>ĐỠ ĐÒN</b> bấm trước F/J.<br>
-                    <img src="/game/assets/ui/icon_atk_pixel.png" alt="Tuyệt chiêu" style="width:14px;height:14px;vertical-align:-2px;"> Ải 5: đầy nội lực 100 rồi bấm <b>Space</b> tung tuyệt chiêu.
+                    <img src="/original/art/ui-icon_scroll_pixel.svg" alt="Nhìn chữ" style="width:14px;height:14px;vertical-align:-2px;"> Nhìn chữ trên màn hình. Chậm trước, nhanh sau.<br>
+                    <img src="/original/art/ui-icon_mp_pixel.svg" alt="Tích năng lượng" style="width:14px;height:14px;vertical-align:-2px;"> Ba ải đầu: tích năng lượng trước, xuất chiêu sau.<br>
+                    <img src="/original/art/ui-icon_sword_pixel.svg" alt="Phá bùa" style="width:14px;height:14px;vertical-align:-2px;"> Ở ải 4 và 5, gõ đủ cả từ mới gây sát thương.<br>
+                    <img src="/original/art/ui-icon_def_pixel.svg" alt="Đỡ đòn" style="width:14px;height:14px;vertical-align:-2px;"> khi thấy <b>ĐỠ ĐÒN</b> bấm trước F/J.<br>
+                    <img src="/original/art/ui-icon_atk_pixel.svg" alt="Tuyệt chiêu" style="width:14px;height:14px;vertical-align:-2px;"> Ải 5: đầy nội lực 100 rồi bấm <b>Space</b> tung tuyệt chiêu.
                 </div>
                 <div id="learning-panel">
                     <div id="learning-title">Tình hình lượt này</div>
@@ -2768,8 +2767,8 @@
 
         <div id="title-screen" class="screen">
             <div class="screen-card">
-                <div class="vn-wordmark">VÕ LÂM GÕ PHÍM</div>
-                <div id="title-name">Võ lâm gõ phím · Ngũ ải phi thăng</div>
+                <div class="vn-wordmark">ĐÈN SAO</div>
+                <div id="title-name">Đèn Sao · Hành trình chữ Hán</div>
                 <div id="title-sub">
                     Mục tiêu: luyện gõ không nhìn phím, đánh bại giáo chủ chỉ biết gõ một ngón.<br>
                     Năm ải độc lập. Bạn có 3 phút mỗi lượt để ghi điểm và giành sao.
@@ -2852,7 +2851,7 @@
 
         <div id="result-screen" class="screen">
             <div id="result-card" class="screen-card">
-                <div id="result-title">「Minh chủ võ lâm gõ phím</div>
+                <div id="result-title">「Người giữ Đèn Sao</div>
                 <div id="result-sub">Hoàn thành hành trình, đạt cảnh giới vô địch.</div>
                 <div id="result-stage-line">Ải:--</div>
                 <div id="result-stars"></div>
@@ -2922,7 +2921,7 @@
 
         <div id="practice-setup" class="screen" aria-labelledby="practice-heading">
  <section class="screen-card" id="practice-card">
-  <div class="vn-wordmark">VÕ LÂM GÕ PHÍM</div>
+  <div class="vn-wordmark">ĐÈN SAO</div>
   <p class="setup-step" id="setup-step">BƯỚC 1 / 2 · CHỌN NỘI DUNG</p>
   <h1 id="practice-heading">Bạn muốn luyện gì?</h1>
   <p id="setup-intro">Chọn nội dung trước, rồi chọn cấp độ và bước vào ngũ ải.</p>
@@ -2947,6 +2946,6 @@
 <div id="toast"></div>
     </div>
 
-    <script defer src="/game/runtime.js"></script>
+    <script defer src="/game/runtime.js?v=9a3409514705"></script>
 </body>
 </html>

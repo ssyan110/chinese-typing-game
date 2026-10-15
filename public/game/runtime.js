@@ -138,13 +138,13 @@
         };
 
         const SCENES = {
-            title: "assets/title_background_inkwash.jpg",
-            forest: "assets/backgrounds/battle_forest_pixel.jpg",
-            frozen: "assets/backgrounds/battle_frozen_peak_pixel.jpg",
-            cave: "assets/backgrounds/battle_cave_pixel.jpg",
-            crypt: "assets/backgrounds/battle_crypt_pixel.jpg",
-            ruins: "assets/backgrounds/battle_ruins_pixel.jpg",
-            volcano: "assets/backgrounds/battle_volcano_pixel.jpg"
+            title: "/original/art/title_background_inkwash.svg",
+            forest: "/original/art/backgrounds-battle_forest_pixel.svg",
+            frozen: "/original/art/backgrounds-battle_frozen_peak_pixel.svg",
+            cave: "/original/art/backgrounds-battle_cave_pixel.svg",
+            crypt: "/original/art/backgrounds-battle_crypt_pixel.svg",
+            ruins: "/original/art/backgrounds-battle_ruins_pixel.svg",
+            volcano: "/original/art/backgrounds-battle_volcano_pixel.svg"
         };
 
         const SCENE_TONES = {
@@ -158,48 +158,41 @@
         };
 
         const MONSTERS = {
-            ruins_guardian_boss: { name: "Vua hộ vệ di tích", src: "assets/monsters/ruins_guardian_boss.gif" },
-            boar_angry: { name: "Lợn rừng cuồng nộ", src: "assets/monsters/boar_angry.gif" },
-            ice_spirit_elite: { name: "Hàn linh tinh anh", src: "assets/monsters/ice_spirit_elite.gif" },
-            mountain_bandit: { name: "Sơn tặc", src: "assets/monsters/mountain_bandit.gif" },
-            corrupted_treant: { name: "Thụ linh tha hóa", src: "assets/monsters/corrupted_treant.gif" },
-            mountain_bandit_elite: { name: "Thủ lĩnh sơn tặc", src: "assets/monsters/mountain_bandit_elite.gif" },
-            stone_golem_elite: { name: "Thạch khôi tinh anh", src: "assets/monsters/stone_golem_elite.gif" },
-            wolf_cub_elite: { name: "Sói con tinh anh", src: "assets/monsters/wolf_cub_elite.gif" },
-            undead_warrior: { name: "Võ giả bất tử", src: "assets/monsters/undead_warrior.gif" },
-            boar_angry_elite: { name: "Vua lợn rừng cuồng nộ", src: "assets/monsters/boar_angry_elite.gif" },
-            crazed_scholar_elite: { name: "Cuồng thư sinh tinh anh", src: "assets/monsters/crazed_scholar_elite.gif" },
-            forest_spirit: { name: "Tinh phách rừng", src: "assets/monsters/forest_spirit.gif" },
-            stone_golem: { name: "Thạch khôi", src: "assets/monsters/stone_golem.gif" },
-            snakelet_bamboo: { name: "Rắn trúc non", src: "assets/monsters/snakelet_bamboo.gif" },
-            corrupted_treant_elite: { name: "Cổ thụ tha hóa", src: "assets/monsters/corrupted_treant_elite.gif" },
-            nether_lord_boss: { name: "Ma vương một ngón", src: "assets/monsters/nether_lord_boss.gif" },
-            crazed_scholar: { name: "Cuồng thư sinh", src: "assets/monsters/crazed_scholar.gif" },
-            shadow_imp: { name: "Ảnh mị", src: "assets/monsters/shadow_imp.gif" },
-            forest_spirit_elite: { name: "Linh hộ vệ rừng", src: "assets/monsters/forest_spirit_elite.gif" },
-            forest_guardian_boss: { name: "Vua hộ vệ rừng", src: "assets/monsters/forest_guardian_boss.gif" },
-            flying_eye_elite: { name: "Tà nhãn tinh anh", src: "assets/monsters/flying_eye_elite.gif" },
-            frost_wyrm_boss: { name: "Sương long vương", src: "assets/monsters/frost_wyrm_boss.gif" },
-            flying_eye: { name: "Phi nhãn", src: "assets/monsters/flying_eye.gif" },
-            lich_apprentice_elite: { name: "Học đồ vu yêu tinh anh", src: "assets/monsters/lich_apprentice_elite.gif" },
-            cave_troll_boss: { name: "Cự ma hang động", src: "assets/monsters/cave_troll_boss.gif" },
-            wolf_cub: { name: "Sói con", src: "assets/monsters/wolf_cub.gif" },
-            yeti: { name: "Tuyết quái", src: "assets/monsters/yeti.gif" },
-            placeholder_monster: { name: "Ảo ảnh thử thách", src: "assets/monsters/placeholder_monster.gif" },
-            lava_elemental_boss: { name: "Vua nguyên tố dung nham", src: "assets/monsters/lava_elemental_boss.gif" },
-            lich_apprentice: { name: "Học đồ vu yêu", src: "assets/monsters/lich_apprentice.gif" },
-            shadow_imp_elite: { name: "Ảnh mị tinh anh", src: "assets/monsters/shadow_imp_elite.gif" },
-            ice_spirit: { name: "Hàn linh", src: "assets/monsters/ice_spirit.gif" }
+            ruins_guardian_boss: { name: "Vua hộ vệ di tích", src: "/original/art/monsters-ruins_guardian_boss.svg" },
+            boar_angry: { name: "Lợn rừng cuồng nộ", src: "/original/art/monsters-boar_angry.svg" },
+            ice_spirit_elite: { name: "Hàn linh tinh anh", src: "/original/art/monsters-ice_spirit_elite.svg" },
+            mountain_bandit: { name: "Sơn tặc", src: "/original/art/monsters-mountain_bandit.svg" },
+            corrupted_treant: { name: "Thụ linh tha hóa", src: "/original/art/monsters-corrupted_treant.svg" },
+            mountain_bandit_elite: { name: "Thủ lĩnh sơn tặc", src: "/original/art/monsters-mountain_bandit_elite.svg" },
+            stone_golem_elite: { name: "Thạch khôi tinh anh", src: "/original/art/monsters-stone_golem_elite.svg" },
+            wolf_cub_elite: { name: "Sói con tinh anh", src: "/original/art/monsters-wolf_cub_elite.svg" },
+            undead_warrior: { name: "Võ giả bất tử", src: "/original/art/monsters-undead_warrior.svg" },
+            boar_angry_elite: { name: "Vua lợn rừng cuồng nộ", src: "/original/art/monsters-boar_angry_elite.svg" },
+            crazed_scholar_elite: { name: "Cuồng thư sinh tinh anh", src: "/original/art/monsters-crazed_scholar_elite.svg" },
+            forest_spirit: { name: "Tinh phách rừng", src: "/original/art/monsters-forest_spirit.svg" },
+            stone_golem: { name: "Thạch khôi", src: "/original/art/monsters-stone_golem.svg" },
+            snakelet_bamboo: { name: "Rắn trúc non", src: "/original/art/monsters-snakelet_bamboo.svg" },
+            corrupted_treant_elite: { name: "Cổ thụ tha hóa", src: "/original/art/monsters-corrupted_treant_elite.svg" },
+            nether_lord_boss: { name: "Ma vương một ngón", src: "/original/art/monsters-nether_lord_boss.svg" },
+            crazed_scholar: { name: "Cuồng thư sinh", src: "/original/art/monsters-crazed_scholar.svg" },
+            shadow_imp: { name: "Ảnh mị", src: "/original/art/monsters-shadow_imp.svg" },
+            forest_spirit_elite: { name: "Linh hộ vệ rừng", src: "/original/art/monsters-forest_spirit_elite.svg" },
+            forest_guardian_boss: { name: "Vua hộ vệ rừng", src: "/original/art/monsters-forest_guardian_boss.svg" },
+            flying_eye_elite: { name: "Tà nhãn tinh anh", src: "/original/art/monsters-flying_eye_elite.svg" },
+            frost_wyrm_boss: { name: "Sương long vương", src: "/original/art/monsters-frost_wyrm_boss.svg" },
+            flying_eye: { name: "Phi nhãn", src: "/original/art/monsters-flying_eye.svg" },
+            lich_apprentice_elite: { name: "Học đồ vu yêu tinh anh", src: "/original/art/monsters-lich_apprentice_elite.svg" },
+            cave_troll_boss: { name: "Cự ma hang động", src: "/original/art/monsters-cave_troll_boss.svg" },
+            wolf_cub: { name: "Sói con", src: "/original/art/monsters-wolf_cub.svg" },
+            yeti: { name: "Tuyết quái", src: "/original/art/monsters-yeti.svg" },
+            placeholder_monster: { name: "Ảo ảnh thử thách", src: "/original/art/monsters-placeholder_monster.svg" },
+            lava_elemental_boss: { name: "Vua nguyên tố dung nham", src: "/original/art/monsters-lava_elemental_boss.svg" },
+            lich_apprentice: { name: "Học đồ vu yêu", src: "/original/art/monsters-lich_apprentice.svg" },
+            shadow_imp_elite: { name: "Ảnh mị tinh anh", src: "/original/art/monsters-shadow_imp_elite.svg" },
+            ice_spirit: { name: "Hàn linh", src: "/original/art/monsters-ice_spirit.svg" }
         };
 
-        const HERO_FRAMES = {
-            stand: [1, 2, 3, 4].map((i) => `assets/character/stand-${i}.png`),
-            run: [1, 2, 3, 4].map((i) => `assets/character/run-${i}.png`),
-            jump: [1, 2, 3, 4].map((i) => `assets/character/jump-${i}.png`),
-            attack: [1, 2, 3, 4].map((i) => `assets/character/attack-${i}.png`),
-            defense: [1, 2, 3, 4].map((i) => `assets/character/defense-${i}.png`),
-            Injuried: [1, 2, 3, 4].map((i) => `assets/character/Injuried-${i}.png`)
-        };
+        const HERO_FRAMES = {"stand":["/original/art/character-stand-1.svg","/original/art/character-stand-2.svg","/original/art/character-stand-3.svg","/original/art/character-stand-4.svg"],"run":["/original/art/character-run-1.svg","/original/art/character-run-2.svg","/original/art/character-run-3.svg","/original/art/character-run-4.svg"],"jump":["/original/art/character-jump-1.svg","/original/art/character-jump-2.svg","/original/art/character-jump-3.svg","/original/art/character-jump-4.svg"],"attack":["/original/art/character-attack-1.svg","/original/art/character-attack-2.svg","/original/art/character-attack-3.svg","/original/art/character-attack-4.svg"],"defense":["/original/art/character-defense-1.svg","/original/art/character-defense-2.svg","/original/art/character-defense-3.svg","/original/art/character-defense-4.svg"],"Injuried":["/original/art/character-Injuried-1.svg","/original/art/character-Injuried-2.svg","/original/art/character-Injuried-3.svg","/original/art/character-Injuried-4.svg"]};
 
         const HERO_FRAME_INTERVAL = {
             stand: 230,
@@ -211,11 +204,11 @@
         };
 
         const STAGE_TRACK = [
-            { name: "Tấn pháp căn bản", thumb: "assets/ui/location_thumb_forest.png" },
-            { name: "Khinh công vượt mây", thumb: "assets/ui/location_thumb_frozen_peak.png" },
-            { name: "Quét chân phá ám khí", thumb: "assets/ui/location_thumb_crypt.png" },
-            { name: "Kiếm khí tung hoành", thumb: "assets/ui/location_thumb_ruins.png" },
-            { name: "Quyết chiến ma giáo", thumb: "assets/ui/location_thumb_volcano.png" }
+            { name: "Tấn pháp căn bản", thumb: "/original/art/ui-location_thumb_forest.svg" },
+            { name: "Khinh công vượt mây", thumb: "/original/art/ui-location_thumb_frozen_peak.svg" },
+            { name: "Quét chân phá ám khí", thumb: "/original/art/ui-location_thumb_crypt.svg" },
+            { name: "Kiếm khí tung hoành", thumb: "/original/art/ui-location_thumb_ruins.svg" },
+            { name: "Quyết chiến ma giáo", thumb: "/original/art/ui-location_thumb_volcano.svg" }
         ];
 
         const STAGE_VISUALS = {
@@ -368,7 +361,7 @@
                 clear: [
                     { speaker: "Lời dẫn", text: "Kiếm khách tra kiếm vào vỏ." },
                     { speaker: "[Hướng dẫn]", text: "Hoàn thành hành trình. Bạn đã đạt cảnh giới vô địch!" },
-                    { speaker: "Sư phụ", text: "Từ hôm nay, con là Minh chủ võ lâm gõ phím!" }
+                    { speaker: "Sư phụ", text: "Từ hôm nay, con là Người giữ Đèn Sao!" }
                 ]
             }
         ];
@@ -444,29 +437,29 @@
         const audio = {
             unlocked: false,
             bgm: {
-                title: new Audio("audio/bgm_title_screen.mp3"),
-                main: new Audio("audio/bgm_main_game.mp3"),
-                battle: new Audio("audio/bgm_battle.mp3")
+                title: new Audio("/original/audio/lantern-courtyard.mp3"),
+                main: new Audio("/original/audio/jade-postroad.mp3"),
+                battle: new Audio("/original/audio/inkstorm-duel.mp3")
             },
             sfx: {
-                heal: "audio/sfx_heal_effect.mp3",
-                debuff: "audio/sfx_debuff_negative.mp3",
-                shield: "audio/sfx_shield_block.mp3",
-                skill: "audio/sfx_skill_cast.mp3",
-                buy: "audio/sfx_buy_item.mp3",
-                crit: "audio/sfx_attack_crit.mp3",
-                correct: "audio/sfx_answer_correct.mp3",
-                poison: "audio/sfx_poison_tick.mp3",
-                fire: "audio/sfx_fire_effect.mp3",
-                buff: "audio/sfx_buff_positive.mp3",
-                hover: "audio/sfx_button_hover.mp3",
-                ice: "audio/sfx_ice_effect.mp3",
-                playerAttack: "audio/sfx_player_attack.mp3",
-                monsterAttack: "audio/sfx_monster_attack.mp3",
-                levelUp: "audio/sfx_level_up.mp3",
-                lose: "audio/sfx_battle_lose.mp3",
-                wrong: "audio/sfx_answer_wrong.mp3",
-                click: "audio/sfx_button_click.mp3"
+                heal: "/original/audio/cue-heal_effect.mp3",
+                debuff: "/original/audio/cue-debuff_negative.mp3",
+                shield: "/original/audio/cue-shield_block.mp3",
+                skill: "/original/audio/cue-skill_cast.mp3",
+                buy: "/original/audio/cue-buy_item.mp3",
+                crit: "/original/audio/cue-attack_crit.mp3",
+                correct: "/original/audio/cue-answer_correct.mp3",
+                poison: "/original/audio/cue-poison_tick.mp3",
+                fire: "/original/audio/cue-fire_effect.mp3",
+                buff: "/original/audio/cue-buff_positive.mp3",
+                hover: "/original/audio/cue-button_hover.mp3",
+                ice: "/original/audio/cue-ice_effect.mp3",
+                playerAttack: "/original/audio/cue-player_attack.mp3",
+                monsterAttack: "/original/audio/cue-monster_attack.mp3",
+                levelUp: "/original/audio/cue-level_up.mp3",
+                lose: "/original/audio/cue-battle_lose.mp3",
+                wrong: "/original/audio/cue-answer_wrong.mp3",
+                click: "/original/audio/cue-button_click.mp3"
             },
             currentBgm: null
         };
@@ -822,7 +815,7 @@
             el.stageSelectGrid.innerHTML = STAGES.map((stage, index) => {
                 const record = getStageRecord(stage.id);
                 const pass = record.bestStars >= 1;
-                const thumb = STAGE_TRACK[index]?.thumb || "assets/ui/location_thumb_forest.png";
+                const thumb = STAGE_TRACK[index]?.thumb || "/original/art/ui-location_thumb_forest.svg";
                 const statusText = pass ? "Đã vượt ải" : "Chưa vượt ải";
                 return `
                     <div class="stage-select-node ${pass ? "pass" : ""}">
@@ -1707,46 +1700,46 @@
 
             if (stage.mechanic === "homefall") {
                 items = [
-                    { icon: "assets/ui/icon_scroll_pixel.png", text: game.chineseMode ? "Gõ ký hiệu chú âm" : "Gõ phù văn", active: true },
-                    { icon: "assets/ui/icon_mp_pixel.png", text: `Tích khí ${data.charge}/${data.chargeNeed}`, active: data.charge + 1 >= data.chargeNeed },
-                    { icon: "assets/ui/icon_sword_pixel.png", text: "Đầy khí tự chém", active: data.charge + 1 >= data.chargeNeed }
+                    { icon: "/original/art/ui-icon_scroll_pixel.svg", text: game.chineseMode ? "Gõ ký hiệu chú âm" : "Gõ phù văn", active: true },
+                    { icon: "/original/art/ui-icon_mp_pixel.svg", text: `Tích khí ${data.charge}/${data.chargeNeed}`, active: data.charge + 1 >= data.chargeNeed },
+                    { icon: "/original/art/ui-icon_sword_pixel.svg", text: "Đầy khí tự chém", active: data.charge + 1 >= data.chargeNeed }
                 ];
             } else if (stage.mechanic === "top_anchor") {
                 const guarding = data.expectedType === "anchor";
                 const cloudReady = data.cloudCharge >= data.cloudNeed;
                 items = [
-                    { icon: "assets/ui/icon_atk_pixel.png", text: game.chineseMode ? "Chú âm đạp mây" : "Q~P Đạp mây", active: !guarding && !cloudReady },
-                    { icon: "assets/ui/icon_def_pixel.png", text: "F/J Đỡ đòn", active: guarding || cloudReady },
-                    { icon: "assets/ui/icon_sword_pixel.png", text: `Nổ mây ${data.burstCount}/${data.targetBurst}`, active: cloudReady }
+                    { icon: "/original/art/ui-icon_atk_pixel.svg", text: game.chineseMode ? "Chú âm đạp mây" : "Q~P Đạp mây", active: !guarding && !cloudReady },
+                    { icon: "/original/art/ui-icon_def_pixel.svg", text: "F/J Đỡ đòn", active: guarding || cloudReady },
+                    { icon: "/original/art/ui-icon_sword_pixel.svg", text: `Nổ mây ${data.burstCount}/${data.targetBurst}`, active: cloudReady }
                 ];
             } else if (stage.mechanic === "bottom_defense") {
                 const burstReady = data.shieldCharge + 1 >= data.shieldNeed;
                 items = [
-                    { icon: "assets/ui/icon_def_pixel.png", text: game.chineseMode ? "Ký hiệu đỡ đòn" : "Z~M Đỡ đòn", active: true },
-                    { icon: "assets/ui/icon_mp_pixel.png", text: `Khí khiên ${data.shieldCharge}/${data.shieldNeed}`, active: burstReady },
-                    { icon: "assets/ui/icon_sword_pixel.png", text: `Phản kích ${data.counterBursts}/${data.targetBurst}`, active: burstReady }
+                    { icon: "/original/art/ui-icon_def_pixel.svg", text: game.chineseMode ? "Ký hiệu đỡ đòn" : "Z~M Đỡ đòn", active: true },
+                    { icon: "/original/art/ui-icon_mp_pixel.svg", text: `Khí khiên ${data.shieldCharge}/${data.shieldNeed}`, active: burstReady },
+                    { icon: "/original/art/ui-icon_sword_pixel.svg", text: `Phản kích ${data.counterBursts}/${data.targetBurst}`, active: burstReady }
                 ];
             } else if (stage.mechanic === "word_combo") {
                 items = [
-                    { icon: "assets/ui/icon_scroll_pixel.png", text: game.chineseMode ? (game.zhModeVariant === "bopomofo" ? "Nhìn cả chuỗi chú âm" : "Nhìn cả từ") : "Nhìn cả từ", active: true },
-                    { icon: "assets/ui/icon_atk_pixel.png", text: game.chineseMode ? (game.zhModeVariant === "bopomofo" ? "Bấm đúng phím" : "Đã chọn chữ") : "Gõ hết liên tục", active: data.progress > 0 },
-                    { icon: "assets/ui/icon_sword_pixel.png", text: `Phá bùa ${data.completed}/${data.target}`, active: data.progress > 0 }
+                    { icon: "/original/art/ui-icon_scroll_pixel.svg", text: game.chineseMode ? (game.zhModeVariant === "bopomofo" ? "Nhìn cả chuỗi chú âm" : "Nhìn cả từ") : "Nhìn cả từ", active: true },
+                    { icon: "/original/art/ui-icon_atk_pixel.svg", text: game.chineseMode ? (game.zhModeVariant === "bopomofo" ? "Bấm đúng phím" : "Đã chọn chữ") : "Gõ hết liên tục", active: data.progress > 0 },
+                    { icon: "/original/art/ui-icon_sword_pixel.svg", text: `Phá bùa ${data.completed}/${data.target}`, active: data.progress > 0 }
                 ];
             } else if (stage.mechanic === "boss_raid") {
                 if (data.guardMode) {
                     items = [
-                        { icon: "assets/ui/icon_def_pixel.png", text: `Bấm ${data.guardKey.toUpperCase()}`, active: true },
-                        { icon: "assets/ui/icon_sword_pixel.png", text: "Đỡ đòn rồi phản kích", active: true },
-                        { icon: "assets/ui/icon_mp_pixel.png", text: `Nội lực ${Math.round(game.qi)}/100`, active: game.qi >= game.maxQi }
+                        { icon: "/original/art/ui-icon_def_pixel.svg", text: `Bấm ${data.guardKey.toUpperCase()}`, active: true },
+                        { icon: "/original/art/ui-icon_sword_pixel.svg", text: "Đỡ đòn rồi phản kích", active: true },
+                        { icon: "/original/art/ui-icon_mp_pixel.svg", text: `Nội lực ${Math.round(game.qi)}/100`, active: game.qi >= game.maxQi }
                     ];
                 } else {
                     const counterText = data.counterWindow > 0
                         ? `Phản kích x${(data.counterBonus || 1).toFixed(2)} ${data.counterWindow.toFixed(1)}s`
                         : `Ải ${data.phase || 1} Giai đoạn`;
                     items = [
-                        { icon: "assets/ui/icon_scroll_pixel.png", text: game.chineseMode ? (game.zhModeVariant === "bopomofo" ? "Gõ đủ chuỗi chú âm" : "Gõ đầy đủ từ") : "Gõ đầy đủ từ", active: true },
-                        { icon: "assets/ui/icon_sword_pixel.png", text: counterText, active: data.counterWindow > 0 || (data.phase || 1) >= 2 },
-                        { icon: "assets/ui/icon_mp_pixel.png", text: `Space ${Math.round(game.qi)}/100`, active: game.qi >= game.maxQi }
+                        { icon: "/original/art/ui-icon_scroll_pixel.svg", text: game.chineseMode ? (game.zhModeVariant === "bopomofo" ? "Gõ đủ chuỗi chú âm" : "Gõ đầy đủ từ") : "Gõ đầy đủ từ", active: true },
+                        { icon: "/original/art/ui-icon_sword_pixel.svg", text: counterText, active: data.counterWindow > 0 || (data.phase || 1) >= 2 },
+                        { icon: "/original/art/ui-icon_mp_pixel.svg", text: `Space ${Math.round(game.qi)}/100`, active: game.qi >= game.maxQi }
                     ];
                 }
             }
@@ -2116,7 +2109,7 @@
             const minLoadingMs = 2200;
             const loadingStart = performance.now();
             setLoadingProgress(0, 1, "Đang kiểm tra tài nguyên...");
-            let urls = ["assets/backgrounds/battle_cave_pixel.jpg","assets/backgrounds/battle_crypt_pixel.jpg","assets/backgrounds/battle_forest_pixel.jpg","assets/backgrounds/battle_frozen_peak_pixel.jpg","assets/backgrounds/battle_ruins_pixel.jpg","assets/backgrounds/battle_volcano_pixel.jpg","assets/backgrounds/inventory_background_pixel.jpg","assets/backgrounds/main_game_pixel_background.jpg","assets/backgrounds/shop_background_pixel.jpg","assets/backgrounds/world_map_pixel.jpg","assets/character/Injuried-1.png","assets/character/Injuried-2.png","assets/character/Injuried-3.png","assets/character/Injuried-4.png","assets/character/attack-1.png","assets/character/attack-2.png","assets/character/attack-3.png","assets/character/attack-4.png","assets/character/defense-1.png","assets/character/defense-2.png","assets/character/defense-3.png","assets/character/defense-4.png","assets/character/jump-1.png","assets/character/jump-2.png","assets/character/jump-3.png","assets/character/jump-4.png","assets/character/run-1.png","assets/character/run-2.png","assets/character/run-3.png","assets/character/run-4.png","assets/character/stand-1.png","assets/character/stand-1.png","assets/character/stand-2.png","assets/character/stand-3.png","assets/character/stand-4.png","assets/effects/effect_levelup_animation.gif","assets/game_logo_title.png","assets/monsters/boar_angry.gif","assets/monsters/boar_angry_elite.gif","assets/monsters/cave_troll_boss.gif","assets/monsters/corrupted_treant.gif","assets/monsters/corrupted_treant_elite.gif","assets/monsters/crazed_scholar.gif","assets/monsters/crazed_scholar_elite.gif","assets/monsters/flying_eye.gif","assets/monsters/flying_eye_elite.gif","assets/monsters/forest_guardian_boss.gif","assets/monsters/forest_spirit.gif","assets/monsters/forest_spirit_elite.gif","assets/monsters/frost_wyrm_boss.gif","assets/monsters/ice_spirit.gif","assets/monsters/ice_spirit_elite.gif","assets/monsters/lava_elemental_boss.gif","assets/monsters/lich_apprentice.gif","assets/monsters/lich_apprentice_elite.gif","assets/monsters/mountain_bandit.gif","assets/monsters/mountain_bandit_elite.gif","assets/monsters/nether_lord_boss.gif","assets/monsters/placeholder_monster.gif","assets/monsters/ruins_guardian_boss.gif","assets/monsters/shadow_imp.gif","assets/monsters/shadow_imp_elite.gif","assets/monsters/snakelet_bamboo.gif","assets/monsters/stone_golem.gif","assets/monsters/stone_golem_elite.gif","assets/monsters/undead_warrior.gif","assets/monsters/wolf_cub.gif","assets/monsters/wolf_cub_elite.gif","assets/monsters/yeti.gif","assets/pets/kunpeng_icon.png","assets/pets/pet_nether_whelp_icon.png","assets/pets/qinglong_icon.png","assets/pets/zhuque_icon.png","assets/title_background_inkwash.jpg","assets/ui/button_wood_texture.png","assets/ui/icon_atk_pixel.png","assets/ui/icon_def_pixel.png","assets/ui/icon_hp_pixel.png","assets/ui/icon_mp_pixel.png","assets/ui/icon_scroll_pixel.png","assets/ui/icon_settings_pixel.png","assets/ui/icon_sword_pixel.png","assets/ui/location_thumb_crypt.png","assets/ui/location_thumb_forest.png","assets/ui/location_thumb_frozen_peak.png","assets/ui/location_thumb_ruins.png","assets/ui/location_thumb_volcano.png","assets/ui/portrait.png","audio/bgm_battle.mp3","audio/bgm_main_game.mp3","audio/bgm_title_screen.mp3","audio/sfx_answer_correct.mp3","audio/sfx_answer_wrong.mp3","audio/sfx_attack_crit.mp3","audio/sfx_battle_lose.mp3","audio/sfx_buff_positive.mp3","audio/sfx_button_click.mp3","audio/sfx_button_hover.mp3","audio/sfx_buy_item.mp3","audio/sfx_debuff_negative.mp3","audio/sfx_fire_effect.mp3","audio/sfx_heal_effect.mp3","audio/sfx_ice_effect.mp3","audio/sfx_level_up.mp3","audio/sfx_monster_attack.mp3","audio/sfx_player_attack.mp3","audio/sfx_poison_tick.mp3","audio/sfx_shield_block.mp3","audio/sfx_skill_cast.mp3"];
+            let urls = ["/original/art/backgrounds-battle_cave_pixel.svg","/original/art/backgrounds-battle_crypt_pixel.svg","/original/art/backgrounds-battle_forest_pixel.svg","/original/art/backgrounds-battle_frozen_peak_pixel.svg","/original/art/backgrounds-battle_ruins_pixel.svg","/original/art/backgrounds-battle_volcano_pixel.svg","/original/art/backgrounds-inventory_background_pixel.svg","/original/art/backgrounds-main_game_pixel_background.svg","/original/art/backgrounds-shop_background_pixel.svg","/original/art/backgrounds-world_map_pixel.svg","/original/art/character-Injuried-1.svg","/original/art/character-Injuried-2.svg","/original/art/character-Injuried-3.svg","/original/art/character-Injuried-4.svg","/original/art/character-attack-1.svg","/original/art/character-attack-2.svg","/original/art/character-attack-3.svg","/original/art/character-attack-4.svg","/original/art/character-defense-1.svg","/original/art/character-defense-2.svg","/original/art/character-defense-3.svg","/original/art/character-defense-4.svg","/original/art/character-jump-1.svg","/original/art/character-jump-2.svg","/original/art/character-jump-3.svg","/original/art/character-jump-4.svg","/original/art/character-run-1.svg","/original/art/character-run-2.svg","/original/art/character-run-3.svg","/original/art/character-run-4.svg","/original/art/character-stand-1.svg","/original/art/character-stand-1.svg","/original/art/character-stand-2.svg","/original/art/character-stand-3.svg","/original/art/character-stand-4.svg","/original/art/effects-effect_levelup_animation.svg","/original/art/game_logo_title.svg","/original/art/monsters-boar_angry.svg","/original/art/monsters-boar_angry_elite.svg","/original/art/monsters-cave_troll_boss.svg","/original/art/monsters-corrupted_treant.svg","/original/art/monsters-corrupted_treant_elite.svg","/original/art/monsters-crazed_scholar.svg","/original/art/monsters-crazed_scholar_elite.svg","/original/art/monsters-flying_eye.svg","/original/art/monsters-flying_eye_elite.svg","/original/art/monsters-forest_guardian_boss.svg","/original/art/monsters-forest_spirit.svg","/original/art/monsters-forest_spirit_elite.svg","/original/art/monsters-frost_wyrm_boss.svg","/original/art/monsters-ice_spirit.svg","/original/art/monsters-ice_spirit_elite.svg","/original/art/monsters-lava_elemental_boss.svg","/original/art/monsters-lich_apprentice.svg","/original/art/monsters-lich_apprentice_elite.svg","/original/art/monsters-mountain_bandit.svg","/original/art/monsters-mountain_bandit_elite.svg","/original/art/monsters-nether_lord_boss.svg","/original/art/monsters-placeholder_monster.svg","/original/art/monsters-ruins_guardian_boss.svg","/original/art/monsters-shadow_imp.svg","/original/art/monsters-shadow_imp_elite.svg","/original/art/monsters-snakelet_bamboo.svg","/original/art/monsters-stone_golem.svg","/original/art/monsters-stone_golem_elite.svg","/original/art/monsters-undead_warrior.svg","/original/art/monsters-wolf_cub.svg","/original/art/monsters-wolf_cub_elite.svg","/original/art/monsters-yeti.svg","/original/art/pets-kunpeng_icon.svg","/original/art/pets-pet_nether_whelp_icon.svg","/original/art/pets-qinglong_icon.svg","/original/art/pets-zhuque_icon.svg","/original/art/title_background_inkwash.svg","/original/art/ui-button_wood_texture.svg","/original/art/ui-icon_atk_pixel.svg","/original/art/ui-icon_def_pixel.svg","/original/art/ui-icon_hp_pixel.svg","/original/art/ui-icon_mp_pixel.svg","/original/art/ui-icon_scroll_pixel.svg","/original/art/ui-icon_settings_pixel.svg","/original/art/ui-icon_sword_pixel.svg","/original/art/ui-location_thumb_crypt.svg","/original/art/ui-location_thumb_forest.svg","/original/art/ui-location_thumb_frozen_peak.svg","/original/art/ui-location_thumb_ruins.svg","/original/art/ui-location_thumb_volcano.svg","/original/art/ui-portrait.svg","/original/audio/inkstorm-duel.mp3","/original/audio/jade-postroad.mp3","/original/audio/lantern-courtyard.mp3","/original/audio/cue-answer_correct.mp3","/original/audio/cue-answer_wrong.mp3","/original/audio/cue-attack_crit.mp3","/original/audio/cue-battle_lose.mp3","/original/audio/cue-buff_positive.mp3","/original/audio/cue-button_click.mp3","/original/audio/cue-button_hover.mp3","/original/audio/cue-buy_item.mp3","/original/audio/cue-debuff_negative.mp3","/original/audio/cue-fire_effect.mp3","/original/audio/cue-heal_effect.mp3","/original/audio/cue-ice_effect.mp3","/original/audio/cue-level_up.mp3","/original/audio/cue-monster_attack.mp3","/original/audio/cue-player_attack.mp3","/original/audio/cue-poison_tick.mp3","/original/audio/cue-shield_block.mp3","/original/audio/cue-skill_cast.mp3"];
             const total = urls.length || 1;
             let done = 0;
             setLoadingProgress(done, total, `Chuẩn bị tải ${total} tài nguyên...`);
@@ -3987,7 +3980,7 @@
             }
 
             el.certificate.innerHTML = `
-                Chứng nhận:<b>Đệ tử nhập môn kiếm phái</b><br>
+                Chứng nhận:<b>Sứ giả tập sự Đèn Sao</b><br>
                 ${game.practiceMode
                     ? "Đã hoàn thành lượt luyện bổ sung."
                     : game.endlessBossMode
@@ -5619,8 +5612,8 @@ updateImePanelHint=function(){
  if(practice.mode!=='zhuyin'&&isChineseTypingStage()){
   el.imeTitle.textContent=`${practiceModes[practice.mode]} · dùng bộ gõ tiếng Trung`;
   el.imeInput.placeholder='Gõ và chọn đúng chữ Hán';
-  const data=game.stageData,target=getTokenText(data.currentToken||data.currentWord),phonetic=getTokenPhonetic(data.currentToken||data.currentWord);
-  el.imeHint.textContent=game.imeComposing?`Đang chọn chữ. Từ cần nhập: ${target}`:`Từ cần nhập: ${target}${phonetic?' · Phiên âm: '+phonetic:''}`;
+  const data=game.stageData,target=getTokenText(data.currentToken||data.currentWord);
+  el.imeHint.textContent=game.imeComposing?`Đang chọn chữ. Từ cần nhập: ${target}`:'Nhập từ trên ấn của đối thủ.';
  }
 };
 const nativeHanziInput=handleChineseWordComboImeInput;
@@ -5645,9 +5638,9 @@ handleChineseWordComboImeInput=function(confirm=false){
   }
   if(result.kind==='confirm'){setTypingStatus(`Gõ tiếp nếu chưa hết từ. Nếu muốn nhập ${result.text}, bấm Enter hoặc Xuất chiêu.`, 'pending');return;}
   if(result.kind==='partial'||result.kind==='preedit'){setTypingStatus('Gõ tiếp cho đủ từ rồi chọn chữ trong bộ gõ.', 'pending');return;}
-  if(result.kind==='unavailable'){setTypingStatus(`Từ ${result.text} chưa xuất hiện hoặc đã hết lượt. Gõ mục tiêu đang được tô sáng.`, 'pending');return;}
+  if(result.kind==='unavailable'){setTypingStatus(`Từ ${result.text} chưa xuất hiện hoặc đã hết lượt. Nhìn các mục tiêu đang bay.`, 'pending');return;}
   if(entries[0])recordWordStat(entries[0][1].text,0,false);
-  recordAttempt(false);softMistake('Chưa đúng từ mục tiêu. Nhìn từ tô sáng và chọn lại chữ nhé.');
+  recordAttempt(false);softMistake('Chưa đúng từ mục tiêu. Nhìn các mục tiêu đang bay và chọn lại chữ nhé.');
   setTypingStatus('Chưa đúng từ mục tiêu. Bạn có thể sửa lại trong ô nhập.', 'error');return;
  }
  if(confirm!==true&&el.imeInput.value&&!/\p{Script=Han}/u.test(el.imeInput.value)){setTypingStatus('Đang nhập phiên âm; hãy chọn chữ trong bộ gõ.', 'pending');return;}
@@ -5660,7 +5653,7 @@ stage2NextPrompt=function(){nativeTopPrompt();const data=game.stageData;if(data?
 
 const nativeLoadStage=loadStage;
 loadStage=function(index,skipOpening=false){
- resetDamageIndicators();setTypingStatus('Nhìn mục tiêu được tô sáng rồi bắt đầu gõ.');applyTypingMode();
+ resetDamageIndicators();setTypingStatus('Nhìn mục tiêu trong trận đấu rồi bắt đầu gõ.');applyTypingMode();
  nativeLoadStage(index,skipOpening);
  if(game.practiceMode&&game.stageData&&getStage()?.mechanic==='word_combo'){
   const pool=practice.mode==='zhuyin'?practice.bopomofo:practice.tokens;
@@ -5695,9 +5688,9 @@ updateObjectiveUI=function(){
  nativeObjective();
  if(game.stageData?.rowTokens){
   const descriptions={
-   homefall:'Ưu tiên phù văn tô sáng. Bỏ lỡ mất 10 HP; gõ sai mất 4 HP. Đủ 3 lần đúng sẽ tự xuất kiếm.',
+   homefall:'Nhập bất kỳ phù văn nào đang rơi. Bỏ lỡ mất 10 HP; gõ sai mất 4 HP. Đủ 3 lần đúng sẽ tự xuất kiếm.',
    top_anchor:'Nhập từ để nhảy và tích vân khí. Bấm đúng F hoặc J được nhắc để đỡ đòn; đủ 2 nấc khí sẽ kích nổ mây.',
-   bottom_defense:'Ưu tiên ám khí tô sáng. Lọt đòn mất 12 HP; gõ sai mất 4 HP. Đủ 3 nấc khiên sẽ tự phản kích.'
+   bottom_defense:'Nhập bất kỳ ám khí nào đang bay. Lọt đòn mất 12 HP; gõ sai mất 4 HP. Đủ 3 nấc khiên sẽ tự phản kích.'
   };
   el.objectiveMain.textContent=descriptions[getStage()?.mechanic]||el.objectiveMain.textContent;
  }
@@ -5731,6 +5724,10 @@ renderPromptForStage=function(){
  nativeRenderPrompt();
  const hanzi=practice.mode!=='zhuyin',data=game.stageData,mechanic=getStage()?.mechanic;
  el.promptBoard.classList.toggle('hanzi-whole-word',hanzi);
+ el.arena.dataset.mechanic=mechanic||'';
+ el.arena.classList.toggle('world-guard',!!data&&(data.guardMode||mechanic==='top_anchor'&&data.expectedType==='anchor'));
+ el.arena.classList.toggle('hanzi-gameplay',hanzi);
+ if(hanzi){el.promptBoard.removeAttribute('title');el.promptBoard.removeAttribute('aria-label');}
  if(hanzi&&data&&['word_combo','boss_raid'].includes(mechanic)&&!data.guardMode){
   el.wordProgress.textContent=getTokenPhonetic(data.currentToken||data.currentWord);
  }
@@ -5814,7 +5811,7 @@ function bindPracticeControls(){
  el.imeInput.addEventListener('keydown',event=>{if(event.key==='Enter'&&!event.isComposing&&event.keyCode!==229&&!game.imeComposing){event.preventDefault();handleChineseWordComboImeInput(true);}});
  el.imeInput.addEventListener('paste',event=>{event.preventDefault();showToast('Hãy tự gõ để luyện tay nhé.',1000);});
 }
-// Keep one recommended target clear while concurrent threats create combat pressure.
+// Concurrent targets are read directly from the moving objects in the arena.
 const nativeSpawnCap=getAdaptiveSpawnCap;
 getAdaptiveSpawnCap=function(mechanic){return game.stageData?.rowTokens&&['homefall','bottom_defense'].includes(mechanic)?(game.practiceMode?1:combatPressureTier()+2):nativeSpawnCap(mechanic);};
 function tuneHanziObjects(){
@@ -5873,14 +5870,20 @@ renderProjectiles=function(){
  if(projectileOwner!==data){el.projectileLayer.replaceChildren();projectileNodes.clear();projectileOwner=data;projectileSignature='';}
  const objects=data.objects||[],live=new Set(objects.map(obj=>obj.id));
  for(const [id,node]of projectileNodes)if(!live.has(id)){node.remove();projectileNodes.delete(id);}
- const preferred=displayRowEntries(data,stage.mechanic)[0]?.[0];
  for(const obj of objects){
   let node=projectileNodes.get(obj.id);
-  if(!node){node=document.createElement('div');node.className=(stage.mechanic==='homefall'?'rune-orb':'shadow-bolt')+' hanzi-object';node.style.left='0';node.style.top='0';node.textContent=getKeyVisualLabel(obj.char);el.projectileLayer.append(node);projectileNodes.set(obj.id,node);}
-  node.style.transform=`translate3d(${obj.x}px,${obj.y}px,0)`;node.classList.toggle('target-highlight',obj.char===preferred);
+  if(!node){node=document.createElement('div');node.className=(stage.mechanic==='homefall'?'rune-orb':'shadow-bolt')+' hanzi-object';node.style.left='0';node.style.top='0';const word=document.createElement('span');word.className='bubble-word';word.textContent=getKeyVisualLabel(obj.char);node.append(word);const timer=document.createElement('small');timer.className='bubble-seconds';node.append(timer);el.projectileLayer.append(node);projectileNodes.set(obj.id,node);}
+  const rect=el.arena.getBoundingClientRect();
+  // Keep the whole label and countdown visible without changing collision positions.
+  const displayX=stage.mechanic==='homefall'?Math.max(8,Math.min(obj.x,rect.width-node.offsetWidth-8)):obj.x;
+  const displayY=Math.max(8,Math.min(obj.y,rect.height-node.offsetHeight-8));
+  node.style.transform=`translate3d(${displayX}px,${displayY}px,0)`;node.classList.remove('target-highlight');
+  const seconds=stage.mechanic==='homefall'?(rect.height-38-obj.y)/obj.speed:(obj.x-126)/obj.speed;
+  const time=Math.max(0,seconds);writeText(node.querySelector('.bubble-seconds'),`${time.toFixed(1)}s`);node.classList.toggle('bubble-urgent',time<=2);
+  node.setAttribute('aria-label',`${getKeyVisualLabel(obj.char)} · ${time.toFixed(1)} giây`);
  }
  const signature=objects.map(o=>o.id+':'+o.char).join('|');
- if(signature!==projectileSignature){projectileSignature=signature;renderActiveTypingCue();if(!el.imeInput.value&&!game.imeComposing&&performance.now()>typingSuccessUntil)setTypingStatus(objects.length?'Gõ từ đang được tô sáng. Không cần gõ theo danh sách.':'Đang chờ mục tiêu tiếp theo.');}
+ if(signature!==projectileSignature){projectileSignature=signature;renderActiveTypingCue();if(!el.imeInput.value&&!game.imeComposing&&performance.now()>typingSuccessUntil)setTypingStatus(objects.length?'Nhập bất kỳ mục tiêu nào đang bay. Không cần theo thứ tự.':'Đang chờ mục tiêu tiếp theo.');}
 };
 // Damage feedback is driven by actual damage calls, not guessed from score or combo.
 const combatFeedback={hero:{until:0,loss:0,before:0,max:1,reason:''},enemy:{until:0,loss:0,before:0,max:1,reason:''}};
@@ -6188,5 +6191,35 @@ openResultScreen=function(...args){nativeDetailedResult(...args);if(game.mode===
 
 (async function bootVietnameseGame(){
  try{const response=await fetch('/data/manifest.json');if(response.ok)practice.manifest=await response.json();}catch{}
- await bootstrap();bindPracticeControls();mountCombatSpeedControls();openPracticeSetup('mode');
+ await bootstrap();bindPracticeControls();mountCombatSpeedControls();mountOriginalWorld();openPracticeSetup('mode');
 })();
+
+// Original Lantern Atlas identity and layout; gameplay identifiers remain compatible.
+function mountOriginalWorld(){
+ const dock=document.createElement('div');dock.id='typing-dock';dock.setAttribute('aria-label','Khu vực nhập chữ, bên ngoài sân chơi');
+ el.arena.after(dock);dock.append(el.imePanel);
+ document.title='Đèn Sao · Hành trình chữ Hán';
+ const brand=document.querySelector('.vn-wordmark');if(brand)brand.textContent='ĐÈN SAO';
+ const enter=document.getElementById('enter-original-game');if(enter)enter.textContent='Vào học viện →';
+ const title=document.getElementById('title-name');if(title)title.textContent='HỌC VIỆN ĐÈN SAO';
+ const loading=document.getElementById('loading-title');if(loading)loading.textContent='Đang thắp đèn…';
+ el.heroSprite.alt='Sứ giả Đèn Sao';
+ const portrait=document.querySelector('#hero-card img');if(portrait)portrait.alt='Sứ giả Đèn Sao';
+ const credits=document.querySelector('.adaptation-credit');if(credits){credits.textContent='Đèn Sao · Hình ảnh và âm nhạc sáng tác riêng · Phần chơi phát triển từ ';const link=document.createElement('a');link.href='https://changsheng0612.itch.io/typegamewuxia';link.textContent='TypeGameWuxia';link.target='_blank';link.rel='noopener';credits.append(link);}
+}
+const academyStageNames=['Vườn đom đóm','Cầu mây','Bến đèn','Thư viện sao','Cổng nhật thực'];
+const academyStageInstructions=[
+ 'Nhìn chữ trong các bong bóng đang rơi. Nhập một từ bất kỳ còn trên sân; ba lần đúng sẽ thắp một luồng sáng.',
+ 'Nhập chữ đang nổi trên mây, rồi bấm F hoặc J khi được nhắc để giữ thăng bằng.',
+ 'Nhập chữ trên các hạt mực đang bay để ngăn chúng đi qua. Ba lần đỡ đúng sẽ tạo một đợt phản sáng.',
+ 'Nhìn chữ trên ấn nổi cạnh đối thủ. Nhập đủ cả từ trước khi hết giờ để mở ấn.',
+ 'Nhập chữ trên ấn của Thủ lĩnh Nhật thực. Khi thấy F hoặc J, đỡ trước rồi nhập tiếp. Đầy năng lượng thì bấm Space.'
+];
+STAGES.forEach((stage,i)=>{
+ stage.name=`Ải ${i+1} · ${academyStageNames[i]}`;stage.subtitle=academyStageInstructions[i];
+ stage.opening=[{speaker:'Người giữ đèn',text:academyStageInstructions[i]}];
+ stage.clear=[{speaker:'Người giữ đèn',text:'Một ngọn đèn mới đã sáng. Giữ nhịp, đọc chữ và tiếp tục hành trình nhé.'}];
+ if(STAGE_TRACK[i])STAGE_TRACK[i].name=academyStageNames[i];
+});
+const creatureNames={"boar_angry":"Mặt nạ giấy · ngọc","boar_angry_elite":"Bướm gấp · Tinh anh","cave_troll_boss":"Thủ lĩnh Đèn canh · hoàng hôn","corrupted_treant":"Rồng dải lụa · đồng","corrupted_treant_elite":"Diều đá · Tinh anh","crazed_scholar":"Mực linh · ngọc","crazed_scholar_elite":"Mảnh sao · Tinh anh","flying_eye":"Mặt nạ giấy · hoàng hôn","flying_eye_elite":"Bướm gấp · Tinh anh","forest_guardian_boss":"Thủ lĩnh Đèn canh · lá","forest_spirit":"Rồng dải lụa · ngọc","forest_spirit_elite":"Diều đá · Tinh anh","frost_wyrm_boss":"Thủ lĩnh Mực linh · hoàng hôn","ice_spirit":"Mảnh sao · đồng","ice_spirit_elite":"Mặt nạ giấy · Tinh anh","lava_elemental_boss":"Thủ lĩnh Bướm gấp · ngọc","lich_apprentice":"Đèn canh · sương","lich_apprentice_elite":"Rồng dải lụa · Tinh anh","mountain_bandit":"Diều đá · đồng","mountain_bandit_elite":"Mực linh · Tinh anh","nether_lord_boss":"Thủ lĩnh Mảnh sao · ngọc","placeholder_monster":"Mặt nạ giấy · sương","ruins_guardian_boss":"Thủ lĩnh Bướm gấp · hoàng hôn","shadow_imp":"Đèn canh · đồng","shadow_imp_elite":"Rồng dải lụa · Tinh anh","snakelet_bamboo":"Diều đá · ngọc","stone_golem":"Mực linh · sương","stone_golem_elite":"Mảnh sao · Tinh anh","undead_warrior":"Mặt nạ giấy · đồng","wolf_cub":"Bướm gấp · lá","wolf_cub_elite":"Đèn canh · Tinh anh","yeti":"Rồng dải lụa · sương"};
+for(const [id,monster]of Object.entries(MONSTERS)){const base=id.replace(/_elite$/,'');monster.name=(creatureNames[id]||creatureNames[base]||'Mực linh');}

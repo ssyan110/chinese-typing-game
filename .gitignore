@@ -11,3 +11,8 @@ data/upstream/*.zip
 .env
 .env.*
 .DS_Store
+
+# Upstream reference media retained locally for provenance, never published.
+public/game/assets/
+public/game/audio/
+public/game/fonts/
