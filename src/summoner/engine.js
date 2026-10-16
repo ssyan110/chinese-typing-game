@@ -34,7 +34,7 @@ export class Duel{
   if(this.lastWrong===text)return 'unchanged';this.lastWrong=text;this.wrong(4);return 'wrong';
  }
  key(key){
-  if(this.mode!=='zhuyin'||this.status!=='playing')return 'ignored';if(key===this.target.input[this.progress]){this.progress++;if(this.progress===this.target.input.length){this.succeed();return 'correct';}return 'partial';}this.wrong(3);return 'wrong';
+  if(this.mode!=='zhuyin'||this.status!=='playing')return 'ignored';if(key===this.target.input[this.progress]){this.progress++;this.revision++;if(this.progress===this.target.input.length){this.succeed();return 'correct';}return 'partial';}this.wrong(3);return 'wrong';
  }
  wrong(damage){this.errors++;this.combo=0;this.stats.get(this.target.id).wrong++;this.score=Math.max(0,this.score-20);const before=this.hp;if(this.kind!=='review')this.hurt(damage);this.notice=this.kind==='review'?'Chưa đúng. Thử lại nhé.':this.hp<before?`Chưa đúng · −${before-this.hp} HP`:'Chưa đúng · khiên đã hấp thụ sát thương';this.revision++;}
  hurt(damage){if(this.status!=='playing')return;const blocked=Math.min(this.shield,damage);this.shield-=blocked;this.hp=Math.max(0,this.hp-(damage-blocked));if(this.hp===0){this.status='lost';this.outcome='Đã hết HP';this.revision++;}}

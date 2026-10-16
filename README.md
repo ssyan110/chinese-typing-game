@@ -24,7 +24,7 @@ npm run build
 npm run preview -- --host 127.0.0.1 --port 4186 --strictPort
 ```
 
-The active application consists only of `src/summoner/engine.js`, `app.js`, `style.css` and the root HTML entry. `src/summoner/shell.html` is the editable HTML source corresponding to the entry. The browser uses native modules, HTML/CSS, the Canvas-free DOM arena and standard Audio; there are no inherited game-runtime imports.
+The active application consists only of `src/summoner/engine.js`, `app.js`, `style.css` and the root `index.html` entry. Edit that root HTML for UI changes. `src/summoner/shell.html` is a standalone launcher for the published game, not a second app entry. Opening either HTML file directly redirects to the online game and requires Internet access; use the Vite development/preview URL for local testing. The browser uses native modules, HTML/CSS, the Canvas-free DOM arena and standard Audio; there are no inherited game-runtime imports.
 
 `npm test` runs the independent summoner tests, including real vocabulary validation. Historical adaptation tests/scripts remain as historical development records and are not acceptance tests for this engine.
 
