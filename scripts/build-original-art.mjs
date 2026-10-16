@@ -25,3 +25,6 @@ const map={};let i=0;for(const old of assets){const file=old.replace(/^assets\//
 fs.writeFileSync('public/original/art-map.json',JSON.stringify(map,null,2)+'\n');console.log(`Created ${assets.length} original vector assets; every image mapped.`);
 
 fs.writeFileSync(path.join(out,"favicon.svg"),svg(`<rect width="128" height="128" rx="28" fill="#123448"/><path d="M39 28h50v68H39Z" fill="url(#gold)"/><path d="M35 28h58M35 96h58M64 97v22M64 9v18" stroke="#86d2b9" stroke-width="7"/>`,128,128));
+
+// Preserve the newer illustrated cast when rebuilding the vector scenery pack.
+if(fs.existsSync('public/original/refined-map.json')){Object.assign(map,JSON.parse(fs.readFileSync('public/original/refined-map.json','utf8')));fs.writeFileSync('public/original/art-map.json',JSON.stringify(map,null,2)+'\n');}

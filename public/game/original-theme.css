@@ -135,3 +135,24 @@ body:has(#app.in-combat){height:auto!important;min-height:100dvh;overflow:visibl
 
 /* Keep Vietnamese form controls consistent with the screen interface. */
 #app button,#app input,#app select,#app summary,#app [style*="font-family"]{font-family:var(--ui-font)!important}
+
+/* Compact live progress with optional, naturally expanding instructions. */
+#app.in-combat{height:auto!important;min-height:100dvh!important;grid-template-rows:auto minmax(360px,calc(100dvh - 330px)) 88px auto;overflow:visible!important}
+#app.in-combat #bottom-hud{height:auto!important;min-height:52px!important;max-height:none!important;display:flex!important;flex-wrap:wrap;align-items:center;gap:8px 20px;overflow:visible!important;padding:10px 14px}
+#app.in-combat #objective-progress{flex:1 1 300px;margin:0;font-size:13px;line-height:1.7;color:#d5eae8}
+#combat-guide{flex:0 1 auto;min-width:0;font-size:13px}#combat-guide summary{cursor:pointer;color:#ffce83;padding:6px 4px;font-weight:600}
+#combat-guide[open]{flex-basis:100%}.combat-guide-content{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;padding-top:8px}
+#app.in-combat #combat-guide #objective-panel,#app.in-combat #combat-guide #help-panel{display:block!important;height:auto!important;max-height:none!important;overflow:visible!important;padding:12px}
+#app.in-combat #stage-track{display:none!important}
+#app.in-combat #hero-sprite,#app.in-combat #enemy-sprite{object-fit:contain!important;image-rendering:auto!important;filter:drop-shadow(0 8px 8px #061a2d66)}
+@media(max-width:680px){#app.in-combat{grid-template-rows:auto 420px 88px auto!important}.combat-guide-content{grid-template-columns:minmax(0,1fr)}#app.in-combat #bottom-hud{padding:8px 10px;gap:3px}#app.in-combat #objective-progress{font-size:12px}#combat-guide{flex-basis:100%}}
+
+#app.in-combat{overflow:clip!important}
+#app.in-combat #hero-sprite{width:190px!important;height:230px!important}#app.in-combat #enemy-sprite{width:220px!important;height:260px!important}
+#app.in-combat .hero-health{bottom:270px!important}#app.in-combat .enemy-health{bottom:300px!important}
+@media(max-width:680px){#app.in-combat #hero-sprite{width:130px!important;height:160px!important}#app.in-combat #enemy-sprite{width:150px!important;height:180px!important}#app.in-combat .hero-health{bottom:205px!important}#app.in-combat .enemy-health{bottom:225px!important}}
+/* Match sprite containers to their illustrated silhouettes; old pixel sprites used 1.5× scaling. */
+#app.in-combat #hero-wrap{width:190px!important;height:230px!important}
+#app.in-combat #enemy-wrap{width:220px!important;height:260px!important}
+#app.in-combat #enemy-sprite{transform:none!important}
+@media(max-width:680px){#app.in-combat #hero-wrap{width:130px!important;height:160px!important}#app.in-combat #enemy-wrap{width:150px!important;height:180px!important}}

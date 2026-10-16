@@ -6,7 +6,7 @@ async(page)=>{
  for(let i=0;i<6;i++){if(await page.evaluate(()=>game.mode)==='dialogue')await page.locator('#dialogue-next').click();else break;}await page.waitForFunction(()=>game.mode==='playing'&&game.stageData.objects.length>0);
  const initial=await page.evaluate(()=>({time:audio.bgm.main.currentTime,src:audio.bgm.main.currentSrc,loop:audio.bgm.main.loop,paused:audio.bgm.main.paused}));await page.waitForTimeout(1000);
  check(initial.src.includes('/original/audio/jade-postroad.mp3')&&initial.loop&&!initial.paused&&await page.evaluate(t=>audio.bgm.main.currentTime>t,initial.time),'Original looping music actually plays and advances');
- check(await page.locator('#hero-sprite').evaluate(n=>n.currentSrc.includes('/original/art/character-')&&n.naturalWidth>0),'Original hero animation image decodes');check(await page.locator('#enemy-sprite').evaluate(n=>n.currentSrc.includes('/original/art/monsters-')&&n.naturalWidth>0),'Original paper creature decodes');
+ check(await page.locator('#hero-sprite').evaluate(n=>n.currentSrc.includes('/original/art/refined/hero-')&&n.naturalWidth>0),'Original hero animation image decodes');check(await page.locator('#enemy-sprite').evaluate(n=>n.currentSrc.includes('/original/art/refined/')&&n.naturalWidth>0),'Refined illustrated creature decodes');
  const word=await page.locator('.bubble-word').first().innerText();await page.locator('#ime-input').fill(word);await page.locator('#ime-confirm').click();check(await page.evaluate(()=>game.correctTyped)>0,'Actual visible bubble can be answered through the separate dock');
  check(await page.locator('#prompt-board').evaluate(n=>getComputedStyle(n).display==='none'),'No duplicate upper target frame in rune game');
  const verifyGeometry=async width=>{
