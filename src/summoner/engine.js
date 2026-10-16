@@ -10,17 +10,17 @@ export function selectVocabulary(rows,system,level,cumulative,mode){
  const allowed=new Set(cumulative?levels.slice(0,levels.indexOf(level)+1):[level]),seen=new Set();
   return rows.filter(w=>{const label=clean(mode==='zhuyin'?w.z:mode==='traditional'?w.t:w.s),identity=mode==='zhuyin'?clean(w.t)+'|'+label:label;if(!allowed.has(w.level)||!label||mode==='zhuyin'&&!w.keys||seen.has(identity))return false;seen.add(identity);return true;});
 }
-export function makeDeck(words,rng=Math.random){
- if(!words.length)throw new Error('Vocabulary pool is empty');let deck=[],last;
+export function makeDeck(words,rng=Math.random,previousFirst){
+ if(!words.length)throw new Error('Vocabulary pool is empty');let deck=[],last=previousFirst;
  return ()=>{if(!deck.length){deck=[...words];for(let i=deck.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]];}if(deck.length>1&&deck.at(-1).id===last)[deck[0],deck[deck.length-1]]=[deck.at(-1),deck[0]];}const word=deck.pop();last=word.id;return word;};
 }
 export class Duel{
- constructor({words,mode='simplified',encounter='guardian',seconds=5,kind='duel',rng=Math.random}={}){
-  this.words=words;this.mode=mode;this.encounter=ENCOUNTERS[encounter]?encounter:'guardian';this.seconds=Math.max(1,Math.min(60,Number(seconds)||5));this.kind=kind;this.deck=makeDeck(words,rng);this.campaignQueue=kind==='campaign'?words.map(()=>this.deck()):[];this.completedIds=new Set();
+ constructor({words,mode='simplified',encounter='guardian',seconds=5,kind='duel',rng=Math.random,previousFirst}={}){
+  this.words=words;this.mode=mode;this.encounter=ENCOUNTERS[encounter]?encounter:'guardian';this.seconds=Math.max(1,Math.min(60,Number(seconds)||5));this.kind=kind;this.deck=makeDeck(words,rng,previousFirst);this.campaignQueue=kind==='campaign'?words.map(()=>this.deck()):[];this.completedIds=new Set();
   Object.assign(this,{status:'playing',hp:100,shield:0,energy:2,power:0,round:1,turn:0,correct:0,errors:0,misses:0,blocks:0,combo:0,maxCombo:0,score:0,elapsed:0,spell:'strike',progress:0,revision:0,notice:'',outcome:'',lastWrong:null});this.stats=new Map();this.beginRound();
  }
  get enemy(){return ENCOUNTERS[this.encounter];}
- beginRound(){this.enemyMax=this.enemy.hp+(this.round-1)*16;this.enemyHp=this.enemyMax;this.turn=0;this.next();}
+ beginRound(){this.enemyMax=this.kind==='campaign'?this.words.length*18:this.kind==='duel'?this.enemy.hp*3+48:this.enemy.hp+(this.round-1)*16;this.enemyHp=this.enemyMax;this.turn=0;this.next();}
  next(){
   if(this.status!=='playing')return;const w=this.kind==='campaign'?this.campaignQueue.shift():this.deck();this.target={id:w.id,label:clean(this.mode==='zhuyin'?w.z:this.mode==='traditional'?w.t:w.s),input:clean(w.keys),word:w};
   if(!this.stats.has(w.id))this.stats.set(w.id,{id:w.id,label:this.target.label,correct:0,wrong:0,missed:0,shown:0});this.stats.get(w.id).shown++;
@@ -40,21 +40,27 @@ export class Duel{
  hurt(damage){if(this.status!=='playing')return;const blocked=Math.min(this.shield,damage);this.shield-=blocked;this.hp=Math.max(0,this.hp-(damage-blocked));if(this.hp===0){this.status='lost';this.outcome='Đã hết HP';this.revision++;}}
  succeed(){
   if(this.status!=='playing')return;this.correct++;this.combo++;this.maxCombo=Math.max(this.maxCombo,this.combo);this.stats.get(this.target.id).correct++;this.completedIds.add(this.target.id);this.score+=100+Math.min(this.combo,20)*5;
-  if(this.kind==='campaign'&&this.completedIds.size===this.words.length){this.enemyHp=0;this.status='won';this.outcome='Đã nhập đúng toàn bộ từ trong chặng';this.revision++;return;}
   if(this.kind==='review'){this.notice='Đúng rồi!';if(this.correct>=Math.min(10,this.words.length)){this.status='won';this.outcome='Đã hoàn thành lượt ôn';}else this.next();this.revision++;return;}
   const spell=this.energy>=({strike:0,ward:1,mend:2}[this.spell])?this.spell:'strike';this.spell=spell;
   if(spell==='strike')this.energy=Math.min(3,this.energy+1);else if(spell==='ward'){this.energy--;this.shield=Math.min(30,this.shield+14);}else{this.energy-=2;this.hp=Math.min(100,this.hp+12);}
   let damage=(this.defending?10:{strike:18,ward:10,mend:9}[spell])+this.power;if(this.encounter==='moth'&&this.remaining>=this.seconds/2)damage+=5;
-  this.lastAction={spell,defending:this.defending};this.enemyHp=Math.max(0,this.enemyHp-damage);this.notice=`${this.defending?'Đỡ đòn thành công':'Triệu hồi thành công'} · đối thủ −${damage} HP`;
+  const finalSeal=this.kind==='campaign'&&this.completedIds.size===this.words.length;
+  // A chapter is a sealed boss: damage matters, but all vocabulary seals must break.
+  damage=finalSeal?this.enemyHp:Math.min(damage,Math.max(0,this.enemyHp-(this.kind==='campaign'?(this.words.length-this.completedIds.size)*18:0)));
+  this.lastAction={spell,defending:this.defending,finisher:finalSeal};this.enemyHp=Math.max(0,this.enemyHp-damage);this.notice=`${this.defending?'Đỡ đòn thành công':'Triệu hồi thành công'} · đối thủ −${damage} HP`;
   if(this.defending){this.blocks++;this.score+=30;}
   if(this.enemyHp===0){
-   if(this.round===3&&this.kind==='duel'){this.status='won';this.outcome='Đã vượt ba vòng';}else{this.status='reward';this.outcome='Chọn một phần thưởng';}this.revision++;return;
+   if(this.kind==='endless'){this.status='reward';this.outcome='Đã hạ đối thủ · chuẩn bị đợt tiếp theo';}
+   else{this.status='won';this.outcome=finalSeal?'Đã phá toàn bộ phong ấn trong chặng':'Đã hạ thủ lĩnh';}
+   this.revision++;return;
   }
+  const supply=this.kind==='campaign'?new Set([1,2,3].map(n=>Math.ceil(this.words.length*n/4)).filter(n=>n<this.words.length)).has(this.completedIds.size):this.kind==='duel'&&this.round<3&&this.enemyHp<=this.enemyMax*(3-this.round)/3;
+  if(supply){this.status='reward';this.outcome='Chọn tiếp sức · đối thủ không hồi HP';this.revision++;return;}
   if(!this.defending){const before=this.hp;this.hurt(this.enemy.counter+this.round-1);this.notice+=this.hp<before?` · bạn −${before-this.hp} HP`:' · khiên đã đỡ đòn';}
   if(this.status==='playing')this.next();this.revision++;
  }
  tick(dt){if(this.status!=='playing'||!Number.isFinite(dt)||dt<=0)return;this.elapsed+=dt;if(this.kind==='review')return;this.remaining=Math.max(0,this.remaining-dt);if(this.remaining===0){this.misses++;this.combo=0;const stat=this.stats.get(this.target.id);stat.wrong++;stat.missed++;this.notice='Hết giờ · đối thủ gây 22 sát thương';this.hurt(22);if(this.status==='playing'){if(this.kind==='campaign')this.campaignQueue.push(this.target.word);this.next();}this.revision++;}}
- reward(kind){if(this.status!=='reward'||!['heal','power','shield'].includes(kind))return false;if(kind==='heal')this.hp=Math.min(100,this.hp+25);if(kind==='power')this.power+=3;if(kind==='shield')this.shield=Math.min(30,this.shield+20);this.round++;this.status='playing';this.beginRound();return true;}
+ reward(kind){if(this.status!=='reward'||!['heal','power','shield'].includes(kind))return false;if(kind==='heal')this.hp=Math.min(100,this.hp+25);if(kind==='power')this.power+=3;if(kind==='shield')this.shield=Math.min(30,this.shield+20);this.round++;this.status='playing';if(this.kind==='endless')this.beginRound();else this.next();return true;}
  setSeconds(value){const n=Number(value);if(!Number.isInteger(n)||n<1||n>60)return false;this.seconds=n;if(this.status==='playing'||this.status==='paused')this.remaining=n;this.revision++;return true;}
  pause(){if(this.status==='playing'){this.status='paused';this.revision++;}}
  resume(){if(this.status==='paused'){this.status='playing';this.revision++;}}
