@@ -1,0 +1,11 @@
+async page=>{
+ const command=__COMMAND__;
+ if(command.begin){await page.setViewportSize({width:1366,height:900});await page.goto('http://127.0.0.1:4186/');await page.locator('[data-mode=traditional]').click();await page.locator('#vocab-system').selectOption('tocfl');await page.locator('#vocab-level').selectOption('A1');await page.locator('#enter-lobby:enabled').waitFor();await page.locator('#enter-lobby').click();await page.locator('[data-seconds="5"]').click();await page.locator('[data-encounter=sentinel]').click();await page.evaluate(()=>{window.__naturalSummoner={actions:0,samples:[],started:Date.now(),errors:[]};window.addEventListener('error',e=>window.__naturalSummoner.errors.push(e.message));});}
+ if(await page.locator('#pause-dialog').evaluate(n=>n.open))await page.locator('#resume').click();
+ const end=Date.now()+25000;
+ while(Date.now()<end){const state=await page.evaluate(()=>window.__tulinh.snapshot());if(['won','lost','ended'].includes(state.status))break;if(state.status==='reward'){await page.locator('[data-reward=heal]').click();continue;}if(state.status!=='playing')break;
+ const defensive=(await page.locator('#rune-action').innerText()).includes('PHÒNG THỦ');if(!defensive&&await page.locator('[data-spell=ward]').isEnabled())await page.locator('[data-spell=ward]').click();else await page.locator('[data-spell=strike]').click();
+ const target=await page.locator('#active-rune').innerText();await page.waitForTimeout(1000);for(const ch of [...target]){await page.locator('#hanzi-input').pressSequentially(ch,{delay:150});}if((await page.evaluate(()=>window.__tulinh.snapshot())).status==='playing'&&await page.locator('#hanzi-input').inputValue())await page.locator('#cast-form button').click();await page.evaluate(()=>window.__naturalSummoner.actions++);
+ }
+ const state=await page.evaluate(()=>window.__tulinh.snapshot());await page.evaluate(s=>window.__naturalSummoner.samples.push(s),state);if(state.status==='playing')await page.locator('#pause-button').click();else if(['won','lost'].includes(state.status))await page.screenshot({path:'output/playwright/summoner-natural-result.png',fullPage:true});const errors=await page.evaluate(()=>window.__naturalSummoner.errors);if(errors.length)throw Error(JSON.stringify(errors));return {status:state.status,hp:state.hp,round:state.round,result:state.result,errors};
+}

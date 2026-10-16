@@ -16,3 +16,8 @@ data/upstream/*.zip
 public/game/assets/
 public/game/audio/
 public/game/fonts/
+
+# The previous adaptation is a local-only archive; the new site never imports it.
+/reference-game.html
+/src/reference/
+/public/game/

@@ -1,100 +1,43 @@
-# Đèn Sao — Học viện chữ Hán
+# Tự Linh — Đấu trường triệu hồi
 
-An illustrated Chinese typing adventure for Vietnamese-speaking learners. Original lantern-courier characters, paper creatures, landscapes, interface design and synthesized music replace the earlier reference-game media. The five combat mechanics still derive from [TypeGameWuxia by changsheng0612](https://changsheng0612.itch.io/typegamewuxia); source attribution is retained, and this project does not claim the inherited gameplay engine is wholly original.
+Vietnamese-first Chinese vocabulary battles, independently implemented with a new turn-based engine and interface. Choose Simplified Chinese, Traditional Chinese or Zhuyin first, then an HSK/TOCFL level and encounter.
 
-## Play online
+Student site: **https://ssyan110.github.io/chinese-typing-game/**
 
-Student link: **https://ssyan110.github.io/chinese-typing-game/**
+## Gameplay
 
-No account is required. Settings and scores are saved in the current browser; they do not synchronize between devices. GitHub Pages serves this public repository with HTTPS. The `Publish student game` workflow tests, builds and publishes `main` automatically. `scripts/prepare-pages.mjs` rewrites only the deployment artifact to the repository subpath; ordinary local builds retain root URLs.
+- Three encounters: jade guardian, moon moth and lantern sentinel. A standard duel has three rounds; endless mode continues until defeat or voluntary stop.
+- Complete the visible rune to cast a selected spell. Strike builds energy; Ward spends energy to create a shield; Mend spends two energy to heal. Energy is capped at three.
+- On defense turns, completing the rune blocks the enemy and counterattacks. No F/J or Space command is required. Missed deadlines cause an enemy attack. Zero HP ends the run; only replay starts at full health.
+- Between rounds, explicitly select healing, more damage or a shield. There is no automatic full-health revival.
+- Five seconds per rune by default, adjustable from 1–60 seconds. Pause freezes the battle. Keyboard/mouse and on-screen Zhuyin symbol buttons are available.
+- Optional word-by-word results are available after victory, defeat and voluntary stop, with mistakes first. Mistake review is untimed and does not deduct HP.
+- Stars for standard duels: win with ≥90% accuracy = three, ≥75% = two, otherwise one. A failed/incomplete duel gets zero. Endless and review do not receive stars. Full rules are shown in results.
 
-## Run
+## Development
 
 ```sh
 npm ci
 npm run dev -- --host 127.0.0.1 --port 5186 --strictPort
-```
-
-For the production version:
-
-```sh
+npm test
 npm run build
 npm run preview -- --host 127.0.0.1 --port 4186 --strictPort
 ```
 
-Open http://127.0.0.1:4186. Node 20 works for the game. The separately cloned `rea/` tool requires a newer Node version and was not installed or configured.
+The active application consists only of `src/summoner/engine.js`, `app.js`, `style.css` and the root HTML entry. `src/summoner/shell.html` is the editable HTML source corresponding to the entry. The browser uses native modules, HTML/CSS, the Canvas-free DOM arena and standard Audio; there are no inherited game-runtime imports.
 
-## Student flow
+`npm test` runs the independent summoner tests, including real vocabulary validation. Historical adaptation tests/scripts remain as historical development records and are not acceptance tests for this engine.
 
-1. Choose **Chú âm**, **Chữ giản thể**, or **Chữ phồn thể**, on a screen using the original game's ink-wash background and wood buttons.
-2. Choose HSK or TOCFL, level and whether to include earlier levels.
-3. Enter the academy game menu, then choose an independent three-minute stage or the endless boss mode.
+## Deployment
 
-The UI and story dialogue are Vietnamese. The title wordmark is Vietnamese text in the original gold/serif visual style. Chinese remains in practice examples and targets. Read the actual moving bubbles to answer; there is no duplicate upper target panel. Hanzi input lives in a dedicated lane outside the battlefield. The five mechanics retain their behavior, with new original visual identity.
+The `Publish student game` workflow tests and builds `main`, prepares the `/chinese-typing-game/` prefix, and deploys GitHub Pages. `scripts/stage-summoner-public.mjs` explicitly stages only vocabulary, self-hosted fonts, original audio and the refined illustrated cast. It rejects legacy game-runtime signatures. No `dist/game/` directory is published. `scripts/prepare-pages.mjs` rewrites only the build artifact; the local build stays at root.
 
-Each normal-play target defaults to **5 seconds**. The in-game **Giây / từ** control accepts **1–60 seconds**, with 3 / 5 / 8 / 10 second presets, and saves the chosen value locally. This replaces the earlier speed multipliers. Hanzi practice does not display pinyin. Both timed and endless bosses attack on word timeout and independently request F/J defense.
+## Data, media and provenance
 
-## Gameplay mechanics
+- HSK: [uranbekanarbaev/hsk-3.0-vocabulary-dataset](https://github.com/uranbekanarbaev/hsk-3.0-vocabulary-dataset), syllabus 11/2025. HSK 7–9 share an advanced pool. Source rights notes are in `data/upstream/HSK-RIGHTS.md`.
+- TOCFL: [ivankra/tocfl](https://github.com/ivankra/tocfl), list 07/2023. C1–C2 share one pool. This application does not represent endorsement by either examination provider or grant new rights in their data.
+- Hanzi gameplay shows no pinyin. Zhuyin is derived from the supplied readings; conversion can require teacher review for particular words and regional pronunciations. Repeated labels are deduplicated within a selected mode.
+- Refined character illustrations were generated specifically for this project with AI assistance. Music and effects were locally synthesized. Be Vietnam Pro is self-hosted under the included OFL font licence.
+- The previous application adapted TypeGameWuxia. That runtime and adapter are now removed from the current tracked application tree, retained as an ignored local archive, and excluded from the build. Existing Git history has **not** been rewritten and still records that earlier adaptation. Rewriting the current application does not retroactively clear rights in prior distributions. See `docs/independent-rebuild-2026-10-16.md`.
 
-- **Ải 1 — Tấn pháp căn bản:** moving/falling rune objects; three hits charge an automatic sword strike.
-- **Ải 2 — Khinh công vượt mây:** timed prompts; jump to gather cloud energy, then return to the requested F/J guard key to trigger cloud bursts.
-- **Ải 3 — Quét chân phá ám khí:** incoming moving projectiles; build three shield charges to counterattack.
-- **Ải 4 — Kiếm khí tung hoành:** type a complete word/phonetic sequence to attack, keep combos and rotate enemies.
-- **Ải 5 — Quyết chiến ma giáo:** multi-phase boss, approach distance, timed F/J defense, counter windows and Space ultimate.
-- **Ma vương vô tận:** original endless rounds without the three-minute clock.
-
-Zhuyin uses the original physical-key drills in the first three stages, and selected vocabulary's phonetic sequences in stages four and five. Simplified/Traditional modes attach dictionary words to the original rune/projectile objects, using the device's IME. Word-entry time scales with word length. Hanzi F/J defense has a 1.8-second window. These are targeted input adaptations, not substitute minigames.
-
-Escape pauses, and switching away from the window automatically pauses. The original assistance, contrast and reduced-motion settings remain. The original results, stars, achievements, scoring and review-practice paths remain. Stage and endless records are separated by writing mode, vocabulary system, level and cumulative selection. The reference author's cloud leaderboard and itch runtime are disconnected; no score is sent there.
-
-Chinese input requires the device's Chinese IME. Choose English input for physical Zhuyin drills. Actual phone IME use and Safari need device testing; desktop keyboard play is the primary experience.
-
-## Vocabulary
-
-- **11,000 HSK entries**: November 2025 examination syllabus, HSK 1–6 and shared HSK 7–9 band. No invented split into levels 7, 8 and 9.
-- **7,517 TOCFL entries**: July 2023 reference list; two novice levels, A1, A2, B1, B2 and shared fluent C1–C2 band.
-- HSK Traditional forms are OpenCC conversions. Pinyin is retained from source; Zhuyin is computed from that pinyin. 10,999 HSK and all 7,517 TOCFL entries have convertible keyboard sequences. The unsupported HSK 嗯 / ǹg is excluded from Zhuyin only.
-- No Vietnamese vocabulary definitions were invented. Source rights and conversion limits are recorded in [vocabulary sources](docs/vocabulary-sources.md) and [the manifest](public/data/manifest.json).
-
-## Source and rebuild
-
-- `reference-game.html`: retrieved original HTML/CSS/JavaScript, preserved unchanged.
-- `src/reference/ui-vi.tsv`: Vietnamese translations of the original UI and dialogue.
-- `src/reference/adapter.js`: practice selection, dictionary integration, Chinese IME bridges and local-record isolation.
-- `src/reference/setup.html` and `adaptation.css`: setup screens and targeted typography/layout adjustments.
-- `scripts/build-reference.mjs`: generates root `index.html`, `public/game/runtime.js` and adaptation stylesheet.
-- `public/original/`: authored SVG art and MP3 recordings. Earlier source-media metadata is retained in `data/upstream/game-asset-manifest.json` for historical provenance only.
-- `scripts/fetch-reference-assets.py`: reproducible, bounded asset retrieval into this project.
-- `scripts/build-vocabulary.mjs`: recreates the local dictionary JSON from preserved upstream data.
-
-The reference game and media remain attributed to their original creator and rights holders. This local adaptation does not claim ownership or a new license for them.
-
-## Verification
-
-```sh
-npm test
-npm run build
-npm audit --audit-level=high
-```
-
-The browser scenario in `scripts/browser-reference-smoke.js` runs through Playwright CLI against the production preview. See [QA](docs/qa.md) for current results and limits. Earlier prototype checks are historical and do not establish this adaptation's behavior.
-
-## Typing guidance and damage feedback
-
-Read the words directly on moving bubbles/projectiles, each with its own countdown. There is no duplicate target box and no preferred-target highlight. Hanzi rune/projectile stages start with two concurrent threats, rising to three after one minute. Any live word can be typed, with no fixed sequence. If a complete short word is also the start of another word (such as 水 / 水果), continue typing the longer word, or press Enter / **Xuất chiêu** to confirm the short word.
-
-Both fighters have labeled numeric HP plates, loss trails and explicit −HP feedback. The player's low-HP state is marked with persistent warning text. Opponent HP stays visible during pause, and defeated-opponent messages explain the next health bar reset. Keyboard combat and vocabulary selection remain the same.
-
-Combat now shows a target countdown. Missing runes costs 10 HP, missed jumps/projectiles 12 HP, and missed boss guards at least 16 HP; judged incorrect input costs 4 HP. IME preedit and partial correct words are unjudged. Correct input no longer heals; defeating an opponent retains the original cycle recovery. Extra practice is untimed and keeps one grace shield.
-
-## Complete player-flow verification
-
-See [the full playtest report](docs/full-playtest-2026-10-15.md) for the 15 mode/stage combinations, 18 natural timed runs including repair validation, review/endless paths, discovered fixes and platform limits. Raw observations and a machine-readable summary are under `output/full-user-play/`.
-
-## Original media and production build
-
-- `scripts/build-original-art.mjs`: authors 87 mapped SVG replacements plus a favicon from project geometry.
-- `scripts/compose-original-audio.py`: authors 3 looping scores and 18 sound effects with deterministic synthesis (local NumPy/FFmpeg authoring only).
-- `docs/original-art-direction.md`, `docs/original-ui-direction.md`, `docs/original-audio-direction.md`: creative direction and provenance.
-- `scripts/stage-original-public.mjs` explicitly allows only original media, runtime/CSS and vocabulary into the deployment; archived source-game pictures, audio and font files never ship. `scripts/audit-public-assets.mjs` verifies this.
-- Source media remain local reference files and are ignored by Git. The original source HTML remains an attributed engine input, not a deployed page.
+No project-wide third-party licence or legal clearance is implied by this README. Local scores and settings stay in the browser and do not synchronize between devices.
