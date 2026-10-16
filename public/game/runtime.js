@@ -5623,6 +5623,7 @@ handleChineseWordComboImeInput=function(confirm=false){
   const data=game.stageData,stage=getStage();
   const entries=rowTargetEntries(data,stage.mechanic);
   const result=assessRowInput(el.imeInput.value,entries,Object.entries(data.rowTokens),confirm===true);
+  if(result.text!==data.lastWrongDraft)data.lastWrongDraft=null;
   if(result.kind==='empty')return;
   if(result.kind==='match'){
    const born=stage.mechanic==='top_anchor'?data.rowPromptBornAt:data.objects.find(o=>o.char===result.key)?.hanziBornAt;
@@ -5639,6 +5640,8 @@ handleChineseWordComboImeInput=function(confirm=false){
   if(result.kind==='confirm'){setTypingStatus(`Gõ tiếp nếu chưa hết từ. Nếu muốn nhập ${result.text}, bấm Enter hoặc Xuất chiêu.`, 'pending');return;}
   if(result.kind==='partial'||result.kind==='preedit'){setTypingStatus('Gõ tiếp cho đủ từ rồi chọn chữ trong bộ gõ.', 'pending');return;}
   if(result.kind==='unavailable'){setTypingStatus(`Từ ${result.text} chưa xuất hiện hoặc đã hết lượt. Nhìn các mục tiêu đang bay.`, 'pending');return;}
+  if(data.lastWrongDraft===result.text)return;
+  data.lastWrongDraft=result.text;
   if(entries[0])recordWordStat(entries[0][1].text,0,false);
   recordAttempt(false);softMistake('Chưa đúng từ mục tiêu. Nhìn các mục tiêu đang bay và chọn lại chữ nhé.');
   setTypingStatus('Chưa đúng từ mục tiêu. Bạn có thể sửa lại trong ô nhập.', 'error');return;
@@ -6126,7 +6129,7 @@ function mountCombatSpeedControls(){
  const group=document.createElement('div');group.id='combat-speed';group.setAttribute('role','group');group.setAttribute('aria-label','Thời gian nhập mỗi từ');
  const label=document.createElement('label');label.htmlFor='target-seconds';label.textContent='Giây / từ';group.append(label);
  for(const seconds of [3,5,8,10]){const button=document.createElement('button');button.type='button';button.className='wood-btn';button.dataset.targetSeconds=seconds;button.textContent=seconds+'s';button.onpointerdown=event=>event.preventDefault();button.onclick=()=>setTargetSeconds(seconds);group.append(button);}
- const input=document.createElement('input');input.id='target-seconds';input.type='number';input.min='1';input.max='60';input.step='1';input.setAttribute('aria-label','Số giây cho mỗi từ, từ 1 đến 60');input.onchange=()=>{if(!setTargetSeconds(input.value))input.value=String(targetSeconds);};input.onkeydown=event=>{event.stopPropagation();if(event.key==='Enter'){event.preventDefault();input.onchange();input.blur();}};group.append(input);
+ const input=document.createElement('input');input.id='target-seconds';input.type='number';input.min='1';input.max='60';input.step='1';input.setAttribute('aria-label','Số giây cho mỗi từ, từ 1 đến 60');input.onchange=()=>{if(!setTargetSeconds(input.value))input.value=String(targetSeconds);};input.onkeydown=event=>{if(event.key==='Escape'){input.blur();return;}event.stopPropagation();if(event.key==='Enter'){event.preventDefault();input.onchange();input.blur();}};group.append(input);
  const unit=document.createElement('span');unit.className='seconds-unit';unit.textContent='giây (1–60)';group.append(unit);
  group.title='Mỗi từ mặc định 5 giây. Đổi số giây bất cứ lúc nào; mỗi lượt vẫn dài 3 phút.';controls.append(group);setTargetSeconds(targetSeconds);
 }

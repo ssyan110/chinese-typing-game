@@ -67,7 +67,7 @@ select{padding:12px 14px}.setup-check input{accent-color:#77e0c7}
 #title-leaderboard-grid .rankboard{padding:16px}.rankboard h3,.lb-name{color:var(--atlas-teal)!important}
 #loading-bar-fill{background:linear-gradient(90deg,#77e0c7,#ffce83)!important;box-shadow:none!important}
 #stage-track .stage-node{border-radius:11px!important}#stage-track img{border-radius:7px}
-body.high-contrast .screen-card,body.high-contrast .glass{background:#071629!important;border-color:#d9f8ee!important}
+body.access-contrast .screen-card,body.access-contrast .glass{background:#071629!important;border-color:#d9f8ee!important}
 @media(max-width:800px){.screen-card,#practice-card,#stage-select-card,#leaderboard-card,#result-card{padding:20px;border-radius:23px!important}.practice-mode{min-height:210px}.practice-mode>b{font-size:34px}.practice-mode>strong{font-size:19px}#dialogue-text{font-size:15px}}
 @media(max-width:520px){.screen{padding:10px}.screen-card,#practice-card,#stage-select-card,#leaderboard-card,#result-card{width:100%;max-width:100%;padding:17px 13px;border-radius:20px!important}.vn-wordmark{font-size:29px;line-height:1.25;margin-bottom:17px}.practice-mode{min-height:110px!important;border-radius:17px!important}.practice-mode>b{font-size:29px}.practice-mode[data-practice-mode=zhuyin]>b{font-size:22px}.practice-mode>strong{font-size:18px}.practice-mode>span{font-size:12px}#practice-modes{gap:10px}#top-hud,#bottom-hud,#arena{border-radius:16px!important}#hero-card .portrait{border-radius:11px!important}#ime-panel{border-radius:14px!important}#ime-input{padding:7px 9px!important}#dialogue-text{font-size:13px}#dialogue-speaker{font-size:15px}#result-actions .wood-btn{font-size:12px;padding:9px}.combat-health{border-radius:10px!important}.combat-health-label strong{font-size:9px}#result-metrics{gap:5px}.stage-node-title{font-size:18px!important}.wood-btn:hover{transform:none!important}.practice-review-table{font-size:11px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
@@ -156,3 +156,6 @@ body:has(#app.in-combat){height:auto!important;min-height:100dvh;overflow:visibl
 #app.in-combat #enemy-wrap{width:220px!important;height:260px!important}
 #app.in-combat #enemy-sprite{transform:none!important}
 @media(max-width:680px){#app.in-combat #hero-wrap{width:130px!important;height:160px!important}#app.in-combat #enemy-wrap{width:150px!important;height:180px!important}}
+
+/* Small screens keep health below the actors, clear of the active word and countdown. */
+@media(max-width:680px){#app.in-combat .hero-health,#app.in-combat .enemy-health{bottom:8px!important}#app.in-combat #hero-wrap,#app.in-combat #enemy-wrap{bottom:78px!important}}
