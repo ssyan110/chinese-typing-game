@@ -1,7 +1,8 @@
 async page=>{
+ const openFree=async()=>{if(!await page.locator('.free-play').evaluate(n=>n.open))await page.locator('.free-play summary').click();};
  const checks=[],errors=[];const check=(ok,label)=>{if(!ok)throw Error(label);checks.push(label);};page.on('pageerror',e=>errors.push(e.message));
  await page.addInitScript(()=>{window.__qaAudio=[];const Native=window.Audio;window.Audio=function(...args){const audio=new Native(...args);window.__qaAudio.push(audio);return audio;};window.Audio.prototype=Native.prototype;});
- await page.setViewportSize({width:390,height:844});await page.goto('http://127.0.0.1:4186/');await page.locator('#mode-choices').waitFor();await page.locator('[data-mode=traditional]').click();await page.locator('#enter-lobby:enabled').waitFor();await page.locator('#enter-lobby').click();await page.locator('[data-seconds="3"]').click();await page.locator('[data-encounter=sentinel]').click();
+ await page.setViewportSize({width:390,height:844});await page.goto('http://127.0.0.1:4186/');await page.locator('#mode-choices').waitFor();await page.locator('[data-mode=traditional]').click();await page.locator('#enter-lobby:enabled').waitFor();await page.locator('#enter-lobby').click();await page.locator('[data-seconds="3"]').click();await openFree();await page.locator('[data-encounter=sentinel]').click();
  await page.locator('#battle-seconds').fill('1');await page.locator('#battle-seconds').press('Tab');
  const target=await page.locator('#active-rune').innerText();await page.locator('#hanzi-input').dispatchEvent('compositionstart');await page.locator('#hanzi-input').fill('ce');const before=await page.evaluate(()=>window.__tulinh.snapshot());check(before.errors===0,'Composition draft is unjudged');
  await page.waitForFunction(t=>window.__tulinh.snapshot().target!==t,target,{timeout:5000});

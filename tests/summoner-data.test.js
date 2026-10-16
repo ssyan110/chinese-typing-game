@@ -5,7 +5,7 @@ for(const [system,levels]of Object.entries({hsk:['1','2','3','4','5','6','7-9'],
  test(system+' every level and mode has valid real vocabulary',()=>{
   for(const level of levels)for(const mode of ['simplified','traditional','zhuyin']){
    const words=selectVocabulary(rows,system,level,false,mode);assert.ok(words.length>0,mode+' '+level);
-   const labels=words.map(w=>mode==='zhuyin'?w.z.replace(/\s/g,''):mode==='traditional'?w.t:w.s);assert.equal(new Set(labels).size,labels.length);
+   const labels=words.map(w=>mode==='zhuyin'?w.t+'|'+w.z.replace(/\s/g,''):mode==='traditional'?w.t:w.s);assert.equal(new Set(labels).size,labels.length);
    for(const w of words)if(mode==='zhuyin')assert.equal(w.z.replace(/\s/g,'').length,w.keys.length,w.id);
    const game=new Duel({words,mode});assert.ok(game.target.label);assert.equal(Object.hasOwn(game.target,'p'),false);assert.equal(Object.hasOwn(game.target,'phonetic'),false);
   }

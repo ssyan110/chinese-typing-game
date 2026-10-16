@@ -6,13 +6,15 @@ Student site: **https://ssyan110.github.io/chinese-typing-game/**
 
 ## Gameplay
 
+- The main curriculum partitions the entire selected vocabulary pool into chapters of at most 20 items. Earlier levels are included by default. Every chapter is accessible, including the final partial chapter; there is no fixed limit of three encounters on vocabulary coverage.
+- Chapter completion requires a correct answer to every remaining item. Timeouts return to the queue. Correct answers save immediately, even before defeat, quitting or reloading; continue resumes unfinished items. Progress is separate for Simplified, Traditional and Zhuyin, and for HSK/TOCFL. The optional catalog shows every chapter's actual words and completion state.
 - Three encounters: jade guardian, moon moth and lantern sentinel. A standard duel has three rounds; endless mode continues until defeat or voluntary stop.
 - Complete the visible rune to cast a selected spell. Strike builds energy; Ward spends energy to create a shield; Mend spends two energy to heal. Energy is capped at three.
 - On defense turns, completing the rune blocks the enemy and counterattacks. No F/J or Space command is required. Missed deadlines cause an enemy attack. Zero HP ends the run; only replay starts at full health.
 - Between rounds, explicitly select healing, more damage or a shield. There is no automatic full-health revival.
 - Five seconds per rune by default, adjustable from 1–60 seconds. Pause freezes the battle. Keyboard/mouse and on-screen Zhuyin symbol buttons are available.
 - Optional word-by-word results are available after victory, defeat and voluntary stop, with mistakes first. Mistake review is untimed and does not deduct HP.
-- Stars for standard duels: win with ≥90% accuracy = three, ≥75% = two, otherwise one. A failed/incomplete duel gets zero. Endless and review do not receive stars. Full rules are shown in results.
+- Stars for standard duels and curriculum chapters: win with ≥90% accuracy = three, ≥75% = two, otherwise one. A failed/incomplete run gets zero. Endless and review do not receive stars. Full rules are shown in results.
 
 ## Development
 
@@ -24,7 +26,7 @@ npm run build
 npm run preview -- --host 127.0.0.1 --port 4186 --strictPort
 ```
 
-The active application consists only of `src/summoner/engine.js`, `app.js`, `style.css` and the root `index.html` entry. Edit that root HTML for UI changes. `src/summoner/shell.html` is a standalone launcher for the published game, not a second app entry. Opening either HTML file directly redirects to the online game and requires Internet access; use the Vite development/preview URL for local testing. The browser uses native modules, HTML/CSS, the Canvas-free DOM arena and standard Audio; there are no inherited game-runtime imports.
+The active application uses `src/summoner/engine.js`, `curriculum.js`, `app.js`, `style.css`, `arena-layout.css` and the root `index.html` entry. Edit that root HTML for UI changes. `src/summoner/shell.html` is a standalone launcher for the published game, not a second app entry. Opening either HTML file directly redirects to the online game and requires Internet access; use the Vite development/preview URL for local testing. The browser uses native modules, HTML/CSS, the Canvas-free DOM arena and standard Audio; there are no inherited game-runtime imports.
 
 `npm test` runs the independent summoner tests, including real vocabulary validation. Historical adaptation tests/scripts remain as historical development records and are not acceptance tests for this engine.
 
@@ -35,8 +37,9 @@ The `Publish student game` workflow tests and builds `main`, prepares the `/chin
 ## Data, media and provenance
 
 - HSK: [uranbekanarbaev/hsk-3.0-vocabulary-dataset](https://github.com/uranbekanarbaev/hsk-3.0-vocabulary-dataset), syllabus 11/2025. HSK 7–9 share an advanced pool. Source rights notes are in `data/upstream/HSK-RIGHTS.md`.
-- TOCFL: [ivankra/tocfl](https://github.com/ivankra/tocfl), list 07/2023. C1–C2 share one pool. This application does not represent endorsement by either examination provider or grant new rights in their data.
-- Hanzi gameplay shows no pinyin. Zhuyin is derived from the supplied readings; conversion can require teacher review for particular words and regional pronunciations. Repeated labels are deduplicated within a selected mode.
+- TOCFL: [ivankra/tocfl](https://github.com/ivankra/tocfl), list 07/2023. All spellings from each source row's `Variants` field are imported, including 妳 and 她; the original 7,517 rows expand to 7,848 entries before display-string deduplication. C1–C2 share one pool. This application does not represent endorsement by either examination provider or grant new rights in their data.
+- Hanzi gameplay shows no pinyin. Zhuyin is derived from the supplied readings; conversion can require teacher review for particular words and regional pronunciations. Identical Hanzi labels are practiced once; Zhuyin keeps different words with the same pronunciation as separate items. The previously unsupported HSK 嗯 reading uses [MOE's ˙ㄣ](https://dict.concised.moe.edu.tw/dictView.jsp?ID=39854) for Zhuyin practice.
+- The original vector logo combines a folded page and lantern seal. Sources: `public/original/art/tulinh-mark.svg` and `tulinh-logo.svg`; the mark is also the app favicon. The arena fills the browser and offers native full screen where supported. See `docs/curriculum-and-arena-2026-10-16.md` for coverage counts and verification.
 - Refined character illustrations were generated specifically for this project with AI assistance. Music and effects were locally synthesized. Be Vietnam Pro is self-hosted under the included OFL font licence.
 - The previous application adapted TypeGameWuxia. That runtime and adapter are now removed from the current tracked application tree, retained as an ignored local archive, and excluded from the build. Existing Git history has **not** been rewritten and still records that earlier adaptation. Rewriting the current application does not retroactively clear rights in prior distributions. See `docs/independent-rebuild-2026-10-16.md`.
 

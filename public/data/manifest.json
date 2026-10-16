@@ -9,7 +9,7 @@
       "edition": "2025-11",
       "rawCount": 11000,
       "playableCount": 11000,
-      "zhuyinCount": 10999,
+      "zhuyinCount": 11000,
       "note": "HSK 7–9 dùng chung một danh sách nâng cao. Chữ phồn thể được chuyển bằng OpenCC; chú âm được chuyển từ pinyin của nguồn."
     },
     {
@@ -19,9 +19,10 @@
       "official": "https://tocfl.edu.tw/tocfl/index.php/teach/download",
       "edition": "2023-07",
       "rawCount": 7517,
-      "playableCount": 7517,
-      "zhuyinCount": 7517,
-      "note": "Hai bậc dự bị, A1, A2, B1, B2 và bậc lưu loát C1–C2 dùng chung. Không tách riêng C2 khi nguồn không có danh sách riêng."
+      "expandedCount": 7848,
+      "playableCount": 7848,
+      "zhuyinCount": 7848,
+      "note": "Giữ tất cả cách viết trong trường Variants. Hai bậc dự bị, A1, A2, B1, B2 và bậc lưu loát C1–C2 dùng chung. Không tách riêng C2 khi nguồn không có danh sách riêng."
     }
   ],
   "hashes": {
@@ -44,7 +45,7 @@
       },
       "4": {
         "words": 1000,
-        "zhuyin": 999
+        "zhuyin": 1000
       },
       "5": {
         "words": 1600,
@@ -61,32 +62,32 @@
     },
     "tocfl": {
       "N1": {
-        "words": 160,
-        "zhuyin": 160
+        "words": 184,
+        "zhuyin": 184
       },
       "N2": {
-        "words": 234,
-        "zhuyin": 234
+        "words": 270,
+        "zhuyin": 270
       },
       "A1": {
-        "words": 347,
-        "zhuyin": 347
+        "words": 400,
+        "zhuyin": 400
       },
       "A2": {
-        "words": 485,
-        "zhuyin": 485
+        "words": 512,
+        "zhuyin": 512
       },
       "B1": {
-        "words": 1173,
-        "zhuyin": 1173
+        "words": 1209,
+        "zhuyin": 1209
       },
       "B2": {
-        "words": 2342,
-        "zhuyin": 2342
+        "words": 2432,
+        "zhuyin": 2432
       },
       "C1": {
-        "words": 2776,
-        "zhuyin": 2776
+        "words": 2841,
+        "zhuyin": 2841
       }
     }
   }
