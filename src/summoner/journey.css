@@ -1,0 +1,32 @@
+/* Illustrated chapter selection, with readable progress outside the artwork. */
+.route-back{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:8px 0;background:none;border:0;color:var(--teal);font:600 13px/1.4 'Be Vietnam Pro',sans-serif}
+.route-back:disabled{opacity:.5;cursor:default}.route-back:focus-visible{outline:3px solid #b88335;outline-offset:3px;border-radius:3px}
+#home-back{margin-bottom:10px}#lobby-back{margin:0 0 8px}#result-back{margin-bottom:12px}
+#battle-back{width:40px;min-height:40px;justify-content:center;padding:4px;border:1px solid #b4c4b4;border-radius:4px;font-size:22px;flex-shrink:0}
+.chapter-list{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin:20px 0 22px}
+.chapter-list .chapter-row{position:relative;display:flex;flex-direction:column;align-items:stretch;gap:0;border:1px solid #bac8b6;background:#f7f8ee;border-radius:8px;padding:0;min-height:0;text-align:left;overflow:hidden;box-shadow:0 2px 0 #213e3010;transition:border-color .15s,box-shadow .15s}
+.chapter-list .chapter-row:hover{border-color:#607b64;background:#fffdf3;box-shadow:0 4px 12px #163e3120;transform:none}
+.chapter-list .chapter-row.current{border-color:#8d763d;box-shadow:0 0 0 2px #bb9f5460}
+.chapter-list .chapter-row:focus-visible{outline:3px solid #ad772a;outline-offset:3px}
+.chapter-art{position:relative;display:block;overflow:hidden;height:clamp(132px,10vw,210px);isolation:isolate;background:#21463d}
+.chapter-art:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#001c2520 0%,transparent 40%,#031f2b70 100%);z-index:-1}
+.chapter-scene{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.chapter-creature{position:absolute;right:12%;bottom:2%;width:53%;height:91%;object-fit:contain;filter:drop-shadow(0 6px 6px #001d2760)}
+.chapter-art[data-scene=moth] .chapter-creature{right:8%;width:61%}
+.chapter-number{position:absolute;top:12px;left:13px;font:500 clamp(24px,2vw,38px)/1 'Be Vietnam Pro',sans-serif;color:#fff0c9;text-shadow:0 2px 8px #001e2e}
+.chapter-status{position:absolute;bottom:10px;left:12px;padding:4px 7px;background:#142d31ed;border:1px solid #819b8499;color:#e6e9d1;border-radius:3px;font-size:10px;font-weight:600;line-height:1.3}
+.completed .chapter-status{background:#dcecd1;color:#244f39;border-color:#a6c296}
+.current .chapter-status{color:#f8e5b4;border-color:#bea76c}
+.chapter-list .chapter-row .chapter-copy{display:block;padding:13px 14px 4px;min-width:0}
+.chapter-list .chapter-row strong{font-size:17px;font-weight:600;line-height:1.4}
+.chapter-list .chapter-row small{font-size:15px;line-height:1.5;color:#586d5e;margin-top:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chapter-footer{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:11px 14px 13px;font-size:11px;color:#52695a}
+.chapter-list .chapter-row em{margin:0;font-size:11px;font-weight:600;color:#245c4b;white-space:nowrap}
+.chapter-track{display:block;flex:none;height:4px;background:#d9e2d3}.chapter-track i{display:block;height:100%;background:#418369}
+.chapter-pagination{justify-content:space-between}
+@media(min-width:2200px){.chapter-list{grid-template-columns:repeat(6,minmax(0,1fr));gap:24px}.chapter-art{height:clamp(190px,9vw,310px)}.chapter-list .chapter-row strong{font-size:22px}.chapter-list .chapter-row small{font-size:20px}.chapter-footer,.chapter-list .chapter-row em{font-size:15px}.chapter-status{font-size:13px}}
+@media(max-width:1150px){.chapter-list{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.chapter-art{height:150px}}
+@media(max-width:700px){.chapter-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0}.chapter-art{height:clamp(110px,28vw,180px)}.chapter-list .chapter-row .chapter-copy{padding:10px 10px 2px}.chapter-list .chapter-row strong{font-size:15px}.chapter-list .chapter-row small{font-size:14px;margin-top:4px}.chapter-footer{padding:9px 10px 10px;font-size:11px;flex-wrap:wrap}.chapter-list .chapter-row em{font-size:11px}.chapter-status{font-size:9px;bottom:7px;left:7px;padding:4px 5px}.chapter-number{top:10px;left:9px;font-size:26px}.chapter-creature{right:4%;width:66%;height:88%}#lobby-back{margin-bottom:6px}.section-heading h1{font-size:28px}}
+@media(max-width:360px){.chapter-list{gap:9px}.chapter-list .chapter-row strong{font-size:13px}.chapter-list .chapter-row small{font-size:13px}.chapter-footer{padding:8px;font-size:10px}.chapter-list .chapter-row em{font-size:10px}.chapter-list .chapter-row .chapter-copy{padding:9px 8px 2px}}
+@media(hover:none){.chapter-list .chapter-row:hover{box-shadow:none}.chapter-list .chapter-row.current{box-shadow:0 0 0 2px #bb9f5460}}
+@media(prefers-reduced-motion:reduce){.chapter-row{transition:none}}
