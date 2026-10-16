@@ -57,7 +57,7 @@ function pressSymbol(key){if(!game||composing)return;const word=game.target.word
 function renderBattle(){
  if(!game)return;const g=game;
  if(['won','lost','ended'].includes(g.status)){if(!resultShown)showResult();return;}
- if(g.status==='reward'&&!$('reward-dialog').open){setText('reward-title',`Vượt vòng ${g.round}. Chọn tiếp sức.`);$('reward-dialog').showModal();sfx('win');}
+ if(g.status==='reward'&&!$('reward-dialog').open){setText('reward-title',`Vượt vòng ${g.round}!`);$('reward-dialog').showModal();sfx('win');}
  if(g.revision===lastRevision)return;lastRevision=g.revision;
  setText('round-label',g.kind==='review'?`Đã ôn ${g.correct} / ${Math.min(10,g.words.length)}`:g.kind==='endless'?`Vòng ${g.round} · liên hoàn`:g.kind==='campaign'?`Chặng ${lastLaunch.chapter} · ${g.completedIds.size}/${g.words.length} từ`:`Vòng ${g.round} / 3`);setText('turn-label','Lượt '+g.turn);setText('hero-hp-label',`${g.hp} / 100`);setText('enemy-hp-label',`${g.enemyHp} / ${g.enemyMax}`);$('hero-hp-fill').style.width=g.hp+'%';$('enemy-hp-fill').style.width=(g.enemyHp/g.enemyMax*100)+'%';$('arena').classList.toggle('low-health',g.hp<=25);$('arena').classList.toggle('defense-turn',g.defending);setText('shield-label',`Hộ thuẫn ${g.shield}`);setText('energy-label',`Năng lượng ${g.energy} / 3`);
  if(g.hp<lastHp){$('arena').classList.remove('damage-flash');void $('arena').offsetWidth;$('arena').classList.add('damage-flash');sfx('hit');}lastHp=g.hp;
