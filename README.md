@@ -26,7 +26,9 @@ npm run build
 npm run preview -- --host 127.0.0.1 --port 4186 --strictPort
 ```
 
-The active application uses `src/summoner/engine.js`, `curriculum.js`, `app.js`, `style.css`, `arena-layout.css` and the root `index.html` entry. Edit that root HTML for UI changes. `src/summoner/shell.html` is a standalone launcher for the published game, not a second app entry. Opening either HTML file directly redirects to the online game and requires Internet access; use the Vite development/preview URL for local testing. The browser uses native modules, HTML/CSS, the Canvas-free DOM arena and standard Audio; there are no inherited game-runtime imports.
+The active application uses `src/summoner/engine.js`, `curriculum.js`, `app.js`, `mobile.js`, `style.css`, `arena-layout.css`, `mobile.css` and the root `index.html` entry. Edit that root HTML for UI changes. `src/summoner/shell.html` is a standalone launcher for the published game, not a second app entry. Opening either HTML file directly redirects to the online game and requires Internet access; use the Vite development/preview URL for local testing. The browser uses native modules, HTML/CSS, the Canvas-free DOM arena and standard Audio; there are no inherited game-runtime imports.
+
+Phone/tablet play has touch controls beside the arena, landscape layout, safe-area padding and a visual-viewport layout for Chinese software keyboards. Rotation preserves the current duel and all existing curriculum progress. See `docs/mobile-2026-10-16.md` for device sizes, checks and physical-device limitations.
 
 `npm test` runs the independent summoner tests, including real vocabulary validation. Historical adaptation tests/scripts remain as historical development records and are not acceptance tests for this engine.
 

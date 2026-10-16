@@ -1,0 +1,105 @@
+/* Phone controls stay beside the action, not at the bottom of a desktop sidebar. */
+.mobile-spells:empty{display:none}
+@media(max-width:1024px),(pointer:coarse) and (max-width:1400px){
+ body{overflow-x:clip}button,a,input,select,summary{touch-action:manipulation}
+ .site-header{height:56px;padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right));gap:8px}
+ .brand{gap:6px;font-size:16px}.brand-mark{width:32px;height:38px}.brand small{font-size:6px;letter-spacing:.08em}
+ .header-actions{gap:0}.icon-button{font-size:11px;padding:8px;min-height:44px}.header-actions #fullscreen-toggle{max-width:84px;font-size:10px}
+ main{padding:16px max(12px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))}
+ input,select{font-size:16px}.primary-button,.secondary-button,.seconds-control button,.text-button{min-height:44px}
+ .setup-screen{max-width:720px;min-height:0;grid-template-columns:1fr;gap:10px}.setup-story{padding:5px 0;border:0}.setup-story h1{font-size:30px;line-height:1.25;margin-bottom:10px}.setup-story h1 br{display:none}.setup-story>p:not(.eyebrow){font-size:13px;line-height:1.75;max-width:none}.story-art{display:none}.setup-form{padding:0}.setup-form h2{font-size:24px;margin-bottom:16px}.step-marker{margin-bottom:12px}.mode-choice{min-height:88px;padding:16px;gap:16px}.mode-choice strong{font-size:17px}.mode-choice small{font-size:12px;line-height:1.65}.sources summary{padding-block:10px;min-height:44px}.sources{font-size:12px}
+ .field-label,.check-label,.pool-description{font-size:13px}.check-label{align-items:center;min-height:44px}.check-label input{width:20px;height:20px;min-height:20px;flex-shrink:0}.curriculum-panel{padding:15px 12px 5px}.curriculum-heading h2{font-size:23px}.coverage-total span{font-size:11px}.chapter-row{min-height:76px}.chapter-row strong{font-size:14px}.chapter-row em{font-size:13px}.chapter-row small{font-size:17px}.chapter-pagination .secondary-button{min-height:44px;font-size:12px}.vocabulary-catalog summary,.free-play summary,.how-to summary,.score-help summary,.word-review summary{min-height:44px;padding-block:12px}.vocabulary-catalog label,.vocabulary-catalog select{font-size:14px}.vocabulary-catalog select{min-height:44px}.settings-bar{padding:12px;gap:12px;font-size:14px}.settings-bar label{min-height:44px}.settings-bar p{font-size:12px}
+ body[data-screen=battle-screen] main{padding:8px max(8px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left))}
+ .battle-heading{gap:8px;min-height:68px;margin-bottom:8px}.battle-heading h1{font-size:20px;line-height:1.3;margin:3px 0}.battle-heading .eyebrow{font-size:9px}.battle-heading>div>p:last-child{font-size:10px;max-width:55vw}.battle-tools{gap:4px;flex-direction:column;align-items:flex-end}.battle-tools label{font-size:11px;gap:6px}.battle-tools input{width:56px;height:40px;min-height:40px;font-size:16px;padding:6px}.battle-tools .secondary-button{font-size:12px;min-height:40px;padding:6px 11px}.battle-tools kbd{display:none}
+ .battle-layout{display:block;height:auto;min-height:0}.arena-column{display:flex;flex-direction:column;gap:8px;min-height:0}
+ body[data-mode] .summon-arena{height:var(--mobile-arena-height,300px);min-height:0;max-height:none;flex:none;container-type:size;border-radius:5px}
+ .round-strip{height:33px;padding:8px 10px;font-size:10px;gap:8px;align-items:center}
+ body[data-mode] .hero-station,body[data-mode] .enemy-station{position:static;width:auto}
+ body[data-mode] .hero-station>img{position:absolute;left:8px;bottom:15px;margin:0;width:17%;height:37%;max-height:170px;object-fit:contain}
+ body[data-mode] .enemy-station>img{position:absolute;right:8px;bottom:15px;top:auto;margin:0;width:17%;height:37%;max-height:170px;object-fit:contain}
+ body[data-mode] .vital-card{position:absolute;top:40px;width:calc(50% - 13px);padding:7px 8px;background:#112c30f2;min-height:43px;border-radius:3px}
+ .hero-vital{left:8px}.enemy-vital{right:8px}body[data-mode] .vital-card>div:first-child,body[data-mode] .vital-card span{font-size:11px}.vital-card>div:first-child>strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:65%}body[data-mode] .vital-track{height:6px;margin-top:5px}.vital-card small{font-size:9px;line-height:1.2;margin-top:4px}
+ body[data-mode] .rune-zone{left:50%;top:56%;width:58%;transform:translate(-50%,-10%)}body[data-mode] .rune-zone>p{font-size:9px;letter-spacing:.06em;line-height:1.2;margin:0 0 7px}#active-rune{min-height:45px;font-size:clamp(30px,7vw,44px);line-height:1.2}#active-rune.long-rune{font-size:26px}
+ body[data-mode=zhuyin] .zhuyin-progress{font-size:25px;line-height:1.4;min-height:40px;gap:1px}
+ body[data-mode] .rune-timer{height:3px;width:80px;margin:7px auto 4px}body[data-mode] .rune-zone>span{display:block;line-height:1;font-size:12px}
+ .mobile-spells{display:grid;gap:4px;min-width:0}.mobile-spells .battle-notice{position:static;min-height:15px;font-size:11px;line-height:1.35;color:var(--ink);text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mobile-spells .battle-notice:empty{display:none}
+ .mobile-spells .spell-heading{margin:0;display:flex;flex-direction:row;justify-content:space-between;align-items:center;gap:8px}.mobile-spells .spell-heading h2{font-size:12px;margin:0}.mobile-spells .spell-heading span{font-size:11px}
+ .mobile-spells .spell-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.mobile-spells .spell-card{min-width:0;min-height:56px;padding:9px 7px;display:block;position:relative;border-radius:4px}.mobile-spells .spell-symbol{display:none}.mobile-spells .spell-card>span:nth-child(2){display:block;width:auto}.mobile-spells .spell-card strong{font-size:12px;line-height:1.3;padding-right:14px;margin:0 0 4px}.mobile-spells .spell-card small{font-size:10px;line-height:1.3}.mobile-spells .spell-card em{position:absolute;right:5px;top:7px;font-size:10px;line-height:16px;min-width:16px;margin:0}
+ .cast-form{padding:9px 10px;margin:0;border-radius:4px}.cast-form>label{font-size:12px;margin:0 0 5px}.cast-form input{font-size:18px;min-height:44px;height:44px;padding:8px 10px}.cast-form .primary-button{font-size:12px;min-height:44px;padding:8px 12px}.cast-form p{font-size:11px;line-height:1.4;margin:5px 0 0}
+ body[data-mode] .touch-keyboard{padding:8px 5px;margin:0;border-radius:4px}.keyboard-heading{margin:0 0 5px;display:block}.keyboard-heading strong{font-size:12px}.keyboard-heading small{display:none}.key-row{gap:3px;margin-top:3px}body[data-mode] .key-row button{min-height:44px;border-radius:4px;padding:3px 1px;display:flex;flex-direction:column;gap:0;max-width:none}.key-row b{font-size:21px;line-height:1.2}.key-row small{font-size:8px;line-height:1.2}
+ .tactics-panel{display:grid;grid-template-columns:1fr;gap:12px;margin-top:14px}.intent-card{display:block;padding:12px 14px}.intent-card .eyebrow{font-size:10px;margin-bottom:6px}.intent-card h2{font-size:18px;margin-bottom:5px}.intent-card>p:last-child{font-size:12px}.live-stats{grid-column:auto;margin:0;display:flex}.battle-help{grid-column:auto;font-size:12px}.battle-help summary{min-height:44px;padding:10px 0}#end-run{grid-column:auto;font-size:13px;min-height:44px;margin:0}.live-stats span{font-size:12px}
+ dialog{max-width:calc(100vw - 24px - env(safe-area-inset-left) - env(safe-area-inset-right));max-height:calc(var(--visible-height,100dvh) - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom));overflow:auto;padding:24px 20px;overscroll-behavior:contain}dialog button{min-height:44px}dialog h2{font-size:24px}dialog p:not(.eyebrow){font-size:14px}dialog .eyebrow{font-size:10px}.reward-choices{flex-direction:column}.reward-choices>button{min-width:0;min-height:54px;width:100%;flex-direction:row;justify-content:flex-start;padding:12px;gap:12px}.reward-choices small{margin-left:auto}.result-screen>h1{font-size:30px}.result-metrics{gap:16px;padding:16px 0}.result-metrics span{font-size:12px}.result-metrics strong{font-size:27px}.result-screen>p:not(.eyebrow){font-size:13px}.result-actions{gap:10px}.result-actions button{min-height:46px;font-size:13px}.table-scroll{max-height:55dvh}th,td{font-size:13px}.score-help p,.word-review p{font-size:13px;line-height:1.8}
+}
+@media(max-width:360px){.brand{font-size:15px}.brand small{display:none}.icon-button{padding:7px 5px;font-size:10px}.header-actions #fullscreen-toggle{font-size:9px;max-width:65px}.mobile-spells .spell-card strong{font-size:11px}.mobile-spells .spell-card small{font-size:10px}body[data-mode=zhuyin] .zhuyin-progress{font-size:21px}.vital-card>div:first-child>strong{max-width:60%}.key-row{gap:2px}}
+/* A side-by-side control deck makes landscape usable without rotating back. */
+@media(max-width:1024px) and (orientation:landscape) and (max-height:540px),(pointer:coarse) and (max-width:1400px) and (orientation:landscape) and (max-height:540px){
+ body[data-screen=battle-screen] .site-header{display:none}.battle-heading{min-height:44px;margin-bottom:6px;align-items:center}.battle-heading h1{font-size:16px;margin:0}.battle-heading .eyebrow,.battle-heading>div>p:last-child{display:none}.battle-tools{flex-direction:row;align-items:center}.battle-tools .secondary-button{min-height:40px}.battle-tools input{height:40px;min-height:40px}
+ .arena-column{display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,44%);grid-template-rows:auto minmax(0,1fr);gap:8px}
+ body[data-mode] .summon-arena{grid-column:1;grid-row:1/3;height:calc(var(--visible-height,100dvh) - 74px);min-height:220px;max-height:none}.mobile-spells{grid-column:2;grid-row:1}.cast-form,.touch-keyboard{grid-column:2;grid-row:2;align-self:start}
+ .mobile-spells .spell-heading h2{font-size:11px}.mobile-spells .spell-heading span{font-size:10px}.mobile-spells .spell-card{min-height:44px;padding:8px 5px}.mobile-spells .spell-card small{display:none}.mobile-spells .spell-card strong{font-size:11px;margin:0}.mobile-spells .battle-notice{font-size:10px}
+ body[data-mode] .key-row button{min-height:38px}.key-row b{font-size:20px}.keyboard-heading{display:none}.tactics-panel{margin-top:10px}.cast-form p{font-size:11px}.reward-choices{flex-direction:row;flex-wrap:nowrap}.reward-choices>button{flex-direction:column;gap:6px;text-align:center}.reward-choices small{margin:0}
+ body[data-mode] .rune-zone{top:50%;width:58%}#active-rune{font-size:clamp(26px,4.5vw,36px)}body[data-mode=zhuyin] .zhuyin-progress{font-size:clamp(19px,2.7vw,23px)}.hero-station>img,.enemy-station>img{max-height:110px}
+}
+/* Keyboard-open Hanzi play is fitted to the visible area above the native IME. */
+@media(max-width:1024px),(pointer:coarse) and (max-width:1400px){
+ body.native-keyboard{overflow:hidden}body.native-keyboard .site-header{display:none}
+ body.native-keyboard[data-mode] #battle-screen{position:fixed;z-index:5;top:var(--visible-top,0px);left:0;right:0;height:var(--visible-height,100dvh);padding:6px max(8px,env(safe-area-inset-right)) 6px max(8px,env(safe-area-inset-left));background:#e2e6d9;display:flex;flex-direction:column;overflow:auto;overscroll-behavior:contain}
+ body.native-keyboard[data-mode] .battle-heading{min-height:38px;margin-bottom:5px;align-items:center}body.native-keyboard[data-mode] .battle-heading h1{font-size:15px;margin:0}body.native-keyboard[data-mode] .battle-heading .eyebrow,body.native-keyboard[data-mode] .battle-heading>div>p:last-child{display:none}body.native-keyboard[data-mode] .battle-tools{flex-direction:row;align-items:center}body.native-keyboard[data-mode] .battle-tools label{font-size:10px}body.native-keyboard[data-mode] .battle-tools input{min-height:36px;height:36px;font-size:16px}body.native-keyboard[data-mode] .battle-tools .secondary-button{min-height:36px;height:36px;font-size:11px}
+ body.native-keyboard[data-mode] .battle-layout{flex:1;min-height:0;display:flex}body.native-keyboard[data-mode] .arena-column{display:flex;flex-direction:column;gap:5px;width:100%;min-height:0}
+ body.native-keyboard[data-mode] .summon-arena{height:auto;min-height:110px;flex:1}body.native-keyboard[data-mode] .tactics-panel{display:none}
+ body.native-keyboard[data-mode] .mobile-spells{gap:0}body.native-keyboard[data-mode] .mobile-spells .battle-notice,body.native-keyboard[data-mode] .mobile-spells .spell-heading{display:none}body.native-keyboard[data-mode] .mobile-spells .spell-card{min-height:42px;padding:8px}body.native-keyboard[data-mode] .mobile-spells .spell-card small{display:none}body.native-keyboard[data-mode] .mobile-spells .spell-card strong{font-size:12px;margin:0}
+ body.native-keyboard[data-mode] .cast-form{padding:6px 8px}body.native-keyboard[data-mode] .cast-form>label,body.native-keyboard[data-mode] .cast-form p{display:none}body.native-keyboard[data-mode] .cast-form input{font-size:18px;min-height:44px}body.native-keyboard[data-mode] .cast-form .primary-button{min-height:44px}
+ body.native-keyboard[data-mode] .round-strip{height:24px;padding:5px 8px;font-size:9px}body.native-keyboard[data-mode] .vital-card{top:29px;min-height:34px;padding:4px 6px}body.native-keyboard[data-mode] .vital-card small{display:none}body.native-keyboard[data-mode] .vital-track{height:4px;margin-top:3px}body.native-keyboard[data-mode] .vital-card>div:first-child,body.native-keyboard[data-mode] .vital-card span{font-size:10px}
+ body.native-keyboard[data-mode] .hero-station>img,body.native-keyboard[data-mode] .enemy-station>img{height:35%;width:15%;bottom:6px}body.native-keyboard[data-mode] .rune-zone{top:57%;width:64%;transform:translate(-50%,-10%)}body.native-keyboard[data-mode] .rune-zone>p{display:none}body.native-keyboard[data-mode] #active-rune{font-size:30px;min-height:35px}body.native-keyboard[data-mode] .rune-timer{margin:4px auto 3px;height:3px}body.native-keyboard[data-mode] .rune-zone>span{font-size:11px}
+}
+@media(hover:none){button:hover:not(:disabled){transform:none}.mode-choice:hover{box-shadow:none}}
+@media(max-width:1024px),(pointer:coarse) and (max-width:1400px){body{padding-top:env(safe-area-inset-top)}body.native-keyboard[data-mode] #battle-screen{padding-top:max(6px,env(safe-area-inset-top));padding-bottom:max(6px,env(safe-area-inset-bottom))}}
+@media(max-width:600px) and (orientation:portrait) and (max-height:700px){
+ body[data-screen=battle-screen]:not(.native-keyboard) .site-header{display:none}
+ body:not(.native-keyboard) .battle-heading{min-height:44px;align-items:center;margin-bottom:6px}
+ body:not(.native-keyboard) .battle-heading h1{font-size:16px;margin:0}
+ body:not(.native-keyboard) .battle-heading .eyebrow,body:not(.native-keyboard) .battle-heading>div>p:last-child{display:none}
+ body:not(.native-keyboard) .battle-tools{flex-direction:row;align-items:center}
+ body:not(.native-keyboard) .battle-tools label{font-size:0;gap:4px}body:not(.native-keyboard) .battle-tools label:after{content:'s';font-size:11px}
+ body:not(.native-keyboard) .mobile-spells .spell-card{min-height:44px;padding:8px 7px}
+ body:not(.native-keyboard) .mobile-spells .spell-card small{display:none}body:not(.native-keyboard) .mobile-spells .spell-card strong{margin:0}
+ body:not(.native-keyboard) .cast-form>label,body:not(.native-keyboard) .cast-form p{display:none}
+ body:not(.native-keyboard) .round-strip{height:26px;padding:6px 8px;font-size:9px}
+ body:not(.native-keyboard) .vital-card{top:32px;min-height:35px;padding:5px 7px}
+ body:not(.native-keyboard) .vital-card small{display:none}
+ body:not(.native-keyboard) .rune-zone{top:52%}
+ body:not(.native-keyboard) .rune-zone>p{font-size:8px;line-height:1.1;margin-bottom:4px}
+ body:not(.native-keyboard) .zhuyin-progress{font-size:21px;line-height:1.35}
+ body:not(.native-keyboard) .rune-timer{margin:4px auto 2px}
+ body:not(.native-keyboard) .rune-zone>span{font-size:11px}
+ body:not(.native-keyboard) .keyboard-heading{margin-bottom:3px}
+ body:not(.native-keyboard) .touch-keyboard{padding:6px 5px}
+ body:not(.native-keyboard) .key-row button{min-height:40px}
+ body:not(.native-keyboard) .key-row b{font-size:20px}
+}
+@media(max-width:1024px),(pointer:coarse) and (max-width:1400px){.mobile-spells .battle-notice:empty{display:block}body.native-keyboard[data-mode] .mobile-spells .battle-notice:empty{display:none}}
+
+@media(max-width:1024px),(pointer:coarse) and (max-width:1400px){body.native-keyboard[data-mode] .cast-form{align-self:stretch;min-width:0}}
+
+@media(hover:none){.enemy-station>img{animation:none}}
+
+@media(max-width:1024px) and (orientation:landscape) and (max-height:360px){body:not(.native-keyboard) .key-row button{min-height:32px}body:not(.native-keyboard) .key-row small{display:none}}
+/* Landscape IMEs can leave less than 280px: keep HP, the rune, pause and input. */
+@media(max-width:1024px),(pointer:coarse) and (max-width:1400px){
+ body.native-keyboard.keyboard-tight[data-mode] #battle-screen{padding:4px max(6px,env(safe-area-inset-right)) 4px max(6px,env(safe-area-inset-left))}
+ body.native-keyboard.keyboard-tight[data-mode] .battle-heading{min-height:30px;margin-bottom:3px}
+ body.native-keyboard.keyboard-tight[data-mode] .battle-heading h1{font-size:12px}
+ body.native-keyboard.keyboard-tight[data-mode] .battle-tools input,body.native-keyboard.keyboard-tight[data-mode] .battle-tools .secondary-button{height:30px;min-height:30px;padding:3px 6px}
+ body.native-keyboard.keyboard-tight[data-mode] .battle-tools .secondary-button{font-size:10px}
+ body.native-keyboard.keyboard-tight[data-mode] .arena-column{gap:3px}
+ body.native-keyboard.keyboard-tight[data-mode] .summon-arena{min-height:64px}
+ body.native-keyboard.keyboard-tight[data-mode] .mobile-spells,body.native-keyboard.keyboard-tight[data-mode] .round-strip,body.native-keyboard.keyboard-tight[data-mode] .hero-station>img,body.native-keyboard.keyboard-tight[data-mode] .enemy-station>img{display:none}
+ body.native-keyboard.keyboard-tight[data-mode] .vital-card{top:3px;min-height:24px;padding:3px 5px}
+ body.native-keyboard.keyboard-tight[data-mode] .vital-track{height:3px;margin-top:2px}
+ body.native-keyboard.keyboard-tight[data-mode] .rune-zone{top:42%}
+ body.native-keyboard.keyboard-tight[data-mode] #active-rune{font-size:24px;min-height:28px}
+ body.native-keyboard.keyboard-tight[data-mode] .rune-timer{margin:2px auto;height:2px}
+ body.native-keyboard.keyboard-tight[data-mode] .rune-zone>span{font-size:10px}
+ body.native-keyboard.keyboard-tight[data-mode] .cast-form{padding:4px}
+ body.native-keyboard.keyboard-tight[data-mode] .cast-form input,body.native-keyboard.keyboard-tight[data-mode] .cast-form .primary-button{height:40px;min-height:40px}
+}
