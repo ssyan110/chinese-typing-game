@@ -1,4 +1,4 @@
-# Tự Linh — Đấu trường triệu hồi
+# Đấu Trường Hán Tự — Đấu trường triệu hồi
 
 Vietnamese-first Chinese vocabulary battles, independently implemented with a new turn-based engine and interface. Choose Simplified Chinese, Traditional Chinese or Zhuyin first, then an HSK/TOCFL level and encounter.
 
@@ -41,7 +41,7 @@ The `Publish student game` workflow tests and builds `main`, prepares the `/chin
 - HSK: [uranbekanarbaev/hsk-3.0-vocabulary-dataset](https://github.com/uranbekanarbaev/hsk-3.0-vocabulary-dataset), syllabus 11/2025. HSK 7–9 share an advanced pool. Source rights notes are in `data/upstream/HSK-RIGHTS.md`.
 - TOCFL: [ivankra/tocfl](https://github.com/ivankra/tocfl), list 07/2023. All spellings from each source row's `Variants` field are imported, including 妳 and 她; the original 7,517 rows expand to 7,848 entries before display-string deduplication. C1–C2 share one pool. This application does not represent endorsement by either examination provider or grant new rights in their data.
 - Hanzi gameplay shows no pinyin. Zhuyin is derived from the supplied readings; conversion can require teacher review for particular words and regional pronunciations. Identical Hanzi labels are practiced once; Zhuyin keeps different words with the same pronunciation as separate items. The previously unsupported HSK 嗯 reading uses [MOE's ˙ㄣ](https://dict.concised.moe.edu.tw/dictView.jsp?ID=39854) for Zhuyin practice.
-- The original vector logo combines a folded page and lantern seal. Sources: `public/original/art/tulinh-mark.svg` and `tulinh-logo.svg`; the mark is also the app favicon. The arena fills the browser and offers native full screen where supported. See `docs/curriculum-and-arena-2026-10-16.md` for coverage counts and verification.
+- Tiếng Hoa HAHA is the publisher brand, paired with the game name Đấu Trường Hán Tự. The existing circular brand logo, readable HA favicon and 1200×630 social cover are in `public/original/brand/`. See `docs/branding-2026-10-17.md` for provenance and checks. The arena fills the browser and offers native full screen where supported. See `docs/curriculum-and-arena-2026-10-16.md` for coverage counts and verification.
 - Refined character illustrations were generated specifically for this project with AI assistance. Music and effects were locally synthesized. Be Vietnam Pro is self-hosted under the included OFL font licence.
 - The previous application adapted TypeGameWuxia. That runtime and adapter are now removed from the current tracked application tree, retained as an ignored local archive, and excluded from the build. Existing Git history has **not** been rewritten and still records that earlier adaptation. Rewriting the current application does not retroactively clear rights in prior distributions. See `docs/independent-rebuild-2026-10-16.md`.
 
