@@ -12,3 +12,45 @@ test('extended practice requires explicit supply selections and produce a transp
 test('Zhuyin accepts physical keys, preserves progress on a mistake and has touch-key parity',()=>{const g=new Duel({words,mode:'zhuyin'});assert.equal(g.key('1'),'partial');assert.equal(g.key('q'),'wrong');assert.equal(g.progress,1);assert.equal(g.key('8'),'correct');assert.equal(g.correct,1);assert.equal(g.errors,1);});
 test('each correct Zhuyin symbol invalidates the rendered progress before the next key',()=>{const g=new Duel({words,mode:'zhuyin'}),revision=g.revision;g.key('1');assert.equal(g.progress,1);assert.ok(g.revision>revision);assert.equal(g.errors,0);});
 test('review uses no HP loss or countdown and finishes with learning details',()=>{const g=new Duel({words:words.slice(0,2),kind:'review'});g.tick(500);g.submit('錯');assert.equal(g.hp,100);g.submit(g.target.label);g.submit(g.target.label);assert.equal(g.status,'won');assert.equal(g.result().rows.length,2);});
+
+for (const mode of ['simplified', 'traditional', 'zhuyin']) {
+ for (const size of [1, 10, 11, 20]) {
+  test(`${mode} mistake review completes every selected word in a ${size}-word set`, () => {
+   const selected = words.slice(0, size);
+   const game = new Duel({words: selected, kind: 'review', mode, rng: () => .37});
+   const seen = new Set();
+   for (let index = 0; index < size; index++) {
+    assert.equal(game.status, 'playing', 'review must stay open until every word is answered');
+    assert.equal(seen.has(game.target.id), false, 'each selected word is presented once');
+    seen.add(game.target.id);
+    const target = game.target;
+    const remaining = game.remaining;
+    game.tick(500);
+    assert.equal(game.remaining, remaining, 'review remains untimed');
+    if (mode === 'zhuyin') {
+     game.key('!');
+     assert.equal(game.correct, index, 'a wrong key must not complete a word');
+     for (const key of target.input) game.key(key);
+    } else {
+     game.submit('錯誤');
+     assert.equal(game.correct, index, 'a wrong answer must not complete a word');
+     game.submit(target.label);
+    }
+    assert.equal(game.hp, 100, 'mistake review must not lose HP');
+    assert.equal(game.correct, index + 1);
+   }
+   assert.equal(game.status, 'won');
+   assert.deepEqual([...seen].sort(), selected.map(word => word.id).sort());
+   const result = game.result();
+   assert.equal(result.correct, size);
+   assert.equal(result.rows.length, size);
+   assert.ok(result.rows.every(row => row.correct === 1 && row.wrong === 1));
+   const revision = game.revision;
+   game.submit(game.target.label);
+   game.key('1');
+   game.tick(500);
+   assert.equal(game.correct, size, 'completed review cannot add another answer');
+   assert.equal(game.revision, revision);
+  });
+ }
+}

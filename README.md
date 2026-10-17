@@ -13,10 +13,15 @@ Student site: **https://ssyan110.github.io/chinese-typing-game/**
 - On defense turns, completing the rune blocks the enemy and counterattacks. No F/J or Space command is required. Missed deadlines cause an enemy attack. Zero HP ends the run; only replay starts at full health.
 - Every five correct finite-challenge answers, explicitly select healing, more damage or a shield. There is no automatic full-health revival.
 - Five seconds per rune by default, adjustable from 1–60 seconds. Pause freezes the battle. Keyboard/mouse and on-screen Zhuyin symbol buttons are available.
+- Phone challenges wait for **Bắt đầu** before timing starts, including after pause or a supply choice. Open the Chinese keyboard before starting. The compact keyboard layout keeps HP, the target, answer feedback and input visible; small phones use a reflowed Zhuyin touch grid without changing physical key mappings.
 - Optional word-by-word results are available after victory, defeat and voluntary stop, with mistakes first. Mistake review is untimed and does not deduct HP.
 - Stars for standard duels and curriculum chapters: win with ≥90% accuracy = three, ≥75% = two, otherwise one. A failed/incomplete run gets zero. Endless and review do not receive stars. Full rules are shown in results.
 
 The top menu opens **Lịch sử trên máy**: local session results, word details, dates, course/chapter links, and a visible storage notice. Up to 128 recent sessions are stored locally, with no cloud sync. See `docs/practice-and-motion-2026-10-17.md` for behavior and validation.
+
+Progress, partial practice and history now save together in one atomic browser record. One tab holds the write lock; other tabs show a notice and cannot start a conflicting run. Close the active tab and return to the other one to continue. Existing browser saves migrate without deleting the original keys. History also offers a downloadable JSON backup and validated restore with an explicit replacement preview. Reopening the page resumes saved word practice, rather than restoring an exact in-progress combat turn. Current browsers with Web Locks support are required for safe saved play.
+
+The home screen offers the last selected course, and timing controls appear before chapter browsing. Mistake review covers every selected word, including sets larger than ten.
 
 ## Local combat-art preview
 
@@ -30,6 +35,8 @@ npm run dev -- --host 127.0.0.1 --port 5186 --strictPort
 npm test
 npm run build
 npm run preview -- --host 127.0.0.1 --port 4186 --strictPort
+npx playwright install chromium
+npm run test:browser
 ```
 
 The active application uses `src/summoner/engine.js`, `curriculum.js`, `app.js`, `mobile.js`, `style.css`, `arena-layout.css`, `mobile.css` and the root `index.html` entry. Edit that root HTML for UI changes. `src/summoner/shell.html` is a standalone launcher for the published game, not a second app entry. Opening either HTML file directly redirects to the online game and requires Internet access; use the Vite development/preview URL for local testing. The browser uses native modules, HTML/CSS, the DOM arena with a lazily loaded scene with an articulated 3D hero and 3D opponents/effects and browser-native feedback and standard Audio; there are no inherited game-runtime imports.
@@ -37,6 +44,8 @@ The active application uses `src/summoner/engine.js`, `curriculum.js`, `app.js`,
 Phone/tablet play has touch controls beside the arena, landscape layout, safe-area padding and a visual-viewport layout for Chinese software keyboards. Rotation preserves the current duel and all existing curriculum progress. See `docs/mobile-2026-10-16.md` for device sizes, checks and physical-device limitations.
 
 `npm test` runs the independent summoner tests, including real vocabulary validation. Historical adaptation tests/scripts remain as historical development records and are not acceptance tests for this engine.
+
+`npm run test:browser` is the maintained browser acceptance suite. It builds and serves the production game under `/chinese-typing-game/`, then checks desktop campaigns in all three modes, phone input/readiness/rotation, simulated native keyboard sizes, complete mistake review, save ownership, backup/restore and returning-course navigation. CI runs this before publishing. For local installed Chrome, use `PLAYWRIGHT_CHANNEL=chrome npm run test:browser`; `PLAYWRIGHT_BASE_URL` can target an already running local server. Browser keyboard fixtures do not establish physical iOS/Android IME acceptance.
 
 ## Deployment
 

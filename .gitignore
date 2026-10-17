@@ -21,3 +21,7 @@ public/game/fonts/
 /reference-game.html
 /src/reference/
 /public/game/
+
+# Playwright default artifacts (maintained config uses output/).
+test-results/
+playwright-report/
