@@ -7,14 +7,16 @@ Student site: **https://ssyan110.github.io/chinese-typing-game/**
 ## Gameplay
 
 - The main curriculum partitions the entire selected vocabulary pool into chapters of at most 20 items. Earlier levels are included by default. Every chapter is accessible, including the final partial chapter; there is no fixed limit of three encounters on vocabulary coverage.
-- Chapter completion requires a correct answer to every remaining item. Timeouts return to the queue. Correct answers save immediately, even before defeat, quitting or reloading; continue resumes unfinished items. Progress is separate for Simplified, Traditional and Zhuyin, and for HSK/TOCFL. The optional catalog shows every chapter's actual words and completion state.
-- Three encounters: jade guardian, moon moth and lantern sentinel. A standard duel has three rounds; endless mode continues until defeat or voluntary stop.
+- New challenges require three successful presentations per remaining word, with shuffled passes, plus zero enemy HP. Timeouts return to the queue. Partial repetition counts save immediately, even before defeat, quitting or reloading; continue resumes unfinished practice. Existing one-pass completions remain intact and are identified as legacy in history. Progress is separate for Simplified, Traditional and Zhuyin, and for HSK/TOCFL. The optional catalog shows every chapter's actual words and completion state.
+- Three encounters: jade guardian, moon moth and lantern sentinel. Free play selects at most 20 words and uses the same three-practice guard; endless mode continues until defeat or voluntary stop.
 - Complete the visible rune to cast a selected spell. Strike builds energy; Ward spends energy to create a shield; Mend spends two energy to heal. Energy is capped at three.
 - On defense turns, completing the rune blocks the enemy and counterattacks. No F/J or Space command is required. Missed deadlines cause an enemy attack. Zero HP ends the run; only replay starts at full health.
-- Between rounds, explicitly select healing, more damage or a shield. There is no automatic full-health revival.
+- Every five correct finite-challenge answers, explicitly select healing, more damage or a shield. There is no automatic full-health revival.
 - Five seconds per rune by default, adjustable from 1–60 seconds. Pause freezes the battle. Keyboard/mouse and on-screen Zhuyin symbol buttons are available.
 - Optional word-by-word results are available after victory, defeat and voluntary stop, with mistakes first. Mistake review is untimed and does not deduct HP.
 - Stars for standard duels and curriculum chapters: win with ≥90% accuracy = three, ≥75% = two, otherwise one. A failed/incomplete run gets zero. Endless and review do not receive stars. Full rules are shown in results.
+
+The top menu opens **Lịch sử trên máy**: local session results, word details, dates, course/chapter links, and a visible storage notice. Up to 128 recent sessions are stored locally, with no cloud sync. See `docs/practice-and-motion-2026-10-17.md` for behavior and validation.
 
 ## Development
 
@@ -26,7 +28,7 @@ npm run build
 npm run preview -- --host 127.0.0.1 --port 4186 --strictPort
 ```
 
-The active application uses `src/summoner/engine.js`, `curriculum.js`, `app.js`, `mobile.js`, `style.css`, `arena-layout.css`, `mobile.css` and the root `index.html` entry. Edit that root HTML for UI changes. `src/summoner/shell.html` is a standalone launcher for the published game, not a second app entry. Opening either HTML file directly redirects to the online game and requires Internet access; use the Vite development/preview URL for local testing. The browser uses native modules, HTML/CSS, the Canvas-free DOM arena and standard Audio; there are no inherited game-runtime imports.
+The active application uses `src/summoner/engine.js`, `curriculum.js`, `app.js`, `mobile.js`, `style.css`, `arena-layout.css`, `mobile.css` and the root `index.html` entry. Edit that root HTML for UI changes. `src/summoner/shell.html` is a standalone launcher for the published game, not a second app entry. Opening either HTML file directly redirects to the online game and requires Internet access; use the Vite development/preview URL for local testing. The browser uses native modules, HTML/CSS, the DOM arena with two lightweight WebGL image-deformation meshes and browser-native effects and standard Audio; there are no inherited game-runtime imports.
 
 Phone/tablet play has touch controls beside the arena, landscape layout, safe-area padding and a visual-viewport layout for Chinese software keyboards. Rotation preserves the current duel and all existing curriculum progress. See `docs/mobile-2026-10-16.md` for device sizes, checks and physical-device limitations.
 
