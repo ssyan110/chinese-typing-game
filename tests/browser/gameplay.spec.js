@@ -52,17 +52,18 @@ for (const mode of ['simplified', 'traditional', 'zhuyin']) {
  });
 }
 
-test('mobile reward selection resumes play without another ready click', async ({browser, baseURL}) => {
- const context = await browser.newContext({baseURL, viewport: {width: 390, height: 844}, isMobile: true, hasTouch: true});
- const page = await context.newPage();
+for (const [label, mobile] of [['mobile', true], ['desktop', false]]) test(`${label} reward selection resumes play`, async ({browser, baseURL, page}) => {
+ const context = mobile ? await browser.newContext({baseURL, viewport: {width: 390, height: 844}, isMobile: true, hasTouch: true}) : null;
+ const testPage = context ? await context.newPage() : page;
  try {
-  await lobby(page); await page.locator('#continue-learning').click(); await ready(page);
-  for (let i = 0; i < 5; i++) { await answer(page, 'simplified'); }
-  await expect(page.locator('#reward-dialog')).toBeVisible();
-  await page.locator('[data-reward=heal]').click();
-  await expect.poll(() => page.evaluate(() => window.__tulinh.snapshot().status)).toBe('playing');
-  await expect(page.locator('#start-ready')).toBeHidden();
- } finally { await context.close(); }
+  await lobby(testPage); await testPage.locator('#continue-learning').click(); if (mobile) await ready(testPage);
+  for (const reward of ['heal', 'power', 'shield']) {
+   for (let i = 0; i < 5; i++) await answer(testPage, 'simplified');
+   await expect(testPage.locator('#reward-dialog')).toBeVisible(); await testPage.locator(`[data-reward=${reward}]`).click();
+   await expect.poll(() => testPage.evaluate(() => window.__tulinh.snapshot().status)).toBe('playing');
+   if (mobile) await expect(testPage.locator('#start-ready')).toBeHidden();
+  }
+ } finally { await context?.close(); }
 });
 test('twenty-word mistake review finishes every word through the UI', async ({page}) => {
  await lobby(page);
