@@ -52,3 +52,5 @@ The `Publish student game` workflow tests and builds `main`, prepares the `/chin
 - The previous application adapted TypeGameWuxia. That runtime and adapter are now removed from the current tracked application tree, retained as an ignored local archive, and excluded from the build. Existing Git history has **not** been rewritten and still records that earlier adaptation. Rewriting the current application does not retroactively clear rights in prior distributions. See `docs/independent-rebuild-2026-10-16.md`.
 
 No project-wide third-party licence or legal clearance is implied by this README. Local scores and settings stay in the browser and do not synchronize between devices.
+
+Refined local character study: the articulated 3D models now include layered clothing, embroidery, jade relief and material grain. Homepage, chapter and fallback images use stills of the same models. See [implementation and validation](docs/sculpted-combat-2026-10-17.md). The art remains stylized and this branch is not yet the published student version.

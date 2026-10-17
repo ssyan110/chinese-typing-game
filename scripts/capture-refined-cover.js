@@ -1,0 +1,1 @@
+async source=>{const c=await source.context().browser().newContext({viewport:{width:1200,height:630}}),page=await c.newPage();await page.goto('http://localhost:5186/animation-lab/share-cover.html');await page.waitForFunction(()=>[...document.images].every(i=>i.complete&&i.naturalWidth));await page.screenshot({path:'public/original/brand/social-cover.png'});await c.close();}

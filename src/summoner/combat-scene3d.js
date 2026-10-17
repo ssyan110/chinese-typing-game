@@ -1,10 +1,12 @@
 import * as T from 'three';
+import {refineFighter,texturePalette} from './combat-sculpt.js';
 const mat=(color,metalness=.15,roughness=.55,extra={})=>new T.MeshStandardMaterial({color,metalness,roughness,...extra});
-const palette={jade:mat('#247c70',.42,.35),jadeLight:mat('#64b697',.3,.42),jadeDark:mat('#174b49',.28,.6),gold:mat('#d8a749',.68,.28),goldLight:mat('#f9d78b',.55,.3),navy:mat('#18394a',.05,.8),teal:mat('#257f7b',.08,.7),cloth:mat('#e7dfbb',0,.85),skin:mat('#e1ad83',.02,.8),hair:mat('#17272b',.1,.65),boot:mat('#483e32',.12,.65),light:mat('#ffdb72',.2,.3,{emissive:'#ffad38',emissiveIntensity:1.5}),eye:mat('#ffdb86',.2,.2,{emissive:'#ffbd52',emissiveIntensity:2}),white:mat('#f1eee1',.1,.6)};
+const palette={jade:mat('#397b70',.18,.48),jadeLight:mat('#79a38b',.12,.5),jadeDark:mat('#174b49',.28,.6),gold:mat('#b89550',.72,.40),goldLight:mat('#f9d78b',.55,.3),navy:mat('#18394a',.05,.8),teal:mat('#28645e',.02,.88),cloth:mat('#e7dfbb',0,.85),skin:mat('#e1ad83',.02,.8),hair:mat('#17272b',.1,.65),boot:mat('#483e32',.12,.65),light:mat('#ffdb72',.2,.3,{emissive:'#ffad38',emissiveIntensity:1.5}),eye:mat('#ffdb86',.2,.2,{emissive:'#ffbd52',emissiveIntensity:2}),white:mat('#f1eee1',.1,.6)};
+texturePalette(palette);
 const add=(parent,geometry,material,x=0,y=0,z=0)=>{const m=new T.Mesh(geometry,material);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m;};
-const orb=(p,r,m,x,y,z,s=[1,1,1])=>{const o=add(p,new T.SphereGeometry(r,16,12),m,x,y,z);o.scale.set(...s);return o;};
+const orb=(p,r,m,x,y,z,s=[1,1,1])=>{const o=add(p,new T.SphereGeometry(r,32,24),m,x,y,z);o.scale.set(...s);return o;};
 const box=(p,w,h,d,m,x,y,z)=>add(p,new T.BoxGeometry(w,h,d),m,x,y,z);
-const cyl=(p,rt,rb,h,m,x,y,z,n=12)=>add(p,new T.CylinderGeometry(rt,rb,h,n),m,x,y,z);
+const cyl=(p,rt,rb,h,m,x,y,z,n=24)=>add(p,new T.CylinderGeometry(rt,rb,h,n),m,x,y,z);
 const ring=(p,r,t,m,x,y,z)=>add(p,new T.TorusGeometry(r,t,6,32),m,x,y,z);
 const joint=(p,name,x,y,z)=>{const g=new T.Group();g.name=name;g.position.set(x,y,z);p.add(g);return g;};
 const line=(p,a,b,r,m)=>{const va=new T.Vector3(...a),vb=new T.Vector3(...b),mesh=cyl(p,r,r,va.distanceTo(vb),m,...va.clone().add(vb).multiplyScalar(.5).toArray(),8);mesh.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),vb.sub(va).normalize());return mesh;};
@@ -18,7 +20,7 @@ export function createFighter(kind='hero'){
   const shape=new T.Shape();shape.moveTo(0,0);shape.bezierCurveTo(.25,.65,1.2,1.24,1.22,.9);shape.bezierCurveTo(1.3,.33,.88,.1,.4,-.06);shape.bezierCurveTo(1.45,-.17,1.34,-.85,.9,-.72);shape.bezierCurveTo(.5,-.65,.2,-.25,0,0);
   for(const [name,sign]of [['L',-1],['R',1]]){const wing=joint(body,'wing-'+name,sign*.06,.1,0);joints['wing'+name]=wing;const surface=add(wing,new T.ExtrudeGeometry(shape,{depth:.045,bevelEnabled:true,bevelThickness:.025,bevelSize:.025,bevelSegments:1,steps:1}),palette.jadeLight);surface.scale.x=sign;const outline=new T.Line(new T.BufferGeometry().setFromPoints(shape.getPoints(60).map(p=>new T.Vector3(p.x*sign,p.y,.06))),new T.LineBasicMaterial({color:'#e9c26c'}));wing.add(outline);for(const yy of [.15,.5,.8,-.35,-.6])line(wing,[0,0,.075],[sign*(yy>0?1.05:.87),yy,.075],.009,palette.gold);for(const yy of [-.2,-.4,-.6]){const tail=joint(wing,'ribbon',sign*.6,yy,0);cyl(tail,.015,.04,.65,palette.gold,sign*.1,-.3,0);}}
   for(const sign of [-1,1]){const curve=new T.QuadraticBezierCurve3(new T.Vector3(sign*.09,.55,0),new T.Vector3(sign*.3,1,.03),new T.Vector3(sign*.45,.85,.05));add(body,new T.TubeGeometry(curve,10,.015,5,false),palette.gold);}
-  return actor;
+  return refineFighter(actor,palette);
  }
  const hero=kind==='hero',body=joint(root,'torso',0,hero?1.06:1.03,0);joints.body=body;
  if(hero){
@@ -39,7 +41,7 @@ export function createFighter(kind='hero'){
  for(const [name,sign]of [['L',-1],['R',1]]){const hand=limb(body,name,sign*armX,armY,len,rad,hero?palette.teal:palette.jade,joints);orb(hand,hero?.09:.245,hero?palette.skin:palette.jadeDark,0,-.04,.02,[1,1.1,1]);orb(joints['arm'+name],hero?.15:.30,palette.gold,0,-.03,0,[1,.65,1]);if(!hero)for(const xx of [-.13,0,.13])orb(hand,.07,palette.gold,xx,-.15,.17,[.7,.6,1]);}
  if(hero){const staff=joint(joints.handR,'staff',0,0,.02);joints.staff=staff;cyl(staff,.025,.035,1.9,palette.boot,0,.65,0);for(const y of [-.18,.3,.9,1.35])cyl(staff,.042,.042,.06,palette.gold,0,y,0);const crook=ring(staff,.22,.035,palette.gold,.12,1.68,0);crook.rotation.y=Math.PI/2;lantern(staff,.12,1.45,0,.75);}
  for(const [name,sign]of [['L',-1],['R',1]])leg(root,name,sign*(hero?.15:.27),hero?.78:.77,joints,!hero);
- return actor;
+ return refineFighter(actor,palette);
 }
 const key=(t,values)=>{const times=[0,.2,.43,.57,.83,1];for(let i=1;i<times.length;i++)if(t<=times[i]){let p=Math.max(0,(t-times[i-1])/(times[i]-times[i-1]));p=p*p*(3-2*p);return T.MathUtils.lerp(values[i-1],values[i],p);}return values.at(-1);};
 export function poseFighter(a,action='idle',progress=0,time=0,reduced=false){

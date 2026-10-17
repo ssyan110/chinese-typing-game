@@ -1,0 +1,7 @@
+<!doctype html><html><meta charset="utf-8"><style>body{margin:0;background:transparent}canvas{display:block}</style><canvas></canvas><script type="module">
+import * as T from 'three';import {createFighter,poseFighter} from '../src/summoner/combat-scene3d.js';
+const renderer=new T.WebGLRenderer({canvas:document.querySelector('canvas'),alpha:true,antialias:true,preserveDrawingBuffer:true});renderer.setSize(960,1120);renderer.setPixelRatio(1);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;renderer.setClearColor(0,0);
+const scene=new T.Scene();scene.add(new T.HemisphereLight('#dcf0df','#2b3740',2.5));for(const [color,intensity,pos] of [['#ffe4b2',3,[-3,5,5]],['#55b9ad',2,[3,3,-4]]]){const l=new T.DirectionalLight(color,intensity);l.position.set(...pos);scene.add(l);}
+const camera=new T.PerspectiveCamera(28,960/1120,.1,30);camera.position.set(0,2.3,7.4);camera.lookAt(0,1.45,0);let actor;
+window.renderPortrait=(kind='hero')=>{if(actor)scene.remove(actor.group);actor=createFighter(kind);actor.group.rotation.y=kind==='hero'?-.35:-.38;poseFighter(actor,'idle',0,0,true);scene.add(actor.group);renderer.render(scene,camera);return renderer.domElement.toDataURL('image/png');};window.renderPortrait();
+</script></html>
