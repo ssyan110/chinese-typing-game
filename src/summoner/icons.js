@@ -1,5 +1,6 @@
 // Product-owned SVG system. No icon font, remote requests, or user HTML injection.
 const paths={
+ trash:['M3 6h18','M9 6V3h6v3','M5 6l1 15h12l1-15','M10 10v7m4-7v7'],
  heart:['M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8'],
  history:['M3 11a9 9 0 1 1 2.6 7','M3 4v7h7','M12 7v5l3 2'],
  expand:['M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5'],

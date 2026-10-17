@@ -102,3 +102,13 @@ button[data-icon]{min-height:44px}
 @media(max-width:360px){.header-actions [data-icon-only="true"]{width:44px;min-width:44px}}
 .brand-footer .social-link,body[data-screen="setup-screen"] .brand-footer .social-link{width:44px;height:44px}
 .result-metrics [data-icon]>.control-label{margin:0;line-height:1.4}
+.history-actions{display:flex;justify-content:flex-end;margin-top:16px}
+.history-delete{color:#874330!important;gap:7px}
+.history-record>.history-delete{margin-inline-start:12px}
+.history-confirm{border:1px solid #c99570;border-radius:12px;background:#fff5e6;padding:16px;margin:12px 0}
+.history-confirm[hidden]{display:none}
+.history-confirm p{margin:0 0 14px;line-height:1.6}
+.history-confirm button+button{margin-inline-start:10px}
+.history-delete-status{color:#35564a;font-size:13px;line-height:1.5}
+.history-delete-status:empty{display:none}
+.history-delete:disabled{opacity:.45;cursor:default}
