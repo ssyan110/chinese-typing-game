@@ -42,6 +42,8 @@
  body.compact-stage #arena .rune-zone{height:auto;min-height:65px;bottom:4px;padding:3px;gap:2px}
  body.compact-stage #arena #active-rune{font-size:28px}
  body.compact-stage #arena #active-rune.long-rune{font-size:23px}
+ body.compact-stage:not(.native-keyboard):not([data-mode=zhuyin]) #arena{--stage-top:58px;--prompt-room:86px}
+ body.compact-stage:not(.native-keyboard):not([data-mode=zhuyin]) #arena .combat-3d-stage,body.compact-stage:not(.native-keyboard):not([data-mode=zhuyin]) #arena .hero-station>img,body.compact-stage:not(.native-keyboard):not([data-mode=zhuyin]) #arena .enemy-station>img{display:block}
  /* Native IME: preserve a single HP/target stack at every visible height. */
  body.native-keyboard[data-mode] #arena{min-height:74px;height:auto;flex:1}
  body.native-keyboard #arena .combat-3d-stage,body.native-keyboard #arena .hero-station>img,body.native-keyboard #arena .enemy-station>img,body.native-keyboard #arena .round-strip{display:none}
@@ -56,5 +58,9 @@
  body.keyboard-tight[data-mode] #arena .rune-zone{flex-direction:row;gap:8px}
  body.keyboard-tight #arena .rune-timer{display:none}
  body.keyboard-tight #arena #active-rune{font-size:26px}
+ /* Keep a mini battle above the word when the keyboard leaves enough room. */
+ body.native-keyboard:not(.keyboard-tight)[data-mode] #arena{--stage-top:28px;--prompt-room:72px;min-height:130px}
+ body.native-keyboard:not(.keyboard-tight) #arena .combat-3d-stage,body.native-keyboard:not(.keyboard-tight) #arena .hero-station>img,body.native-keyboard:not(.keyboard-tight) #arena .enemy-station>img{display:block}
+ body.native-keyboard:not(.keyboard-tight)[data-mode] #arena .rune-zone{top:auto;bottom:3px;height:64px}
 }
 .high-contrast #arena .rune-zone{background:#071e23;border-color:#efd494}
