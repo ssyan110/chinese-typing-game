@@ -54,3 +54,5 @@ The `Publish student game` workflow tests and builds `main`, prepares the `/chin
 No project-wide third-party licence or legal clearance is implied by this README. Local scores and settings stay in the browser and do not synchronize between devices.
 
 Earlier model studies are documented in [the sculpted-character notes](docs/sculpted-combat-2026-10-17.md). The selected red-panda hero supersedes the procedural human and fox previews.
+
+Shared product icons, color tokens, accessibility behavior and final visual audit are documented in [the product design system](docs/product-design-system-2026-10-17.md).

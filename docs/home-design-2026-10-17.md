@@ -8,8 +8,8 @@ Applied skills: `frontend-design` for the working interface; `natural-vietnamese
 
 - Color: warm paper #f6f4ec, forest #183e36, honey #e9c887; pale sage for control symbols. Dark scene with warm text, quiet light selection panel.
 - Typography: existing bundled Be Vietnam Pro, 400/600/700. Display heading with two lines, compact step marker, clear mode title and supporting input instructions. No external font requests.
-- Layout: illustrated left panel and right selection column at desktop width; compact illustrated panel and vertically stacked choices on phones. The existing model still is reused; no new WebGL work or animation on the home page.
-- Components: articulated fox still inside an arched stage, three concise practice rules, three real mode buttons, existing vocabulary form, visible local-save note, existing sources disclosure. Hover, keyboard focus, disabled, loading and reduced-motion behavior retained.
+- Layout: illustrated left panel and right selection column at desktop width; compact illustrated panel and vertically stacked choices on phones. The selected detailed red-panda portrait is reused; no new WebGL work or animation on the home page.
+- Components: painted red-panda portrait inside an arched stage, three concise practice rules, three real mode buttons, existing vocabulary form, visible local-save note, existing sources disclosure. Hover, keyboard focus, disabled, loading and reduced-motion behavior retained.
 - Scope: `home.css` is loaded last and scoped to `#setup-screen` or the active home screen. Battle, local storage keys, progression rules and records are unchanged.
 
 ## Reader verification
