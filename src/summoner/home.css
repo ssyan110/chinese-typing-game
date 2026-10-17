@@ -1,0 +1,98 @@
+/* Home: a lantern-lit field guide. All styling is scoped away from combat. */
+body[data-screen="setup-screen"]{background:#f6f4ec;min-height:100dvh}
+body[data-screen="setup-screen"] .site-header{background:#f6f4ec;border-color:#d9dfd3;max-width:1600px;margin:auto;padding-inline:40px;height:84px}
+body[data-screen="setup-screen"] .brand>span{font-size:20px;letter-spacing:-.5px}
+body[data-screen="setup-screen"] #history-toggle{border:1px solid #c7d1c3;border-radius:6px;padding-inline:16px}
+body[data-screen="setup-screen"] main{padding:28px 40px 32px}
+#setup-screen{--home-forest:#183e36;--home-cream:#f6f4ec;--home-honey:#e9c887;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(30px,5vw,88px);max-width:1360px;min-height:0;margin:0 auto;align-items:center}
+#setup-screen .setup-story{background:var(--home-forest);border:1px solid #34564a;border-radius:12px;padding:0;overflow:hidden;display:flex;flex-direction:column;min-width:0;align-self:stretch;color:#faf7e9}
+#setup-screen .home-intro{padding:34px 36px 0;position:relative;z-index:1}
+#setup-screen .home-eyebrow{font-size:10px;letter-spacing:.12em;font-weight:600;color:#d7d9bf;display:flex;align-items:center;gap:10px;margin-bottom:20px}
+#setup-screen .home-eyebrow>span{color:var(--home-honey);font-size:20px;line-height:1}
+#setup-screen h1{font-size:clamp(34px,3.4vw,53px);font-weight:600;letter-spacing:-.04em;line-height:1.19;margin:0 0 16px;max-width:none;color:#fbf7e8}
+#setup-screen h1>span{color:var(--home-honey)}
+#setup-screen .home-intro>p:last-child{color:#d1dbcd;font-size:13px;line-height:1.85;max-width:390px;margin:0}
+#setup-screen .story-art{display:block;position:relative;isolation:isolate;flex:1;min-height:310px;height:330px;margin:0;overflow:hidden}
+#setup-screen .story-art:before{display:none}
+#setup-screen .home-arch{position:absolute;left:20%;right:20%;top:24px;bottom:-35px;border:1px solid #6d82715e;border-radius:180px 180px 0 0;background:#23483e}
+#setup-screen .home-arch:after{content:'';position:absolute;inset:14px;border:1px solid #6d827137;border-radius:inherit}
+#setup-screen .home-moon{position:absolute;top:38px;left:65%;width:54px;height:54px;border-radius:50%;background:#d3b777;box-shadow:0 0 0 12px #d3b77709;z-index:-1}
+#setup-screen .home-ground{position:absolute;width:68%;height:38px;left:16%;bottom:30px;border:1px solid #d3b77745;border-radius:50%;background:#183d35;z-index:0}
+#setup-screen .setup-hero{height:300px;width:auto;max-width:82%;position:absolute;left:50%;bottom:32px;transform:translateX(-50%);object-fit:contain;filter:drop-shadow(0 12px 14px #071f223b);z-index:1}
+#setup-screen .story-rune{font-family:'PingFang TC','Microsoft JhengHei',serif;font-size:26px;color:#b2c3a3;line-height:1.2;border:1px solid #7d94724a;padding:10px 13px;background:#204238;z-index:0}
+#setup-screen .rune-one{left:14%;top:60px;transform:rotate(-9deg)}
+#setup-screen .rune-two{right:13%;top:auto;bottom:85px;color:#e2c58d;transform:rotate(8deg)}
+#setup-screen .home-art-caption{position:absolute;bottom:7px;text-align:center;width:100%;font-size:10px;letter-spacing:.07em;color:#b5c4b1;z-index:2}
+#setup-screen .home-rules{display:grid;grid-template-columns:.85fr 1.15fr 1fr;list-style:none;gap:12px;margin:18px 24px 0;padding:20px 10px 24px;border-top:1px solid #78907845}
+#setup-screen .home-rules li{display:flex;flex-direction:column;gap:6px}
+#setup-screen .home-rules strong{font-size:17px;line-height:1.5;font-weight:600;color:#f8edcd;white-space:nowrap}
+#setup-screen .home-rules strong span{font-size:12px;font-weight:400}
+#setup-screen .home-rules small{font-size:10px;color:#b9cbb9;line-height:1.6}
+#setup-screen .setup-form{padding:24px 0;max-width:500px;width:100%;align-self:center;min-width:0}
+#setup-screen #home-back:disabled{display:none}
+#setup-screen .step-marker{margin-bottom:18px;gap:10px}
+#setup-screen .step-marker>span{height:27px;width:27px;border-radius:5px;background:#e5eadd;border:0;color:#315f4d;font-size:11px;font-weight:600}
+#setup-screen .step-marker p{color:#586d5d;letter-spacing:.12em;font-size:10px}
+#setup-screen #choice-title{font-size:32px;line-height:1.35;font-weight:600;letter-spacing:-.035em;color:#203c32;margin:0 0 12px}
+#setup-screen .home-choice-note{font-size:12px;color:#627064;line-height:1.85;max-width:360px;margin-bottom:25px}
+#setup-screen:has(#level-form:not([hidden])) .home-choice-note{display:none}
+#setup-screen .mode-choices{gap:12px}
+#setup-screen .mode-choice{border:1px solid #d7ddcf;background:#fffef9;border-radius:8px;padding:19px 18px;min-height:101px;gap:17px;box-shadow:0 2px 0 #203c3204;transition:background .18s,border-color .18s,box-shadow .18s,transform .18s}
+#setup-screen .mode-choice>b{width:50px;min-width:50px;height:54px;display:grid;place-items:center;background:#edf0e5;border-radius:5px;font-size:34px;font-weight:400;color:#35634f}
+#setup-screen .mode-choice strong{font-size:16px;margin-bottom:5px;line-height:1.4;color:#243e32;font-weight:600}
+#setup-screen .mode-choice small{font-size:11px;color:#667165;line-height:1.7}
+#setup-screen .mode-choice i{font-size:21px;color:#698267;line-height:1}
+#setup-screen .mode-choice:hover{border-color:#698b68;box-shadow:0 5px 12px #173e360a;background:#f5f8ee;transform:translateX(3px)}
+#setup-screen .mode-choice:focus-visible{outline:3px solid #9a6b20;outline-offset:3px}
+#setup-screen .home-save-note{display:flex;align-items:flex-start;gap:12px;margin-top:25px;padding-top:22px;border-top:1px solid #d9dfd1}
+#setup-screen .home-save-note svg{width:23px;height:23px;flex-shrink:0;margin-top:2px;color:#638061}
+#setup-screen .home-save-note p{margin:0;font-size:11px;line-height:1.85;color:#687567}
+#setup-screen .home-save-note strong{display:block;color:#41593d;font-size:12px;font-weight:600}
+#setup-screen .home-save-note span{display:block}
+#setup-screen .sources{margin-top:17px;padding-top:0;border:0;color:#627064;font-size:11px}
+#setup-screen .sources summary{font-size:10px;color:#697363;min-height:35px;line-height:1.6;padding-block:10px;text-underline-offset:3px}
+#setup-screen .sources a{overflow-wrap:anywhere}
+#setup-screen #level-form select{border-color:#c9d2c1;background:#fffef9;border-radius:6px}
+#setup-screen #enter-lobby{background:#234d3e;border-radius:6px;min-height:50px}
+#setup-screen #enter-lobby:hover{background:#34634b}
+body[data-screen="setup-screen"] .brand-footer{max-width:1360px;margin:auto;border-color:#d9dfd1;color:#72806d;font-size:10px;padding:12px 24px;gap:8px 18px;justify-content:space-between}
+body[data-screen="setup-screen"] .brand-footer .social-link{color:#74816c;width:38px;height:38px}
+body[data-screen="setup-screen"] .brand-footer .social-link svg{width:16px;height:16px}
+@media(min-width:1600px){#setup-screen .story-art{min-height:390px}#setup-screen .setup-hero{height:370px}}
+@media(max-width:1100px){#setup-screen{gap:32px;grid-template-columns:1fr 1fr}#setup-screen .home-intro{padding:28px 26px 0}#setup-screen h1{font-size:36px}#setup-screen .home-rules{margin-inline:16px;gap:10px;padding-inline:4px}#setup-screen .home-rules strong{font-size:14px}#setup-screen .home-rules small{font-size:9px}body[data-screen="setup-screen"] main{padding:24px}}
+@media(max-width:760px){
+ body[data-screen="setup-screen"] .site-header{height:auto;min-height:90px;padding:16px 20px 8px;gap:8px;align-items:center}
+ body[data-screen="setup-screen"] .brand>span{font-size:18px}
+ body[data-screen="setup-screen"] .header-actions{width:100%;justify-content:space-between;margin:0;gap:0}
+ body[data-screen="setup-screen"] .header-actions .icon-button{font-size:10px;padding:8px 7px;min-height:40px}
+ body[data-screen="setup-screen"] #history-toggle{padding-inline:10px}
+ body[data-screen="setup-screen"] main{padding:14px 16px 24px}
+ #setup-screen{display:grid;grid-template-columns:1fr;gap:26px;max-width:560px}
+ #setup-screen .setup-story{border-radius:9px;position:relative;min-height:290px;display:block}
+ #setup-screen .home-intro{padding:25px 22px 0;width:65%}
+ #setup-screen .home-eyebrow{font-size:8px;letter-spacing:.04em;gap:6px;margin-bottom:15px;white-space:nowrap}
+ #setup-screen .home-eyebrow>span{font-size:15px}
+ #setup-screen h1{font-size:29px;line-height:1.25;margin-bottom:10px;letter-spacing:-.04em}
+ #setup-screen h1 br{display:block}
+ #setup-screen .home-intro>p:last-child{font-size:10px;line-height:1.8;color:#cfdbcc;max-width:190px;position:relative;z-index:3}
+ #setup-screen .story-art{display:block;position:absolute;right:-5px;top:60px;width:45%;height:185px;min-height:0;margin:0;overflow:visible;z-index:0}
+ #setup-screen .setup-hero{height:178px;width:auto;max-width:100%;bottom:0;left:50%}
+ #setup-screen .home-arch{left:0;right:0;top:10px;bottom:-15px}
+ #setup-screen .home-ground{bottom:0;width:100%;left:0;height:18px}
+ #setup-screen .home-moon{height:25px;width:25px;top:18px;left:70%;box-shadow:none}
+ #setup-screen .story-rune,#setup-screen .home-art-caption{display:none}
+ #setup-screen .home-rules{position:relative;margin:32px 18px 0;padding:15px 0 17px;grid-template-columns:.85fr 1.15fr 1fr;gap:8px;background:var(--home-forest);z-index:2}
+ #setup-screen .home-rules strong{font-size:13px}#setup-screen .home-rules strong span{font-size:10px}#setup-screen .home-rules small{font-size:10px;line-height:1.6}
+ #setup-screen .setup-form{padding:0;max-width:none}
+ #setup-screen .step-marker{margin-bottom:13px}
+ #setup-screen #choice-title{font-size:27px;margin-bottom:8px}
+ #setup-screen .home-choice-note{font-size:11px;margin-bottom:18px;max-width:340px}
+ #setup-screen .mode-choice{min-height:88px;padding:14px;gap:14px}
+ #setup-screen .mode-choice>b{width:44px;min-width:44px;height:48px;font-size:31px}
+ #setup-screen .mode-choice strong{font-size:15px}#setup-screen .mode-choice small{font-size:10px}
+ #setup-screen .home-save-note{margin-top:22px;padding-top:18px}
+ body[data-screen="setup-screen"] .brand-footer{margin-inline:16px;padding-inline:0;gap:6px;font-size:9px}
+}
+@media(max-width:360px){#setup-screen .home-intro{padding:22px 16px 0;width:67%}#setup-screen h1{font-size:25px}#setup-screen .home-eyebrow{font-size:7px}#setup-screen .home-intro>p:last-child{font-size:9px;max-width:155px}#setup-screen .story-art{top:69px;right:-6px;width:43%;height:165px}#setup-screen .setup-hero{height:157px}#setup-screen .home-rules{margin-top:30px}#setup-screen .home-rules strong{font-size:11px}#setup-screen .home-rules small{font-size:9px}}
+@media(prefers-reduced-motion:reduce){#setup-screen .mode-choice{transition:none}#setup-screen .mode-choice:hover{transform:none}}
+body.high-contrast #setup-screen .home-save-note p,body.high-contrast #setup-screen .mode-choice small,body.high-contrast #setup-screen .home-choice-note{color:#344c38}
