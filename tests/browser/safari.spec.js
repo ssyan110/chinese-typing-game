@@ -12,6 +12,10 @@ for(const mode of ['simplified','traditional'])test(`Safari phone ${mode}: tap s
   await page.locator('#continue-learning').tap();
   await page.locator('#start-ready').tap();
   await expect.poll(()=>page.evaluate(()=>window.__tulinh.snapshot().status)).toBe('playing');
+  for(const spell of ['ward','mend','strike']){
+   await page.locator(`[data-spell=${spell}]`).tap();
+   await expect(page.locator('#hanzi-input')).toBeFocused();
+  }
   const word=await page.locator('#active-rune').innerText();
   await page.locator('#hanzi-input').tap();await page.locator('#hanzi-input').dispatchEvent('compositionstart');
   await page.locator('#hanzi-input').fill('ni');
