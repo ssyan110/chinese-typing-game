@@ -99,7 +99,6 @@ function armReady(){
  readyText.textContent=game?.mode==='zhuyin'?'Sẵn sàng luyện chú âm?':'Mở bộ gõ rồi bắt đầu.';
  renderBattle();mobileLayout?.refresh();
 }
-readyButton.addEventListener('pointerdown',event=>event.preventDefault());
 readyButton.onclick=()=>{
  if(!game||!awaitingReady)return;
  if(game.mode!=='zhuyin')$('hanzi-input').focus({preventScroll:true});

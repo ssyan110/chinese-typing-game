@@ -1,5 +1,7 @@
 /* Shared product finish: same forest, paper, honey and line icons on every screen. */
 :root{--ink:#203e34;--teal:#2c6b55;--gold:#ac8342;--paper:#fffdf6;--line:#cfd8c7;--muted:#637262}
+/* Headings receive screen-reader focus, not an interactive control outline. */
+main h1[tabindex="-1"]:focus,main h2[tabindex="-1"]:focus{outline:none}
 .ui-icon{display:inline-block;width:19px;height:19px;flex:0 0 auto;vertical-align:middle;pointer-events:none}
 [data-icon]{display:inline-flex;align-items:center;gap:8px}
 [data-icon]>.control-label{min-width:0}
