@@ -20,7 +20,7 @@ The top menu opens **Lịch sử trên máy**: local session results, word detai
 
 ## Local combat-art preview
 
-The selected hero is a detailed lantern red panda, animated with handpainted action poses inside the existing 3D combat-effects scene. The homepage and social cover match its illustrated design. Remotion Studio uses the same atlas and scene. This is a local preview and has **not been deployed over the live student version**. See [hero implementation and validation](docs/lantern-panda-2026-10-17.md).
+The battle hero is an articulated Three.js lantern red panda with independently animated limbs, face, ears, tail and lantern. It uses no cropped character images or action atlas. Remotion shares this deterministic scene. The homepage and social cover retain the approved painted illustration; the battle model has a rounded toy-like style. See [hero implementation and validation](docs/lantern-panda-2026-10-17.md).
 
 ## Development
 
@@ -32,7 +32,7 @@ npm run build
 npm run preview -- --host 127.0.0.1 --port 4186 --strictPort
 ```
 
-The active application uses `src/summoner/engine.js`, `curriculum.js`, `app.js`, `mobile.js`, `style.css`, `arena-layout.css`, `mobile.css` and the root `index.html` entry. Edit that root HTML for UI changes. `src/summoner/shell.html` is a standalone launcher for the published game, not a second app entry. Opening either HTML file directly redirects to the online game and requires Internet access; use the Vite development/preview URL for local testing. The browser uses native modules, HTML/CSS, the DOM arena with a lazily loaded scene with a painted hero and 3D opponents/effects and browser-native feedback and standard Audio; there are no inherited game-runtime imports.
+The active application uses `src/summoner/engine.js`, `curriculum.js`, `app.js`, `mobile.js`, `style.css`, `arena-layout.css`, `mobile.css` and the root `index.html` entry. Edit that root HTML for UI changes. `src/summoner/shell.html` is a standalone launcher for the published game, not a second app entry. Opening either HTML file directly redirects to the online game and requires Internet access; use the Vite development/preview URL for local testing. The browser uses native modules, HTML/CSS, the DOM arena with a lazily loaded scene with an articulated 3D hero and 3D opponents/effects and browser-native feedback and standard Audio; there are no inherited game-runtime imports.
 
 Phone/tablet play has touch controls beside the arena, landscape layout, safe-area padding and a visual-viewport layout for Chinese software keyboards. Rotation preserves the current duel and all existing curriculum progress. See `docs/mobile-2026-10-16.md` for device sizes, checks and physical-device limitations.
 
