@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {createLanternFox,poseLanternFox} from './lantern-fox.js';
 import {refineFighter,texturePalette} from './combat-sculpt.js';
 const mat=(color,metalness=.15,roughness=.55,extra={})=>new T.MeshStandardMaterial({color,metalness,roughness,...extra});
 const palette={jade:mat('#397b70',.18,.48),jadeLight:mat('#79a38b',.12,.5),jadeDark:mat('#174b49',.28,.6),gold:mat('#b89550',.72,.40),goldLight:mat('#f9d78b',.55,.3),navy:mat('#18394a',.05,.8),teal:mat('#28645e',.02,.88),cloth:mat('#e7dfbb',0,.85),skin:mat('#e1ad83',.02,.8),hair:mat('#17272b',.1,.65),boot:mat('#483e32',.12,.65),light:mat('#ffdb72',.2,.3,{emissive:'#ffad38',emissiveIntensity:1.5}),eye:mat('#ffdb86',.2,.2,{emissive:'#ffbd52',emissiveIntensity:2}),white:mat('#f1eee1',.1,.6)};
@@ -15,6 +16,7 @@ function leg(parent,name,x,y,joints,big=false){const hip=joint(parent,'hip-'+nam
 function lantern(parent,x,y,z,scale=1){const g=joint(parent,'lantern',x,y,z);g.scale.setScalar(scale);orb(g,.22,palette.light,0,0,0,[.9,1.3,.9]);for(let i=0;i<6;i++){const a=i*Math.PI/3;line(g,[Math.cos(a)*.18,-.2,Math.sin(a)*.18],[Math.cos(a)*.18,.2,Math.sin(a)*.18],.018,palette.gold);}for(const y of [-.23,.23]){const r=ring(g,.17,.025,palette.gold,0,y,0);r.rotation.x=Math.PI/2;}cyl(g,.11,.05,.12,palette.gold,0,.3,0);line(g,[0,-.26,0],[0,-.47,0],.012,palette.gold);orb(g,.04,palette.gold,0,-.48,0);return g;}
 export function createFighter(kind='hero'){
  const group=new T.Group(),root=joint(group,kind,0,0,0),joints={},actor={kind,group,root,joints};
+ if(kind==='hero')return createLanternFox(actor);
  if(kind==='moth'){
   const body=joint(root,'body',0,1.45,0);joints.body=body;cyl(body,.13,.07,1.05,palette.jadeDark,0,-.1,0);orb(body,.2,palette.gold,0,.47,0);orb(body,.17,palette.jade,0,.48,.07);orb(body,.05,palette.eye,-.1,.51,.19);orb(body,.05,palette.eye,.1,.51,.19);
   const shape=new T.Shape();shape.moveTo(0,0);shape.bezierCurveTo(.25,.65,1.2,1.24,1.22,.9);shape.bezierCurveTo(1.3,.33,.88,.1,.4,-.06);shape.bezierCurveTo(1.45,-.17,1.34,-.85,.9,-.72);shape.bezierCurveTo(.5,-.65,.2,-.25,0,0);
@@ -45,6 +47,7 @@ export function createFighter(kind='hero'){
 }
 const key=(t,values)=>{const times=[0,.2,.43,.57,.83,1];for(let i=1;i<times.length;i++)if(t<=times[i]){let p=Math.max(0,(t-times[i-1])/(times[i]-times[i-1]));p=p*p*(3-2*p);return T.MathUtils.lerp(values[i-1],values[i],p);}return values.at(-1);};
 export function poseFighter(a,action='idle',progress=0,time=0,reduced=false){
+ if(a.isFox)return poseLanternFox(a,action,Math.max(0,Math.min(1,progress)),time,reduced);
  const j=a.joints,p=Math.max(0,Math.min(1,progress)),hero=a.kind==='hero',attack=action==='attack',hit=action==='hit',guard=action==='guard',heal=action==='heal';a.root.position.set(0,0,0);a.root.rotation.set(0,0,0);Object.values(j).forEach(n=>n.rotation.set(0,0,0));
  if(a.kind==='moth'){const flap=reduced?0:Math.sin(time*7)*.55;a.root.position.y=reduced?.2:.2+Math.sin(time*3)*.08;j.wingL.rotation.y=-.12-flap;j.wingR.rotation.y=.12+flap;j.wingL.rotation.z=-.12;j.wingR.rotation.z=.12;j.body.rotation.x=attack?key(p,[0,-.35,.8,.8,.2,0]):hit?Math.sin(p*12)*.2*(1-p):0;if(attack)a.root.position.z=key(p,[0,-.2,.65,.7,.2,0]);return;}
  j.armL.rotation.x=-.12;j.armR.rotation.x=hero?-.4:-.12;j.foreL.rotation.x=-.18;j.foreR.rotation.x=hero?-.6:-.2;if(j.staff)j.staff.rotation.x=.9;if(j.cape)j.cape.rotation.x=-.15;
