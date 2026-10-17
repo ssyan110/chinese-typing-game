@@ -57,12 +57,20 @@ for (const [label, mobile] of [['mobile', true], ['desktop', false]]) test(`${la
  const testPage = context ? await context.newPage() : page;
  try {
   await lobby(testPage); await testPage.locator('#continue-learning').click(); if (mobile) await ready(testPage);
+  for (const spell of ['ward', 'mend', 'strike']) {
+   await testPage.locator(`[data-spell=${spell}]`).click();
+   await expect(testPage.locator('#hanzi-input')).toBeFocused();
+  }
   for (const reward of ['heal', 'power', 'shield']) {
    for (let i = 0; i < 5; i++) await answer(testPage, 'simplified');
    await expect(testPage.locator('#reward-dialog')).toBeVisible(); await testPage.locator(`[data-reward=${reward}]`).click();
    await expect.poll(() => testPage.evaluate(() => window.__tulinh.snapshot().status)).toBe('playing');
    if (mobile) await expect(testPage.locator('#start-ready')).toBeHidden();
+   await expect(testPage.locator('#hanzi-input')).toBeFocused();
   }
+  const correct=await testPage.evaluate(()=>window.__tulinh.snapshot().correct);
+  await testPage.keyboard.insertText(await testPage.locator('#active-rune').innerText());
+  await expect.poll(()=>testPage.evaluate(()=>window.__tulinh.snapshot().correct)).toBe(correct+1);
  } finally { await context?.close(); }
 });
 test('twenty-word mistake review finishes every word through the UI', async ({page}) => {
