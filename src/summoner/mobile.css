@@ -103,3 +103,60 @@
  body.native-keyboard.keyboard-tight[data-mode] .cast-form{padding:4px}
  body.native-keyboard.keyboard-tight[data-mode] .cast-form input,body.native-keyboard.keyboard-tight[data-mode] .cast-form .primary-button{height:40px;min-height:40px}
 }
+
+/* Final control budgets pair with the mobile stage block in battle-stage.css. */
+#battle-ready[hidden]{display:none}
+#battle-ready{display:flex;align-items:center;gap:8px;font-size:12px;line-height:1.3}
+#battle-ready button{white-space:nowrap;min-height:40px;padding:7px 12px}
+@media(max-width:1024px),(pointer:coarse) and (max-width:1400px){
+ body.awaiting-ready .battle-heading>div:first-child{display:none}
+ body.awaiting-ready .battle-tools label{display:none}
+ body.awaiting-ready .battle-heading{justify-content:space-between}
+ .mobile-spells .battle-notice{white-space:normal;overflow:visible;text-overflow:clip;font-size:12px;line-height:1.3;min-height:16px}
+ /* Keyboard users need health and answer outcomes before optional spells. */
+ body.native-keyboard[data-mode] .mobile-spells{display:block}
+ body.native-keyboard[data-mode] .mobile-spells .battle-notice{display:block;min-height:16px;margin:0;font-size:12px;line-height:1.25}
+ body.native-keyboard[data-mode] .mobile-spells .spell-list,body.native-keyboard[data-mode] .mobile-spells .spell-heading{display:none}
+ body.native-keyboard.keyboard-tight[data-mode] #battle-screen{padding-top:4px;padding-bottom:4px}
+ body.native-keyboard.keyboard-tight[data-mode] .battle-heading{min-height:30px;height:30px;margin-bottom:3px}
+ body.native-keyboard.keyboard-tight[data-mode] .battle-tools label{display:none}
+ body.native-keyboard.keyboard-tight[data-mode] #arena{min-height:56px}
+ body.native-keyboard.keyboard-tight[data-mode] #arena .vital-card{top:1px;min-height:21px;padding:2px 5px}
+ body.native-keyboard.keyboard-tight[data-mode] #arena .rune-zone{top:23px;bottom:1px}
+ body.native-keyboard.keyboard-tight #battle-ready{font-size:11px;gap:6px}
+ body.native-keyboard.keyboard-tight #battle-ready button{height:30px;min-height:30px;padding:3px 8px}
+ body.native-keyboard.keyboard-tight[data-mode] .cast-form{padding:3px 4px}
+ body.native-keyboard.keyboard-tight[data-mode] .cast-form input,body.native-keyboard.keyboard-tight[data-mode] .cast-form .primary-button{height:40px;min-height:40px}
+}
+/* Reflow touch symbols without changing physical keyboard mapping or DOM order. */
+@media(max-width:480px) and (orientation:portrait){
+ #zhuyin-keys{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
+ #zhuyin-keys .key-row{display:contents}
+ body[data-mode] #zhuyin-keys button{width:100%;height:44px;min-height:44px;margin:0}
+ #zhuyin-keys b{font-size:22px}
+ #zhuyin-keys small{display:none}
+ body[data-mode=zhuyin] .touch-keyboard{padding:6px}
+ body[data-mode=zhuyin] .keyboard-heading{display:none}
+}
+@media(max-width:1024px) and (orientation:landscape) and (max-height:540px),(pointer:coarse) and (max-width:1400px) and (orientation:landscape) and (max-height:540px){
+ body:not(.native-keyboard)[data-mode] .arena-column{grid-template-columns:minmax(0,1fr) minmax(320px,48%)}
+ body:not(.native-keyboard)[data-mode] .summon-arena{min-height:130px;height:var(--mobile-arena-height)}
+ body:not(.native-keyboard) .mobile-spells .spell-card{min-height:40px;padding:7px 5px}
+ body:not(.native-keyboard) .mobile-spells .spell-heading{display:none}
+}
+@media(max-width:600px) and (orientation:portrait) and (max-height:700px){
+ body[data-mode]:not(.native-keyboard) .mobile-spells .spell-list .spell-card{display:flex;flex-direction:row;align-items:center;justify-content:center;min-height:44px;height:44px;padding:6px;gap:2px}
+ body[data-mode]:not(.native-keyboard) .mobile-spells .spell-list .spell-card .spell-symbol,body[data-mode]:not(.native-keyboard) .mobile-spells .spell-list .spell-card small{display:none}
+ body[data-mode]:not(.native-keyboard) .mobile-spells .spell-list .spell-card strong{font-size:11px;padding-right:12px;margin:0}
+ body[data-mode]:not(.native-keyboard) .mobile-spells .spell-list .spell-card em{right:3px;left:auto;top:3px}
+ body[data-mode]:not(.native-keyboard) .mobile-spells .spell-heading{display:none}
+}
+@media(max-width:1024px),(pointer:coarse) and (max-width:1400px){
+ body[data-mode] .mobile-spells .battle-notice{font-size:12px;line-height:1.25;min-height:16px}
+}
+@media(max-width:1024px),(pointer:coarse) and (max-width:1400px){
+ body.native-keyboard.keyboard-tight[data-mode] .mobile-spells{display:block;flex:none}
+ body.native-keyboard.keyboard-tight[data-mode] .mobile-spells .battle-notice{display:block;min-height:16px}
+ body.native-keyboard.keyboard-tight[data-mode] #pause-button{height:30px;min-height:30px}
+ body.native-keyboard.keyboard-tight[data-mode] #start-ready{height:30px;min-height:30px}
+}

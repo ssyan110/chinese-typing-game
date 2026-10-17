@@ -112,3 +112,16 @@ button[data-icon]{min-height:44px}
 .history-delete-status{color:#35564a;font-size:13px;line-height:1.5}
 .history-delete-status:empty{display:none}
 .history-delete:disabled{opacity:.45;cursor:default}
+/* Local-save recovery remains readable on phones and inside the history dialog. */
+#save-status{margin:12px auto;padding:12px 16px;max-width:1000px;border:1px solid #a77433;border-radius:6px;background:#fff2d7;color:#5b3717;font-size:14px;line-height:1.5}
+#save-status[hidden]{display:none}
+.history-backup{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:18px 0;padding:16px 0;border-top:1px solid #c3ceba;border-bottom:1px solid #c3ceba}
+.history-backup p,.history-backup [role=status]{flex-basis:100%;margin:4px 0;line-height:1.5}
+.history-backup label{display:flex;flex-wrap:wrap;align-items:center;gap:8px;min-width:0;max-width:100%;font-size:14px;line-height:1.5}
+.history-backup input[type=file]{max-width:100%;min-width:0;font-size:14px}
+.history-backup input[type=checkbox]{width:20px;height:20px;flex:none}
+.history-backup button{min-height:44px;white-space:normal}
+#return-course{margin-bottom:16px;max-width:100%;white-space:normal;text-align:left}
+.curriculum-panel>.timing-card{margin:16px 0}
+.lobby-bottom:has(>.endless-card:only-child){grid-template-columns:1fr}
+body.native-keyboard #save-status:not([hidden]){position:fixed;z-index:80;top:var(--visible-top,0px);left:8px;right:8px;margin:0;max-height:calc(var(--visible-height,100dvh) - 12px);overflow:auto}

@@ -44,7 +44,7 @@ export class Duel{
  hurt(damage){if(this.status!=='playing')return;const blocked=Math.min(this.shield,damage);this.shield-=blocked;this.hp=Math.max(0,this.hp-(damage-blocked));if(this.hp===0){this.status='lost';this.outcome='Đã hết HP';this.revision++;}}
  succeed(){
   if(this.status!=='playing')return;this.correct++;this.combo++;this.maxCombo=Math.max(this.maxCombo,this.combo);this.stats.get(this.target.id).correct++;this.lastPracticeCredited=!this.targetHadError;const count=Math.min(this.practiceGoal,(this.practiceCounts.get(this.target.id)||0)+(this.lastPracticeCredited?1:0));this.practiceCounts.set(this.target.id,count);this.practiceDone=[...this.practiceCounts.values()].reduce((a,b)=>a+b,0);if(count>=this.practiceGoal)this.completedIds.add(this.target.id);this.score+=100+Math.min(this.combo,20)*5;
-  if(this.kind==='review'){this.notice='Đúng rồi!';if(this.correct>=Math.min(10,this.words.length)){this.status='won';this.outcome='Đã hoàn thành lượt ôn';}else this.next();this.revision++;return;}
+  if(this.kind==='review'){this.notice='Đúng rồi!';if(this.correct>=this.words.length){this.status='won';this.outcome='Đã hoàn thành lượt ôn';}else this.next();this.revision++;return;}
   const spell=this.energy>=({strike:0,ward:1,mend:2}[this.spell])?this.spell:'strike';this.spell=spell;const hpBeforeSpell=this.hp;if(this.learning&&this.lastPracticeCredited)this.hp=Math.min(100,this.hp+LEARNING_RULES.cleanRecovery);
   if(spell==='strike')this.energy=Math.min(3,this.energy+1);else if(spell==='ward'){this.energy--;this.shield=Math.min(30,this.shield+14);}else{this.energy-=2;this.hp=Math.min(100,this.hp+12);}
   let damage=(this.defending?10:{strike:18,ward:10,mend:9}[spell])+this.power;if(this.encounter==='moth'&&this.remaining>=this.seconds/2)damage+=5;
