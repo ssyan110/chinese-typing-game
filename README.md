@@ -18,9 +18,9 @@ Student site: **https://ssyan110.github.io/chinese-typing-game/**
 
 The top menu opens **Lịch sử trên máy**: local session results, word details, dates, course/chapter links, and a visible storage notice. Up to 128 recent sessions are stored locally, with no cloud sync. See `docs/practice-and-motion-2026-10-17.md` for behavior and validation.
 
-## Local 3D animation prototype
+## Local combat-art preview
 
-The current working branch replaces picture deformation with hierarchical 3D actors. Remotion Studio and the interactive action study share the same scene code. This changes the character style to cartoon 3D and has **not been deployed over the live illustrated version**. See `docs/three-combat-prototype-2026-10-17.md` for preview links, setup, checks and limitations.
+The selected hero is a detailed lantern red panda, animated with handpainted action poses inside the existing 3D combat-effects scene. The homepage and social cover match its illustrated design. Remotion Studio uses the same atlas and scene. This is a local preview and has **not been deployed over the live student version**. See [hero implementation and validation](docs/lantern-panda-2026-10-17.md).
 
 ## Development
 
@@ -32,7 +32,7 @@ npm run build
 npm run preview -- --host 127.0.0.1 --port 4186 --strictPort
 ```
 
-The active application uses `src/summoner/engine.js`, `curriculum.js`, `app.js`, `mobile.js`, `style.css`, `arena-layout.css`, `mobile.css` and the root `index.html` entry. Edit that root HTML for UI changes. `src/summoner/shell.html` is a standalone launcher for the published game, not a second app entry. Opening either HTML file directly redirects to the online game and requires Internet access; use the Vite development/preview URL for local testing. The browser uses native modules, HTML/CSS, the DOM arena with a lazily loaded solid 3D character scene and browser-native feedback and standard Audio; there are no inherited game-runtime imports.
+The active application uses `src/summoner/engine.js`, `curriculum.js`, `app.js`, `mobile.js`, `style.css`, `arena-layout.css`, `mobile.css` and the root `index.html` entry. Edit that root HTML for UI changes. `src/summoner/shell.html` is a standalone launcher for the published game, not a second app entry. Opening either HTML file directly redirects to the online game and requires Internet access; use the Vite development/preview URL for local testing. The browser uses native modules, HTML/CSS, the DOM arena with a lazily loaded scene with a painted hero and 3D opponents/effects and browser-native feedback and standard Audio; there are no inherited game-runtime imports.
 
 Phone/tablet play has touch controls beside the arena, landscape layout, safe-area padding and a visual-viewport layout for Chinese software keyboards. Rotation preserves the current duel and all existing curriculum progress. See `docs/mobile-2026-10-16.md` for device sizes, checks and physical-device limitations.
 
@@ -53,4 +53,4 @@ The `Publish student game` workflow tests and builds `main`, prepares the `/chin
 
 No project-wide third-party licence or legal clearance is implied by this README. Local scores and settings stay in the browser and do not synchronize between devices.
 
-Refined local character study: the articulated 3D models now include layered clothing, embroidery, jade relief and material grain. Homepage, chapter and fallback images use stills of the same models. See [implementation and validation](docs/sculpted-combat-2026-10-17.md). The art remains stylized and this branch is not yet the published student version.
+Earlier model studies are documented in [the sculpted-character notes](docs/sculpted-combat-2026-10-17.md). The selected red-panda hero supersedes the procedural human and fox previews.

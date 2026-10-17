@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {createLanternFox,poseLanternFox} from './lantern-fox.js';
+import {createLanternPanda,poseLanternPanda} from './lantern-panda.js';
 import {refineFighter,texturePalette} from './combat-sculpt.js';
 const mat=(color,metalness=.15,roughness=.55,extra={})=>new T.MeshStandardMaterial({color,metalness,roughness,...extra});
 const palette={jade:mat('#397b70',.18,.48),jadeLight:mat('#79a38b',.12,.5),jadeDark:mat('#174b49',.28,.6),gold:mat('#b89550',.72,.40),goldLight:mat('#f9d78b',.55,.3),navy:mat('#18394a',.05,.8),teal:mat('#28645e',.02,.88),cloth:mat('#e7dfbb',0,.85),skin:mat('#e1ad83',.02,.8),hair:mat('#17272b',.1,.65),boot:mat('#483e32',.12,.65),light:mat('#ffdb72',.2,.3,{emissive:'#ffad38',emissiveIntensity:1.5}),eye:mat('#ffdb86',.2,.2,{emissive:'#ffbd52',emissiveIntensity:2}),white:mat('#f1eee1',.1,.6)};
@@ -14,9 +14,9 @@ const line=(p,a,b,r,m)=>{const va=new T.Vector3(...a),vb=new T.Vector3(...b),mes
 function limb(parent,name,x,y,length,r,material,joints){const shoulder=joint(parent,'shoulder-'+name,x,y,0),fore=joint(shoulder,'elbow-'+name,0,-length,0);cyl(shoulder,r,r*.9,length,material,0,-length/2,0);orb(shoulder,r*1.15,palette.gold,0,0,0);cyl(fore,r*.95,r*.72,length*.82,material,0,-length*.41,0);const hand=joint(fore,'hand-'+name,0,-length*.85,0);joints['arm'+name]=shoulder;joints['fore'+name]=fore;joints['hand'+name]=hand;return hand;}
 function leg(parent,name,x,y,joints,big=false){const hip=joint(parent,'hip-'+name,x,y,0),knee=joint(hip,'knee-'+name,0,big?-.4:-.37,0);cyl(hip,big?.19:.12,big?.17:.1,big?.4:.37,big?palette.jadeDark:palette.navy,0,big?-.2:-.185,0);cyl(knee,big?.19:.115,big?.22:.13,big?.38:.34,big?palette.jade:palette.boot,0,big?-.19:-.17,0);orb(knee,big?.23:.13,palette.gold,0,0,.07,[1,.8,.5]);orb(knee,big?.26:.14,big?palette.jadeDark:palette.boot,0,big?-.4:-.35,.09,[1,.55,1.65]);joints['leg'+name]=hip;joints['knee'+name]=knee;}
 function lantern(parent,x,y,z,scale=1){const g=joint(parent,'lantern',x,y,z);g.scale.setScalar(scale);orb(g,.22,palette.light,0,0,0,[.9,1.3,.9]);for(let i=0;i<6;i++){const a=i*Math.PI/3;line(g,[Math.cos(a)*.18,-.2,Math.sin(a)*.18],[Math.cos(a)*.18,.2,Math.sin(a)*.18],.018,palette.gold);}for(const y of [-.23,.23]){const r=ring(g,.17,.025,palette.gold,0,y,0);r.rotation.x=Math.PI/2;}cyl(g,.11,.05,.12,palette.gold,0,.3,0);line(g,[0,-.26,0],[0,-.47,0],.012,palette.gold);orb(g,.04,palette.gold,0,-.48,0);return g;}
-export function createFighter(kind='hero'){
+export function createFighter(kind='hero',options={}){
  const group=new T.Group(),root=joint(group,kind,0,0,0),joints={},actor={kind,group,root,joints};
- if(kind==='hero')return createLanternFox(actor);
+ if(kind==='hero')return createLanternPanda(actor,options);
  if(kind==='moth'){
   const body=joint(root,'body',0,1.45,0);joints.body=body;cyl(body,.13,.07,1.05,palette.jadeDark,0,-.1,0);orb(body,.2,palette.gold,0,.47,0);orb(body,.17,palette.jade,0,.48,.07);orb(body,.05,palette.eye,-.1,.51,.19);orb(body,.05,palette.eye,.1,.51,.19);
   const shape=new T.Shape();shape.moveTo(0,0);shape.bezierCurveTo(.25,.65,1.2,1.24,1.22,.9);shape.bezierCurveTo(1.3,.33,.88,.1,.4,-.06);shape.bezierCurveTo(1.45,-.17,1.34,-.85,.9,-.72);shape.bezierCurveTo(.5,-.65,.2,-.25,0,0);
@@ -47,7 +47,7 @@ export function createFighter(kind='hero'){
 }
 const key=(t,values)=>{const times=[0,.2,.43,.57,.83,1];for(let i=1;i<times.length;i++)if(t<=times[i]){let p=Math.max(0,(t-times[i-1])/(times[i]-times[i-1]));p=p*p*(3-2*p);return T.MathUtils.lerp(values[i-1],values[i],p);}return values.at(-1);};
 export function poseFighter(a,action='idle',progress=0,time=0,reduced=false){
- if(a.isFox)return poseLanternFox(a,action,Math.max(0,Math.min(1,progress)),time,reduced);
+ if(a.isPanda)return poseLanternPanda(a,action,Math.max(0,Math.min(1,progress)),time,reduced);
  const j=a.joints,p=Math.max(0,Math.min(1,progress)),hero=a.kind==='hero',attack=action==='attack',hit=action==='hit',guard=action==='guard',heal=action==='heal';a.root.position.set(0,0,0);a.root.rotation.set(0,0,0);Object.values(j).forEach(n=>n.rotation.set(0,0,0));
  if(a.kind==='moth'){const flap=reduced?0:Math.sin(time*7)*.55;a.root.position.y=reduced?.2:.2+Math.sin(time*3)*.08;j.wingL.rotation.y=-.12-flap;j.wingR.rotation.y=.12+flap;j.wingL.rotation.z=-.12;j.wingR.rotation.z=.12;j.body.rotation.x=attack?key(p,[0,-.35,.8,.8,.2,0]):hit?Math.sin(p*12)*.2*(1-p):0;if(attack)a.root.position.z=key(p,[0,-.2,.65,.7,.2,0]);return;}
  j.armL.rotation.x=-.12;j.armR.rotation.x=hero?-.4:-.12;j.foreL.rotation.x=-.18;j.foreR.rotation.x=hero?-.6:-.2;if(j.staff)j.staff.rotation.x=.9;if(j.cape)j.cape.rotation.x=-.15;
@@ -61,8 +61,8 @@ export function poseFighter(a,action='idle',progress=0,time=0,reduced=false){
  for(let i=0;i<8;i++)if(j['robe'+i])j['robe'+i].rotation.x=j.legL.rotation.x*Math.cos(i*Math.PI/4)*.2;
 }
 function disposeTree(group){group.traverse(n=>{n.geometry?.dispose();if(n.material&&!Object.values(palette).includes(n.material))n.material.dispose?.();});}
-export function createCombatWorld({opponent='guardian',showcase=false}={}){
- const scene=new T.Scene(),effects=new T.Group();scene.add(effects);const hero=createFighter('hero');let enemy=createFighter(opponent);hero.group.position.x=-2.15;hero.group.rotation.y=1.0;enemy.group.position.x=2.15;enemy.group.rotation.y=-1.0;scene.add(hero.group,enemy.group);
+export function createCombatWorld({opponent='guardian',showcase=false,heroAtlas}={}){
+ const scene=new T.Scene(),effects=new T.Group();scene.add(effects);const hero=createFighter('hero',{heroAtlas});let enemy=createFighter(opponent);hero.group.position.x=-2.15;hero.group.rotation.y=1.0;enemy.group.position.x=2.15;enemy.group.rotation.y=-1.0;scene.add(hero.group,enemy.group);
  scene.add(new T.HemisphereLight('#c5eddf','#28343f',2.5));const keyLight=new T.DirectionalLight('#ffe7bc',4);keyLight.position.set(-3,7,5);keyLight.castShadow=true;keyLight.shadow.mapSize.set(1024,1024);keyLight.shadow.camera.left=-5;keyLight.shadow.camera.right=5;keyLight.shadow.camera.top=5;keyLight.shadow.camera.bottom=-5;keyLight.shadow.normalBias=.04;scene.add(keyLight);const rim=new T.DirectionalLight('#4ec8bb',3);rim.position.set(3,4,-4);scene.add(rim);
  const floor=add(scene,new T.PlaneGeometry(30,30),new T.ShadowMaterial({opacity:.28}),0,-.06,0);floor.rotation.x=-Math.PI/2;floor.castShadow=false;
  for(const x of [-2.15,2.15]){const g=ring(scene,.65,.012,mat('#bd9858',.1,.7),x,-.025,0);g.rotation.x=Math.PI/2;}
@@ -79,7 +79,7 @@ export function createCombatWorld({opponent='guardian',showcase=false}={}){
   poseFighter(hero,heroState,hp,time,reduced);poseFighter(enemy,enemyState,ep,time+.5,reduced);scene.updateMatrixWorld(true);
  }};return world;
 }
-export function createCombatStage(canvas,{showcase=false,opponent='guardian'}={}){
- const renderer=new T.WebGLRenderer({canvas,alpha:true,antialias:true,preserveDrawingBuffer:showcase,powerPreference:'low-power'});renderer.setClearColor('#102f34',showcase?1:0);renderer.setPixelRatio(Math.min(globalThis.devicePixelRatio||1,1.5));renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;const world=createCombatWorld({opponent,showcase}),camera=new T.OrthographicCamera(-4.3,4.3,3,-3,.1,30);camera.position.set(0,3.2,8);camera.lookAt(0,1.25,0);let width=0,height=0;
- return {...world,world,resize(w,h){if(!w||!h||w===width&&h===height)return;width=w;height=h;renderer.setSize(w,h,false);const halfW=4.35,halfH=halfW*h/w;camera.left=-halfW;camera.right=halfW;camera.top=halfH;camera.bottom=-halfH;const targetY=Math.max(1.25,halfH*.48);camera.position.y=targetY+1.95;camera.lookAt(0,targetY,0);camera.updateProjectionMatrix();},draw(time,event,elapsed=0,reduced=false){world.update(time,event,elapsed,reduced);renderer.render(world.scene,camera);},screenPoint(side){const v=new T.Vector3(side==='hero'?-2.15:2.15,1.65,0).project(camera);return {x:(v.x+1)*width/2,y:(1-v.y)*height/2};},dispose(){disposeTree(world.scene);renderer.dispose();}};
+export function createCombatStage(canvas,{showcase=false,opponent='guardian',heroAtlas}={}){
+ const renderer=new T.WebGLRenderer({canvas,alpha:true,antialias:true,preserveDrawingBuffer:showcase,powerPreference:'low-power'});renderer.setClearColor('#102f34',showcase?1:0);renderer.setPixelRatio(Math.min(globalThis.devicePixelRatio||1,1.5));renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;const world=createCombatWorld({opponent,showcase,heroAtlas}),camera=new T.OrthographicCamera(-4.3,4.3,3,-3,.1,30);camera.position.set(0,3.2,8);camera.lookAt(0,1.25,0);let width=0,height=0;
+ return {...world,world,ready:world.hero.ready,resize(w,h){if(!w||!h||w===width&&h===height)return;width=w;height=h;const heroSize=w<480?2.55:w<700?2.8:3.05;world.hero.sprite?.scale.set(heroSize,heroSize,1);renderer.setSize(w,h,false);const halfW=4.35,halfH=halfW*h/w;camera.left=-halfW;camera.right=halfW;camera.top=halfH;camera.bottom=-halfH;const targetY=Math.max(1.25,halfH*.48);camera.position.y=targetY+1.95;camera.lookAt(0,targetY,0);camera.updateProjectionMatrix();},draw(time,event,elapsed=0,reduced=false){world.update(time,event,elapsed,reduced);renderer.render(world.scene,camera);},screenPoint(side){const v=new T.Vector3(side==='hero'?-2.15:2.15,1.65,0).project(camera);return {x:(v.x+1)*width/2,y:(1-v.y)*height/2};},dispose(){world.hero.sprite?.material.map?.dispose();disposeTree(world.scene);renderer.dispose();}};
 }

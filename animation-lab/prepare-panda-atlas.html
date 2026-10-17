@@ -1,0 +1,9 @@
+<!doctype html><html><meta charset="utf-8"><style>body{margin:0;background:transparent}canvas{display:block}</style><canvas width="2048" height="2048"></canvas><script type="module">
+// Registration only: preserve the generated painting and poses, add gutters and a shared foot baseline.
+const image=new Image();image.src='/output/red-panda/actions-source.png';await image.decode();const c=document.querySelector('canvas'),ctx=c.getContext('2d');
+const xs=[0,314,627,941,1254],ys=[0,320,612,904,1254],feet=[310,600,896,1203],scale=1.35;
+for(let row=0;row<4;row++)for(let col=0;col<4;col++){
+ const x=xs[col],y=ys[row],w=xs[col+1]-x,h=ys[row+1]-y,dx=col*512+256-w*scale/2,dy=row*512+472-(feet[row]-y)*scale;
+ ctx.save();ctx.beginPath();ctx.rect(col*512,row*512,512,512);ctx.clip();ctx.drawImage(image,x,y,w,h,dx,dy,w*scale,h*scale);ctx.restore();
+}window.ready=true;
+</script></html>

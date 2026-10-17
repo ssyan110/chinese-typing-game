@@ -4,11 +4,11 @@ export function combatFeedback(before,after,outcome){
  return {outcome,spell:outcome==='correct'?(after.lastAction?.spell||'strike'):'strike',defending:outcome==='correct'&&!!after.lastAction?.defending,enemyDamage:Math.max(0,before.enemyHp-after.enemyHp),heroDamage,blocked,heal:action?.heal??Math.max(0,after.hp-before.hp),counter:action?.counter??(outcome!=='correct'||heroDamage>0||blocked>0)};
 }
 
-// The game and the Remotion composition use the same solid 3D actor scene.
+// The game and Remotion share a painted frame-animated hero and lit 3D effects.
 export function installCombatMotion({arena,hero,enemy,reduced=()=>false}){
  const canvas=document.createElement('canvas');canvas.className='combat-3d-stage';canvas.setAttribute('aria-hidden','true');canvas.hidden=true;arena.append(canvas);const layer=document.createElement('div');layer.className='combat-fx';layer.setAttribute('aria-hidden','true');arena.append(layer);
  let stage=null,loading=null,unavailable=false,encounter='guardian',event=null,started=0,pausedAt=0,lastFrame=0,animations=[];
- function load(){if(loading||stage||unavailable)return;loading=import('./combat-scene3d.js').then(({createCombatStage})=>{stage=createCombatStage(canvas,{opponent:encounter});stage.resize(arena.clientWidth,arena.clientHeight);stage.draw(0);canvas.hidden=false;hero.classList.add('model-source');enemy.classList.add('model-source');arena.dataset.renderer='three';}).catch(()=>{unavailable=true;canvas.hidden=true;hero.classList.remove('model-source');enemy.classList.remove('model-source');arena.dataset.renderer='static';});}
+ function load(){if(loading||stage||unavailable)return;loading=import('./combat-scene3d.js').then(async ({createCombatStage})=>{stage=createCombatStage(canvas,{opponent:encounter});stage.resize(arena.clientWidth,arena.clientHeight);await stage.ready;if(unavailable)return;stage.draw(0);canvas.hidden=false;hero.classList.add('model-source');enemy.classList.add('model-source');arena.dataset.renderer='three';}).catch(()=>{unavailable=true;canvas.hidden=true;hero.classList.remove('model-source');enemy.classList.remove('model-source');arena.dataset.renderer='static';});}
  canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();unavailable=true;canvas.hidden=true;hero.classList.remove('model-source');enemy.classList.remove('model-source');arena.dataset.renderer='static';});
  function clear(){animations.forEach(a=>a.cancel());animations=[];layer.replaceChildren();event=null;pausedAt=0;arena.removeAttribute('data-combat');}
  function point(side){if(stage&&!unavailable)return stage.screenPoint(side);const n=side==='hero'?hero:enemy,a=arena.getBoundingClientRect(),r=n.getBoundingClientRect();return {x:r.left-a.left+r.width/2,y:r.top-a.top+r.height*.5};}
