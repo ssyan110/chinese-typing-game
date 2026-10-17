@@ -43,3 +43,7 @@ The research notes include proposals broader than this implementation. Ordinary 
 - Screenshots and a short recorded browser preview are under `output/playwright/`; those QA files are not shipped as part of the student build.
 
 Natural Vietnamese gate: added instructions distinguish successful entries, corrected attempts, cumulative counts, challenge wins and local-only storage. These were read back in desktop and phone renders. No claim of user or classroom acceptance is implied.
+
+## Visible history details revision
+
+Each history card now displays its full result metrics (score, accuracy, correct/wrong/timeout counts, duration, combo, grade and available stars) and word table immediately. No disclosure click is required. The per-word wrong count excludes timeout events, which have their own column; rows with errors are highlighted. Old records with no word data explicitly say the detail was not saved, and absent metrics use a dash. Browser checks compared real saved game results against the displayed values, confirmed reload persistence and a 320px table without horizontal overflow. Existing 46 tests and the production build passed.
