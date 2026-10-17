@@ -51,6 +51,19 @@ for (const mode of ['simplified', 'traditional', 'zhuyin']) {
   expect(errors).toEqual([]);
  });
 }
+
+test('mobile reward selection resumes play without another ready click', async ({browser, baseURL}) => {
+ const context = await browser.newContext({baseURL, viewport: {width: 390, height: 844}, isMobile: true, hasTouch: true});
+ const page = await context.newPage();
+ try {
+  await lobby(page); await page.locator('#continue-learning').click(); await ready(page);
+  for (let i = 0; i < 5; i++) { await answer(page, 'simplified'); }
+  await expect(page.locator('#reward-dialog')).toBeVisible();
+  await page.locator('[data-reward=heal]').click();
+  await expect.poll(() => page.evaluate(() => window.__tulinh.snapshot().status)).toBe('playing');
+  await expect(page.locator('#start-ready')).toBeHidden();
+ } finally { await context.close(); }
+});
 test('twenty-word mistake review finishes every word through the UI', async ({page}) => {
  await lobby(page);
  await page.locator('#continue-learning').click();
