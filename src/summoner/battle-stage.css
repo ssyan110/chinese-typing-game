@@ -1,0 +1,54 @@
+/* Three separate zones: battle HUD, bounded character stage, readable prompt. */
+#arena{--stage-top:136px;--prompt-room:140px;isolation:isolate;min-height:440px}
+#arena .round-strip{inset:0 0 auto;height:36px;align-items:center;border-bottom:1px solid #7b977035}
+#arena .hero-station,#arena .enemy-station{position:static;width:auto}
+#arena .vital-card{position:absolute;top:46px;bottom:auto;width:calc(50% - 32px);min-height:60px;background:#102b2cf2;z-index:4}
+#arena .hero-vital{left:18px}#arena .enemy-vital{right:18px}
+#arena .vital-card>div:first-child{gap:8px}
+#arena .vital-card small{font-size:10px;line-height:1.5}
+#arena .vital-card>div:first-child>strong{max-width:55%}
+#arena .combat-3d-stage{inset:var(--stage-top) 0 var(--prompt-room);width:100%;height:calc(100% - var(--stage-top) - var(--prompt-room));min-height:0;z-index:1}
+#arena .hero-station>img,#arena .enemy-station>img{position:absolute;top:var(--stage-top);bottom:auto;width:25%;height:calc(100% - var(--stage-top) - var(--prompt-room));max-height:none;margin:0;object-fit:contain}
+#arena .hero-station>img{left:14%}#arena .enemy-station>img{right:14%}
+#arena .rune-zone{top:auto;bottom:20px;left:50%;width:min(78%,560px);height:112px;transform:translateX(-50%);padding:12px 18px 8px;border:1px solid #e4d49a40;border-radius:8px;background:#102a2eeb;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+#arena .rune-zone>p{font-size:10px;line-height:1.3;margin:0;color:#d7c491}
+#arena #active-rune{font-size:34px;line-height:1.25;min-height:0;margin:0;max-width:100%;overflow-wrap:anywhere}
+#arena #active-rune.long-rune{font-size:26px}
+#arena .zhuyin-progress{font-size:29px;min-height:0;line-height:1.4;max-width:100%;flex-wrap:wrap;justify-content:center}
+#arena .rune-timer{margin:0;height:4px;width:100px;flex-shrink:0}
+#arena #rune-seconds{font-size:11px;line-height:1.2}
+#arena>.battle-notice{bottom:3px;font-size:10px;max-width:98%;line-height:1.3}
+@media(max-width:1024px),(pointer:coarse) and (max-width:1400px){
+ body[data-mode] #arena{--stage-top:106px;--prompt-room:116px;height:max(330px,var(--mobile-arena-height,360px));min-height:330px}
+ #arena .round-strip{height:30px;font-size:9px;padding:7px 9px}
+ body[data-mode] #arena .vital-card{top:38px;width:calc(50% - 18px);min-height:59px;padding:7px}
+ #arena .hero-vital{left:10px}#arena .enemy-vital{right:10px}
+ body[data-mode] #arena .vital-card>div:first-child,body[data-mode] #arena .vital-card span{font-size:10px}
+ #arena .vital-card small{font-size:8px;line-height:1.4}
+ body[data-mode] #arena .rune-zone{top:auto;left:50%;bottom:12px;width:86%;height:96px;transform:translateX(-50%);padding:8px 10px;gap:3px}
+ #arena #active-rune{font-size:28px;min-height:0;line-height:1.2}
+ #arena #active-rune.long-rune{font-size:21px}
+ body[data-mode=zhuyin] #arena .zhuyin-progress{font-size:22px;min-height:0;gap:2px}
+ #arena .rune-zone>p{font-size:8px;letter-spacing:.06em}
+ #arena .rune-timer{height:4px;width:85px}
+ #arena .hero-station>img,#arena .enemy-station>img{width:26%;max-height:none}
+}
+/* While the native IME is open, prioritize the prompt and input over scenery. */
+body.native-keyboard[data-mode] #arena{min-height:120px;height:auto;flex:1;--prompt-room:0px}
+body.native-keyboard #arena .combat-3d-stage,body.native-keyboard #arena .hero-station>img,body.native-keyboard #arena .enemy-station>img,body.native-keyboard #arena .vital-card{display:none}
+body.native-keyboard[data-mode] #arena .rune-zone{position:relative;left:auto;top:auto;bottom:auto;transform:none;width:94%;height:auto;min-height:80px;margin:34px auto 4px}
+body.keyboard-tight[data-mode] #arena{min-height:96px}
+body.keyboard-tight[data-mode] #arena .rune-zone{margin-top:27px;min-height:60px;padding:5px}
+@media(orientation:landscape) and (max-height:500px){body:not(.native-keyboard)[data-mode] #arena{min-height:300px;height:300px;--stage-top:98px;--prompt-room:104px}}
+.high-contrast #arena .rune-zone{background:#071e23;border-color:#efd494}
+/* Keep a fitted mini-stage above the prompt when the IME leaves enough room. */
+body.native-keyboard[data-mode] #arena{min-height:146px;--stage-top:26px;--prompt-room:72px}
+body.native-keyboard #arena .combat-3d-stage{display:block}
+body.native-keyboard[data-mode] #arena .rune-zone{position:absolute;left:50%;top:auto;bottom:4px;transform:translateX(-50%);width:94%;height:64px;min-height:0;margin:0;padding:4px;gap:2px}
+body.native-keyboard #arena #active-rune{font-size:24px}
+body.native-keyboard #arena #active-rune.long-rune{font-size:19px}
+body.native-keyboard #arena .rune-zone>p{font-size:7px}
+body.native-keyboard #arena #rune-seconds{font-size:9px}
+body.keyboard-tight[data-mode] #arena{min-height:96px}
+body.keyboard-tight #arena .combat-3d-stage{display:none}
+body.keyboard-tight[data-mode] #arena .rune-zone{height:60px;bottom:4px}

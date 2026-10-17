@@ -8,5 +8,7 @@ test('combat feedback distinguishes damage, shield absorption and a successful d
  assert.equal(combatFeedback(before,before,'partial'),null);
 });
 test('a newly cast shield shows the actual enemy counter even when HP stays full',async()=>{
- const {Duel}=await import('../src/summoner/engine.js'),words=Array.from({length:20},(_,i)=>({id:String(i),s:'字'+String.fromCodePoint(0x4e00+i)})),g=new Duel({words,kind:'campaign'}),before={hp:g.hp,shield:g.shield,enemyHp:g.enemyHp,kind:g.kind};g.choose('ward');g.submit(g.target.label);const fx=combatFeedback(before,g,'correct');assert.equal(fx.counter,true);assert.equal(fx.blocked,7);assert.equal(fx.heroDamage,0);
+ const {Duel}=await import('../src/summoner/engine.js'),words=Array.from({length:20},(_,i)=>({id:String(i),s:'字'+String.fromCodePoint(0x4e00+i)})),g=new Duel({words,kind:'campaign'}),before={hp:g.hp,shield:g.shield,enemyHp:g.enemyHp,kind:g.kind};g.choose('ward');g.submit(g.target.label);const fx=combatFeedback(before,g,'correct');assert.equal(fx.counter,true);assert.equal(fx.blocked,2);assert.equal(fx.heroDamage,0);
 });
+
+test('a repeated wrong submission with no additional damage does not fake another enemy strike',()=>{const fx=combatFeedback(before,before,'wrong');assert.equal(fx.counter,false);assert.equal(fx.heroDamage,0);});
