@@ -4,6 +4,13 @@ Vietnamese-first Chinese vocabulary battles, independently implemented with a ne
 
 Student site: **https://ssyan110.github.io/chinese-typing-game/**
 
+## Story journey: walking into the original battles
+
+The full eight-stop journey follows the red panda from Thanh Hòa village through bamboo woodland, a river harbor, red sandstone canyon, mountain academy, snowy pass and ancient city, then home to a lantern festival. Each stop has its own matte 3D environment, with visible walking followed by the original Duel typing battle. The first eight existing curriculum chapters supply the vocabulary. All story and UI text is Vietnamese. Existing chapter victories unlock the route; original vocabulary progress, rewards, timing and saves remain authoritative. The map offers a single continue button and lets players revisit the ending after completing the journey.
+
+Every regular vocabulary chapter uses one of the eight environments; chapters beyond the story remain fully playable, with the same exhaustive vocabulary coverage. The legacy three-stop task-engine save format stays readable for compatibility, but delivery puzzles and alternate typing tasks are not part of the live game.
+
+
 ## Gameplay
 
 - The main curriculum partitions the entire selected vocabulary pool into chapters of at most 20 items. Earlier levels are included by default. Every chapter is accessible, including the final partial chapter; there is no fixed limit of three encounters on vocabulary coverage.
@@ -13,7 +20,7 @@ Student site: **https://ssyan110.github.io/chinese-typing-game/**
 - On defense turns, completing the rune blocks the enemy and counterattacks. No F/J or Space command is required. Missed deadlines cause an enemy attack. Zero HP ends the run; only replay starts at full health.
 - Every five correct finite-challenge answers, explicitly select healing, more damage or a shield. There is no automatic full-health revival.
 - Five seconds per rune by default, adjustable from 1–60 seconds. Pause freezes the battle. Keyboard/mouse and on-screen Zhuyin symbol buttons are available.
-- Phone challenges wait for **Bắt đầu** before timing starts, including after pause or a supply choice. Open the Chinese keyboard before starting. The compact keyboard layout keeps HP, the target, answer feedback and input visible; small phones use a reflowed Zhuyin touch grid without changing physical key mappings.
+- Phone challenges wait for **Bắt đầu** before timing starts, including after explicit pause. A supply choice resumes directly. Open the Chinese keyboard before starting. The compact keyboard layout keeps HP, the target, answer feedback and input visible; small phones use a reflowed Zhuyin touch grid without changing physical key mappings.
 - Optional word-by-word results are available after victory, defeat and voluntary stop, with mistakes first. Mistake review is untimed and does not deduct HP.
 - Stars for standard duels and curriculum chapters: win with ≥90% accuracy = three, ≥75% = two, otherwise one. A failed/incomplete run gets zero. Endless and review do not receive stars. Full rules are shown in results.
 
@@ -25,7 +32,7 @@ The home screen offers the last selected course, and timing controls appear befo
 
 ## Local combat-art preview
 
-The battle hero is an articulated Three.js lantern red panda with independently animated limbs, face, ears, tail and lantern. It uses no cropped character images or action atlas. Remotion shares this deterministic scene. The homepage and social cover retain the approved painted illustration; the battle model has a rounded toy-like style. See [hero implementation and validation](docs/lantern-panda-2026-10-17.md).
+The battle hero is an articulated Three.js lantern red panda with independently animated limbs, face, ears, tail and lantern. It uses no cropped character images or action atlas. Remotion shares this deterministic scene. The homepage and journey use renders of the same rounded 3D cast and dioramas; the existing external social cover retains its earlier illustration. See [hero implementation and validation](docs/lantern-panda-2026-10-17.md).
 
 ## Development
 

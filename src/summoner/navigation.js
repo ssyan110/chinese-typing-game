@@ -10,7 +10,7 @@ export function installNavigation({capture,restore,blocked,onBlocked}){
   const ancestor=entries.slice(0,index).findLastIndex(e=>e.route===route);
   if(ancestor>=0){history.go(ancestor-index);return false;}
   const entry={route,data:capture()};
-  if(['battle','result'].includes(route)&&['battle','result'].includes(entries[index].route)){entries[index]=entry;history.replaceState(state(),'');}
+  if(['story','battle','result'].includes(route)&&['story','battle','result'].includes(entries[index].route)){entries[index]=entry;history.replaceState(state(),'');}
   else{entries.splice(index+1);entries.push(entry);index++;history.pushState(state(),'');}
   return true;
  }

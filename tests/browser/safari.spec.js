@@ -40,14 +40,14 @@ test('Safari paused scene paints at its visible size before starting',async({bro
   });
   await page.goto('./');await page.locator('[data-mode=simplified]').tap();await page.locator('#enter-lobby:enabled').tap();await page.locator('#continue-learning').tap();
   await expect(page.locator('#arena')).toHaveAttribute('data-renderer','three');
-  await expect.poll(()=>page.locator('canvas').evaluate(n=>n.clientHeight)).toBeGreaterThan(0);
-  await expect.poll(()=>page.locator('canvas').evaluate(n=>n.width===Math.floor(n.clientWidth*Math.min(devicePixelRatio,1.5)))).toBe(true);
+  await expect.poll(()=>page.locator('#arena canvas').evaluate(n=>n.clientHeight)).toBeGreaterThan(0);
+  await expect.poll(()=>page.locator('#arena canvas').evaluate(n=>n.width===Math.floor(n.clientWidth*Math.min(devicePixelRatio,1.5)))).toBe(true);
   await page.setViewportSize({width:430,height:780});
-  await expect.poll(()=>page.locator('canvas').evaluate(n=>n.width===Math.floor(n.clientWidth*Math.min(devicePixelRatio,1.5)))).toBe(true);
+  await expect.poll(()=>page.locator('#arena canvas').evaluate(n=>n.width===Math.floor(n.clientWidth*Math.min(devicePixelRatio,1.5)))).toBe(true);
   await page.locator('#hanzi-input').tap();
   await page.evaluate(()=>{window.__safariHeight=400;visualViewport.dispatchEvent(new Event('resize'));});
   await expect(page.locator('body')).toHaveClass(/native-keyboard/);
-  await expect.poll(()=>page.locator('canvas').evaluate(n=>n.clientHeight)).toBeGreaterThan(30);
+  await expect.poll(()=>page.locator('#arena canvas').evaluate(n=>n.clientHeight)).toBeGreaterThan(30);
   for(const selector of ['#active-rune','#hero-hp-label','#hanzi-input','#start-ready']){
    const box=await page.locator(selector).boundingBox();
    expect(box.y).toBeGreaterThanOrEqual(35);expect(box.y+box.height).toBeLessThanOrEqual(435);

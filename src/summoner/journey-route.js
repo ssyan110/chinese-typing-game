@@ -1,0 +1,12 @@
+// A short narrative around the existing curriculum; no alternate exercise rules.
+export const JOURNEY_STOPS = [
+ {id:'village',name:'Làng Thanh Hòa',action:'Rời làng',intro:'Sáng sớm, bạn mang chiếc đèn nhỏ rời làng Thanh Hòa. Hãy đi dọc con đường cũ rồi trở về trong đêm hội.',encounter:'Vừa ra khỏi làng, một sinh vật chắn ngang đường. Dùng những chữ đã học để vượt qua.'},
+ {id:'bamboo',name:'Đường Trúc Ảnh',action:'Qua rừng trúc',intro:'Con đường dẫn vào rừng trúc. Qua khu rừng này là bến đò bên sông.',encounter:'Tiếng lá xào xạc bỗng dừng lại. Một sinh vật xuất hiện giữa đường. Hãy sẵn sàng giao đấu.'},
+ {id:'harbor',name:'Bến Khê Kiều',action:'Sang bên kia sông',intro:'Bạn đã đến bến Khê Kiều. Bên kia sông, con đường tiếp tục qua những vách đá đỏ.',encounter:'Một sinh vật đang canh đầu cầu ra bến. Vượt qua thử thách để tiếp tục chuyến đi.'},
+ {id:'canyon',name:'Hẻm Cát Đỏ',action:'Vượt hẻm núi',intro:'Rời bến đò, bạn bước giữa những vách đá đỏ. Cuối hẻm núi là con đường lên thư viện.',encounter:'Ngay trước cây cầu đá, một sinh vật chặn lối. Giữ vững chiếc đèn và vượt qua.'},
+ {id:'academy',name:'Thư Viện Vân Mặc',action:'Tìm đường về làng',intro:'Bạn dừng chân ở thư viện trên núi. Tấm bản đồ cũ chỉ đường về làng qua núi tuyết và thành cổ.',encounter:'Lối ra sân sau đang có một sinh vật canh giữ. Hãy vượt qua để lên đường trước khi trời tối.'},
+ {id:'snow',name:'Núi Đèn Sương',action:'Qua đèo tuyết',intro:'Không khí lạnh dần. Ánh đèn nhỏ giúp bạn nhìn rõ con đường giữa những rặng thông phủ tuyết.',encounter:'Một sinh vật xuất hiện trên cây cầu băng. Bên kia cầu là con đường xuống thành cổ.'},
+ {id:'city',name:'Thành Cổ Vô Tự',action:'Qua cổng thành',intro:'Bạn đi qua thành cổ khi trời vừa tối. Phía bên kia cổng, ánh đèn hội của quê nhà đã hiện ra.',encounter:'Một sinh vật đang đứng trước cổng thành. Vượt qua cửa ải này để trở về làng.'},
+ {id:'homecoming',name:'Đêm Hội Trở Về',action:'Trở về nhà',intro:'Bạn đã thấy làng Thanh Hòa sáng rực đèn lồng. Chỉ còn cây cầu nhỏ trước cổng làng.',encounter:'Một sinh vật chắn lối trên đoạn đường cuối. Hoàn thành trận đấu để mang chiếc đèn về nhà.',after:'Bạn đã trở về làng Thanh Hòa trong đêm hội. Từ rừng trúc, bến sông, hẻm núi đến núi tuyết và thành cổ, chiếc đèn nhỏ luôn ở bên bạn. Chuyến đi đã trọn vẹn. Bạn có thể ghé lại các nơi hoặc tiếp tục luyện những từ còn lại.'}
+];
+export const chapterSetting=number=>JOURNEY_STOPS[(Math.max(1,number)-1)%JOURNEY_STOPS.length];
