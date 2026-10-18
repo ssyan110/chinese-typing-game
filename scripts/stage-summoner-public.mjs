@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 const root=new URL('../',import.meta.url);
-for(const name of ['data','original/brand','original/fonts','original/audio','original/art/refined','original/art/sculpted','original/art/skills','original/art/chapters'])fs.cpSync(new URL('public/'+name,root),new URL('dist/'+name,root),{recursive:true});
+for(const name of ['data','original/brand','original/fonts','original/audio','original/art/refined','original/art/sculpted','original/art/skills','original/art/chapters','original/art/journey'])fs.cpSync(new URL('public/'+name,root),new URL('dist/'+name,root),{recursive:true});
 fs.mkdirSync(new URL('dist/original/art/red-panda/',root),{recursive:true});
 fs.copyFileSync(new URL('public/original/art/red-panda/portrait.webp',root),new URL('dist/original/art/red-panda/portrait.webp',root));
 fs.copyFileSync(new URL('public/original/brand/favicon.svg',root),new URL('dist/favicon.svg',root));

@@ -1,3 +1,4 @@
+import {validStory} from './story-engine.js';
 import {readProgress} from './curriculum.js';
 import {readPractice,readRecords} from './history.js';
 
@@ -5,7 +6,7 @@ export const SAVE_KEY='tulinh.save.v1';
 const LOCK_NAME='tulinh.save.writer.v1';
 const empty=()=>({version:1,progress:readProgress(null),practice:{},records:[]});
 function sanitize(value){
- return {version:1,progress:readProgress(value.progress),practice:readPractice(value.practice),records:readRecords(value.records)};
+ return {version:1,progress:readProgress(value.progress),practice:readPractice(value.practice),records:readRecords(value.records),...(value.story?{story:value.story}:{})};
 }
 const validate=value=>checkBackupData(value);
 
@@ -53,11 +54,12 @@ const object=value=>value!==null&&typeof value==='object'&&!Array.isArray(value)
 const validScope=scope=>/^(simplified|traditional|zhuyin):(hsk|tocfl)$/.test(scope);
 function checkBackupData(data){
  const fail=()=>{throw new Error('Invalid backup data');};
- if(!object(data)||Object.keys(data).some(key=>!['version','progress','practice','records'].includes(key)))fail();
+ if(!object(data)||Object.keys(data).some(key=>!['version','progress','practice','records','story'].includes(key)))fail();
  if(data.version!==1||!object(data.progress)||data.progress.version!==1||!object(data.progress.scopes)||!object(data.practice)||!Array.isArray(data.records)||data.records.length>128)fail();
  const forbidden=new Set(['__proto__','constructor','prototype']);
  function checkTree(value,depth=0){if(depth>12)fail();if(Array.isArray(value)){for(const entry of value)checkTree(entry,depth+1);}else if(object(value)){for(const [key,entry]of Object.entries(value)){if(forbidden.has(key))fail();checkTree(entry,depth+1);}}else if(typeof value==='number'&&!Number.isFinite(value))fail();}
  checkTree(data);
+ if(data.story!==undefined&&!validStory(data.story))fail();
  for(const [scope,entries]of Object.entries(data.progress.scopes)){
   if(!validScope(scope)||!object(entries))fail();
   for(const [id,label]of Object.entries(entries))if(!id||id.length>=100||typeof label!=='string'||!label||label.length>=200)fail();
