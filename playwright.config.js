@@ -9,7 +9,7 @@ export default defineConfig({
   {name:'webkit',testMatch:'**/safari.spec.js',use:{browserName:'webkit'}}
  ],
  webServer: external ? undefined : {
-  command: 'npx vite build --base=/chinese-typing-game/ && node scripts/stage-summoner-public.mjs && npx vite preview --host 127.0.0.1 --port 5187 --base=/chinese-typing-game/',
+  command: 'SITE_BASE=/chinese-typing-game/ npm run build && SITE_BASE=/chinese-typing-game/ node scripts/prepare-pages.mjs && npx vite preview --host 127.0.0.1 --port 5187 --base=/chinese-typing-game/',
   url: 'http://127.0.0.1:5187/chinese-typing-game/', reuseExistingServer: false, timeout: 120_000
  }
 });

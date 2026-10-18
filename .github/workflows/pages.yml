@@ -24,6 +24,8 @@ jobs:
       - run: npx playwright install --with-deps chromium webkit
       - run: npm run test:browser
       - run: npm run build
+        env:
+          SITE_BASE: /chinese-typing-game/
       - run: node scripts/prepare-pages.mjs
         env:
           SITE_BASE: /chinese-typing-game/

@@ -7,7 +7,7 @@ async function lobby(page,mode){await page.goto('./');await page.locator('#setti
 for(const mode of ['simplified','traditional','zhuyin'])test(`eight-stop journey preserves ${mode} practice through the homecoming ending`,async({page})=>{
  test.setTimeout(240_000); // 480 full answers; mobile Zhuyin presses each visible symbol.
  if(mode==='zhuyin')await page.setViewportSize({width:390,height:844});
- const errors=[];page.on('pageerror',e=>errors.push(e.message));await lobby(page,mode);await expect(page.locator('button[data-station=bamboo]')).toBeDisabled();await page.locator('button[data-station=village]').click();
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(`${r.status()} ${r.url()}`);});await lobby(page,mode);await expect(page.locator('button[data-station=bamboo]')).toBeDisabled();await page.locator('button[data-station=village]').click();
  for(const [index,{id:station,name}] of JOURNEY_STOPS.entries()){
   const opponent=['guardian','moth','sentinel'][index%3];
   await expect(page.locator('#journey-screen')).toBeVisible();await page.locator('#journey-action').click();await expect(page.locator('#journey-task-title')).toHaveText('Có đối thủ phía trước!');expect((await page.evaluate(()=>window.__tulinh.story())).travel).toBe(1);
