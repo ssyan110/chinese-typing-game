@@ -1,5 +1,8 @@
 import {test,expect} from '@playwright/test';
 import {JOURNEY_STOPS} from '../../src/summoner/journey-route.js';
+// Keep DOM traces and explicit outcome screenshots without encoding thousands
+// of intermediate WebGL screenshots during a 480-answer journey.
+test.use({trace:{mode:'retain-on-failure',screenshots:false,snapshots:true,sources:true}});
 async function lobby(page,mode){await page.goto('./');await page.locator('#settings-toggle').click();await page.locator('#reduce-motion').check();await page.locator('#settings-toggle').click();await page.locator(`[data-mode=${mode}]`).click();await page.locator('#enter-lobby').click();await page.locator('#lobby-seconds').fill('60');await page.locator('#lobby-seconds').press('Tab');}
 for(const mode of ['simplified','traditional','zhuyin'])test(`eight-stop journey preserves ${mode} practice through the homecoming ending`,async({page})=>{
  test.setTimeout(240_000); // 480 full answers; mobile Zhuyin presses each visible symbol.
@@ -13,7 +16,7 @@ for(const mode of ['simplified','traditional','zhuyin'])test(`eight-stop journey
   await page.locator('#journey-action').click();
   if(await page.locator('#start-ready').isVisible())await page.locator('#start-ready').click();
   await expect(page.locator(mode==='zhuyin'?'#touch-keyboard':'#cast-form')).toBeVisible();await expect(page.locator('#arena')).toHaveAttribute('data-habitat',station);
-  for(let i=0;i<100;i++){const s=await page.evaluate(()=>window.__tulinh.snapshot());if(s.status==='won')break;if(s.status==='reward'){await page.locator('[data-reward=heal]').click();continue;}if(mode==='zhuyin'){while((await page.evaluate(()=>window.__tulinh.snapshot())).correct===s.correct){const symbol=await page.locator('#zhuyin-progress .current').innerText();const key=await page.locator('[data-symbol-key]').evaluateAll((nodes,symbol)=>nodes.find(n=>n.querySelector('b').textContent===symbol).dataset.symbolKey,symbol);await page.locator(`[data-symbol-key="${key}"]`).click();}}else await page.locator('#hanzi-input').fill(s.target);await expect.poll(()=>page.evaluate(()=>window.__tulinh.snapshot().correct)).toBe(s.correct+1);}
+  for(let i=0;i<100;i++){const s=await page.evaluate(()=>window.__tulinh.snapshot());if(s.status==='won')break;if(s.status==='reward'){await page.locator('[data-reward=heal]').click();continue;}if(mode==='zhuyin'){const keys=await page.locator('#zhuyin-progress').evaluate(n=>{const map=new Map([...document.querySelectorAll('[data-symbol-key]')].map(b=>[b.querySelector('b').textContent,b.dataset.symbolKey]));return [...n.querySelectorAll('span')].map(s=>map.get(s.textContent));});if(s.correct===0){for(const key of keys)await page.locator(`[data-symbol-key="${key}"]`).click();}else await page.keyboard.type(keys.join(''));}else await page.locator('#hanzi-input').fill(s.target);await expect.poll(()=>page.evaluate(()=>window.__tulinh.snapshot().correct)).toBe(s.correct+1);}
   expect((await page.evaluate(()=>window.__tulinh.snapshot())).correct).toBe(60);await expect(page.locator('#result-selection')).toContainText(name);await page.locator('#continue-curriculum').click();
   if(station==='homecoming')await expect.poll(()=>page.evaluate(()=>window.__tulinh.story()?.scene?.opponentVisible)).toBe(false);
  }
