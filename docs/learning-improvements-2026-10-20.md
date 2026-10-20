@@ -1,0 +1,11 @@
+# Learning improvements — 2026-10-20
+
+This change adds an optional three-word, untimed Chinese input-method tutorial, character-level wrong-answer comparisons, a five-word next-day pinyin recall exercise, learning-oriented voluntary-stop results and vocabulary-load retry. The existing eight-stop story and three-clean-answer chapter rules remain intact.
+
+Recall uses successful answer timestamps in the existing local history. It requires at least 24 elapsed hours, matches the input mode and vocabulary system, and takes eligible words from the current selected pool, oldest first. Clean recall postpones a word for 24 hours. Hints, prior errors and alternative words with the same pinyin do not count as independently recalling the target. Homophones are acknowledged rather than marked as spelling errors. Recall results use review records with `learningTask: pinyin-recall`, so backup and restore keep evidence without changing the save schema or chapter completion.
+
+This is a basic recall schedule, not an adaptive spaced-repetition algorithm. It depends on the 128 retained local history entries and the device clock. Deleting history removes scheduling evidence. Chinese meaning questions and dictation require additional reviewed content and are not implemented. Zhuyin retains its existing practice flow. Shorter chapter segments and changes to reward frequency are deferred; this change preserves existing combat balance.
+
+Natural Vietnamese gate: checked that the learner can identify the input method, task, submit action, hint consequence and completion condition. Prompts distinguish independent recall from corrected answers and do not claim vocabulary comprehension. This is an author review, not student comprehension or learning-effect acceptance.
+
+Validation covers wrong/missing/extra characters, elapsed-time scheduling, input-mode isolation, homophones, hints, backup preservation, tutorial completion without chapter progress, stopped-run feedback and a 390px mobile dialog. Browser screenshots are saved under `output/learning-*.png`. The maintained browser suite also checks existing combat, journey, mobile and save behavior. This document does not assert publication or physical-phone IME acceptance.

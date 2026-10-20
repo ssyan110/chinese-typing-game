@@ -1,4 +1,6 @@
 import {JOURNEY_STOPS,chapterSetting} from './journey-route.js';
+import {installLearning,compareAnswer} from './learning.js';
+import './learning.css';
 import {installStory} from './story-ui.js';
 import {emptyStory} from './story-engine.js';
 import {icon,iconLabel,decorateIcons,rating,metricLabel} from './icons.js';
@@ -21,7 +23,7 @@ const combatSnapshot=g=>({hp:g.hp,shield:g.shield,enemyHp:g.enemyHp,kind:g.kind}
 let openings={};try{const value=JSON.parse(sessionStorage.getItem('tulinh.openings.v1')||'{}');if(value&&typeof value==='object'&&!Array.isArray(value))openings=value;}catch{}
 let saved={};try{const value=JSON.parse(localStorage.getItem('tulinh.settings.v1')||'{}');if(value&&typeof value==='object'&&!Array.isArray(value))saved=value;}catch{}
 const selection={mode:null,system:'hsk',level:'1',cumulative:false};let pool=[],cache={},game=null,composing=false,lastRune='',lastRevision=-1,lastHp=100,resultShown=false,lastAccepted={text:'',at:0},compositionRune='',suppressSubmitUntil=0,reviewWords=[],lastLaunch={encounter:'guardian',kind:'duel'};
-let story=emptyStory(),storyUI=null;
+let story=emptyStory(),storyUI=null,learningUI=null;
 let progress=readProgress(null),progressSaved=true,chapterPage=0;
 const storageNotice=document.createElement('p');storageNotice.id='save-status';storageNotice.setAttribute('role','status');storageNotice.hidden=true;document.querySelector('main').before(storageNotice);
 function showStorageStatus(){
@@ -42,6 +44,7 @@ function saveRun(){if(!game||!runId||deletedRunIds.has(runId))return;const r=gam
 function recordAnswer(word){if(!game.lastPracticeCredited){saveRun();return;}const finite=['campaign','duel'].includes(game.kind),count=finite?game.practiceCounts.get(word.id):Math.min(3,(practiceFor(practice,scope(),[word],selection.mode)[word.id]||0)+1);savePracticeAnswer(practice,scope(),word,selection.mode,count);if(count>=3)markCompleted(progress,scope(),word,selection.mode);saveRun();}
 function renderCurriculum(){
  storyUI?.refreshMap();
+ learningUI?.refresh();
  const list=chapters(),done=list.reduce((n,c)=>n+c.done,0),next=list.find(c=>c.remaining.length||!hasChapterWon(progress,scope(),c.words,selection.mode)),pages=Math.ceil(list.length/12);chapterPage=Math.max(0,Math.min(chapterPage,pages-1));
  setText('curriculum-title',next?'Luyện hết bộ từ đã chọn.':'Bạn đã luyện hết bộ từ này.');setText('coverage-count',`${done.toLocaleString('vi-VN')} / ${pool.length.toLocaleString('vi-VN')}`);setText('coverage-label',`từ hoàn thành · ${list.length} chặng`);$('coverage-fill').style.width=(pool.length?done/pool.length*100:0)+'%';setText('coverage-note',progressSaved?'Mỗi chặng tối đa 20 từ; mỗi từ luyện đúng 3 lần, xen kẽ các từ khác. Hạ thủ lĩnh sau khi luyện đủ mới hoàn thành thử thách. Từ hết giờ sẽ quay lại. Tiến độ cũ và số lần đang luyện lưu trên máy này.':'Không lưu được tiến độ. Trình duyệt có thể đã hết dung lượng hoặc chặn lưu trữ. Giữ trang mở để tiếp tục lượt này.');
  setText('continue-learning',next?`Tiếp tục chặng ${String(next.number).padStart(2,'0')} →`:'Luyện lại chặng 01 →');$('continue-learning').onclick=()=>startChapter(next?.number||1);
@@ -65,7 +68,7 @@ function renderCurriculum(){
 }
 function renderCatalog(){const chapter=chapters()[Number($('catalog-chapter').value)-1];$('catalog-words').replaceChildren();for(const word of chapter?.words||[]){const item=document.createElement('span'),done=isCompleted(progress,scope(),word,selection.mode);item.className=done?'word-complete':'';item.textContent=wordLabel(word,selection.mode);if(done){item.append(icon('check'));item.setAttribute('aria-label',wordLabel(word,selection.mode)+' · đã hoàn thành');}item.lang=selection.mode==='simplified'?'zh-Hans':'zh-Hant';$('catalog-words').append(item);}}
 function startChapter(number,storyStation=null,storyName=null){const chapter=chapters()[number-1];if(!chapter)return;startBattle(chapter.encounter,'campaign',chapter.remaining.length?chapter.remaining:chapter.words,number,storyStation,storyName);}
-let seconds=Number.isInteger(saved.seconds)&&saved.seconds>=1&&saved.seconds<=60?saved.seconds:5;
+let seconds=Number.isInteger(saved.seconds)&&saved.seconds>=1&&saved.seconds<=60?saved.seconds:10;
 let muted=saved.sound!==true,volume=Number.isFinite(saved.volume)?Math.max(0,Math.min(1,saved.volume)):.35,music=null,currentTrack='',screen='setup-screen';
 let lastCourse=saved.lastCourse&&Object.hasOwn(names,saved.lastCourse.mode)&&Object.hasOwn(levels,saved.lastCourse.system)&&levels[saved.lastCourse.system].includes(saved.lastCourse.level)&&typeof saved.lastCourse.cumulative==='boolean'?saved.lastCourse:null;
 const settings={reduced:saved.reduced??matchMedia('(prefers-reduced-motion: reduce)').matches,contrast:saved.contrast===true};
@@ -81,9 +84,9 @@ function syncLevelOptions(){const select=$('vocab-level');select.replaceChildren
 let requestVersion=0;
 async function updatePool(){
  const version=++requestVersion,system=selection.system;$('enter-lobby').disabled=true;setText('pool-description','Đang tải từ vựng…');setText('load-message','');
- try{if(!cache[system]){const response=await fetch(asset(`data/${system}.json`));if(!response.ok)throw Error('HTTP '+response.status);cache[system]=await response.json();}if(version!==requestVersion)return;
+ try{if(!cache[system]){const response=await fetch(asset(`data/${system}.json`),{signal:AbortSignal.timeout(15000)});if(!response.ok)throw Error('HTTP '+response.status);cache[system]=await response.json();}if(version!==requestVersion)return;
  pool=selectVocabulary(cache[system],system,selection.level,selection.cumulative,selection.mode);setText('pool-description',`${pool.length.toLocaleString('vi-VN')} từ trong bộ đã chọn · ${Math.ceil(pool.length/20)} chặng để luyện hết.`);setText('curriculum-note',system==='hsk'?'HSK 7–9 dùng chung danh sách nâng cao.':'TOCFL C1–C2 dùng chung danh sách lưu loát.');$('enter-lobby').disabled=!pool.length;if(!pool.length)setText('load-message','Chưa có dữ liệu cho lựa chọn này. Hãy chọn cấp độ khác.');
- }catch{if(version!==requestVersion)return;setText('pool-description','Không tải được từ vựng.');setText('load-message','Kiểm tra mạng rồi chọn lại hệ từ vựng để thử tải lần nữa.');}
+ }catch{if(version!==requestVersion)return;pool=[];setText('pool-description','Không tải được từ vựng.');setText('load-message','Kiểm tra kết nối mạng rồi thử lại.');const retry=document.createElement('button');retry.type='button';retry.className='secondary-button';retry.textContent='Tải lại từ vựng';retry.onclick=updatePool;$('load-message').append(retry);}
 }
 function showLevels(){
  $('mode-choices').hidden=true;returnCourse.hidden=true;$('level-form').hidden=false;$('home-back').hidden=true;setText('step-number','02');setText('step-label','CHỌN CẤP ĐỘ');setText('choice-title','Chọn bộ từ cho bạn.');setText('selected-mode',names[selection.mode]);$('vocab-system').value=selection.system;$('cumulative').checked=selection.cumulative;syncLevelOptions();showScreen('setup-screen');playMusic();
@@ -118,6 +121,13 @@ function handleOutcome(outcome,text='',before=null){
  if(before)motion?.play(combatFeedback(before,game,outcome));
  if(outcome==='correct'){$('hanzi-input').value='';sfx('correct');lastAccepted={text,at:performance.now()};}
  if(outcome==='wrong'){sfx('wrong');saveRun();}if(outcome==='partial')setText('input-hint','Gõ tiếp cho đủ phù văn rồi chọn chữ.');if(outcome==='preedit')setText('input-hint','Hãy chọn chữ Hán trong bộ gõ trước khi thi triển.');renderBattle();
+ if(outcome==='wrong'&&game.mode!=='zhuyin'){
+  const comparison=compareAnswer(game.target.label,text),hint=$('input-hint');hint.replaceChildren();
+  for(const [label,chars]of [['Mẫu: ',comparison.target],[' · Bạn nhập: ',comparison.answer]]){
+   hint.append(label);chars.forEach((ch,i)=>{const span=document.createElement('span');span.textContent=ch;if(comparison.target[i]!==comparison.answer[i])span.className='answer-difference';hint.append(span);});
+  }
+  hint.append(` · ${comparison.different.length?'Kiểm tra vị trí '+comparison.different.join(', ')+'. ':''}${comparison.extra?'Bạn nhập thừa chữ. ':''}Chọn lại chữ trong bộ gõ.`);
+ }
 }
 function keepZhuyinVisible(){mobileLayout?.keepVisible();}
 function pressSymbol(key){if(!game||composing)return;const before=combatSnapshot(game),word=game.target.word,outcome=game.key(key);if(outcome==='correct')recordAnswer(word);handleOutcome(outcome,'',before);keepZhuyinVisible();}
@@ -138,11 +148,11 @@ function pause(){if(!game||(!awaitingReady&&game.status!=='playing'))return;game
 function resume(){if(!game)return;$('pause-dialog').close();if(document.body.dataset.mobile==='true'&&game.kind!=='review')armReady();else{previous=performance.now();game.resume();renderBattle();if(game.mode!=='zhuyin')$('hanzi-input').focus({preventScroll:true});}}
 function end(){if(!game)return;motion?.clear();$('pause-dialog').close();$('reward-dialog').close();game.finish();saveRun();renderBattle();}
 function showResult(){
- resultShown=true;navigation?.visit('result');const g=game,r=g.result();if(g.kind==='campaign'&&g.status==='won'){const chapter=chapters()[lastLaunch.chapter-1];if(chapter)markChapterWon(progress,scope(),chapter.words,selection.mode);persist();}$('pause-dialog').close();$('reward-dialog').close();showScreen('result-screen');setText('result-title',r.kind==='campaign'&&r.status==='won'?'Đã hoàn thành chặng '+lastLaunch.chapter:r.kind==='review'?'Đã hoàn thành lượt ôn':r.status==='won'?'Bạn đã chiến thắng!':r.status==='lost'?'Trận đấu đã kết thúc':'Đã lưu lượt luyện');setText('result-selection',selectionLabel()+' · '+(lastLaunch.storyName||(g.kind==='campaign'?chapterSetting(lastLaunch.chapter).name:g.enemy.place)));rating($('result-stars'),r.stars,r.kind);$('result-stars').setAttribute('aria-label',r.stars===null?'Không chấm sao':`${r.stars} trên 3 sao`);
- $('result-metrics').replaceChildren();for(const [label,value]of [['Chính xác',r.accuracy+'%'],['Phù văn đúng',r.correct],['Chuỗi dài nhất',r.combo],['Điểm',r.score.toLocaleString('vi-VN')],['Xếp hạng',r.grade]]){const div=document.createElement('div'),span=document.createElement('span'),b=document.createElement('strong');metricLabel(span,label);b.textContent=value;div.append(span,b);$('result-metrics').append(div);}
+ resultShown=true;navigation?.visit('result');const g=game,r=g.result();if(g.kind==='campaign'&&g.status==='won'){const chapter=chapters()[lastLaunch.chapter-1];if(chapter)markChapterWon(progress,scope(),chapter.words,selection.mode);persist();}$('pause-dialog').close();$('reward-dialog').close();showScreen('result-screen');setText('result-title',r.kind==='campaign'&&r.status==='won'?'Đã hoàn thành chặng '+lastLaunch.chapter:r.kind==='review'?'Đã hoàn thành lượt ôn':r.status==='won'?'Bạn đã chiến thắng!':r.status==='lost'?'Trận đấu đã kết thúc':'Đã lưu lượt luyện');setText('result-selection',selectionLabel()+' · '+(lastLaunch.storyName||(g.kind==='campaign'?chapterSetting(lastLaunch.chapter).name:g.enemy.place)));$('result-stars').hidden=r.status==='ended'||r.kind==='review';rating($('result-stars'),r.stars,r.kind);$('result-stars').setAttribute('aria-label',r.stars===null?'Không chấm sao':`${r.stars} trên 3 sao`);
+ $('result-metrics').replaceChildren();for(const [label,value]of [['Chính xác',r.accuracy+'%'],['Phù văn đúng',r.correct],['Chuỗi dài nhất',r.combo],['Điểm',r.score.toLocaleString('vi-VN')],...(r.status==='ended'||r.kind==='review'?[]:[['Xếp hạng',r.grade]])]){const div=document.createElement('div'),span=document.createElement('span'),b=document.createElement('strong');metricLabel(span,label);b.textContent=value;div.append(span,b);$('result-metrics').append(div);}
  setText('result-summary',`${r.kind==='endless'?'Vòng đã vượt: '+(r.round-1)+' · ':''}${r.errors} lần nhập sai · ${r.misses} lần hết giờ · ${formatTime(r.elapsed)} luyện tập. ${r.status==='lost'?'HP đã về 0. Chọn chơi lại để bắt đầu với 100 HP.':''}`);
  $('review-rows').replaceChildren();for(const item of r.rows){const row=document.createElement('tr');if(item.wrong)row.className='needs-review';for(const value of [item.label,item.correct,item.wrong,item.shown]){const cell=document.createElement('td');cell.textContent=value;row.append(cell);}$('review-rows').append(row);}
- const remainingChapter=chapters().find(c=>c.remaining.length||!hasChapterWon(progress,scope(),c.words,selection.mode));$('continue-curriculum').hidden=!remainingChapter;setText('continue-curriculum',remainingChapter?`Tiếp tục chặng ${remainingChapter.number} →`:'');$('continue-curriculum').onclick=()=>startChapter(remainingChapter.number);if(lastLaunch.storyStation){$('continue-curriculum').hidden=r.status!=='won';setText('continue-curriculum',lastLaunch.chapter===JOURNEY_STOPS.length?'Kết thúc hành trình →':'Tiếp tục hành trình →');$('continue-curriculum').onclick=()=>storyUI.afterWin(lastLaunch.chapter);}setText('result-coverage',`${pool.filter(w=>isCompleted(progress,scope(),w,selection.mode)).length.toLocaleString('vi-VN')} / ${pool.length.toLocaleString('vi-VN')} từ của bộ này đã nhập đúng.${progressSaved?' Đã lưu trong trình duyệt.':' Không lưu được tiến độ; giữ trang mở để tiếp tục.'}`);$('word-review').open=false;setText('word-review-label',`Xem từ / ký hiệu đã luyện (${r.rows.length})`);const ids=new Set(r.rows.filter(w=>w.wrong>0).map(w=>w.id));reviewWords=g.words.filter(w=>ids.has(w.id));$('review-errors').hidden=!reviewWords.length;setText('review-errors',`Ôn ${reviewWords.length} từ sai`);
+ const remainingChapter=chapters().find(c=>c.remaining.length||!hasChapterWon(progress,scope(),c.words,selection.mode));$('continue-curriculum').hidden=!remainingChapter;setText('continue-curriculum',remainingChapter?`Tiếp tục chặng ${remainingChapter.number} →`:'');$('continue-curriculum').onclick=()=>startChapter(remainingChapter.number);if(lastLaunch.storyStation){$('continue-curriculum').hidden=r.status!=='won';setText('continue-curriculum',lastLaunch.chapter===JOURNEY_STOPS.length?'Kết thúc hành trình →':'Tiếp tục hành trình →');$('continue-curriculum').onclick=()=>storyUI.afterWin(lastLaunch.chapter);}setText('result-coverage',`Lượt này: ${r.rows.filter(w=>w.correct>0).length} từ đã nhập đúng, ${r.rows.filter(w=>w.wrong>0).length} từ cần luyện lại. Tiến độ cả bộ: ${pool.filter(w=>isCompleted(progress,scope(),w,selection.mode)).length.toLocaleString('vi-VN')} / ${pool.length.toLocaleString('vi-VN')} từ của bộ này đã nhập đúng.${progressSaved?' Đã lưu trong trình duyệt.':' Không lưu được tiến độ; giữ trang mở để tiếp tục.'}`);$('word-review').open=false;setText('word-review-label',`Xem từ / ký hiệu đã luyện (${r.rows.length})`);const ids=new Set(r.rows.filter(w=>w.wrong>0).map(w=>w.id));reviewWords=g.words.filter(w=>ids.has(w.id));$('review-errors').hidden=!reviewWords.length;setText('review-errors',`Ôn ${reviewWords.length} từ sai`);
  saveRun();playMusic();
 }
 for(const [id,e]of Object.entries(ENCOUNTERS)){const b=document.createElement('button');b.className='encounter-card';b.dataset.encounter=id;const num=document.createElement('span');num.className='encounter-number';num.textContent=String(Object.keys(ENCOUNTERS).indexOf(id)+1).padStart(2,'0')+' / '+({guardian:'CƠ BẢN',moth:'LINH HOẠT',sentinel:'CHIẾN THUẬT'}[id]);const img=document.createElement('img');img.src=asset(`original/art/journey/${id}.png`);img.alt=e.name;const title=document.createElement('strong');title.textContent=e.place;const desc=document.createElement('p');desc.textContent=e.description;const cta=document.createElement('span');cta.className='encounter-cta';iconLabel(cta,'Đấu thủ lĩnh','forward');b.append(num,img,title,desc,cta);b.onclick=()=>startBattle(id);$('encounter-cards').append(b);}
@@ -185,3 +195,10 @@ storyUI=installStory({
  chapters:()=>chapters().slice(0,JOURNEY_STOPS.length).map(c=>({...c,won:hasChapterWon(progress,scope(),c.words,selection.mode)})),
  startBattle:startChapter
 });
+
+learningUI=installLearning({selection:()=>selection,pool:()=>pool,records:()=>records,ensureStorage:acquireStorage,saveRecall:({rows,elapsed})=>{
+ const correct=rows.reduce((sum,row)=>sum+row.correct,0),errors=rows.length-correct;
+ const record={id:'recall-'+Date.now(),scope:selectionLabel(),selection:{...selection},kind:'review',learningTask:'pinyin-recall',status:'won',at:new Date().toISOString(),rows,correct,errors,misses:0,elapsed,accuracy:Math.round(correct/rows.length*100),score:0,combo:0};
+ const next=[...records,record].slice(-128);
+ try{saveStore.save({progress,practice,records:next,story});records=next;return true;}catch{return false;}
+}});
