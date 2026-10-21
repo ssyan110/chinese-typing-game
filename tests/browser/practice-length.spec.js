@@ -45,7 +45,7 @@ test('first two chapters: 30 then 40 answers, two appearances per word, full rep
  test.setTimeout(120_000);
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await lobby(page);await expect(page.locator('#coverage-note')).toContainText('15 từ (30 lượt)');
- await expect(page.locator('body')).not.toContainText('3 lần');
+ await expect(page.locator('#coverage-note')).toContainText('Mỗi từ xuất hiện 2 lần');
  await page.locator('#continue-learning').click();expect((await page.evaluate(()=>window.__tulinh.snapshot())).practiceTotal).toBe(30);
  await play(page,{size:15,total:30});await page.screenshot({path:'output/practice-first-chapter.png'});
  await expect(page.locator('#continue-curriculum')).toContainText('chặng 2');await page.locator('#continue-curriculum').click();
