@@ -25,3 +25,6 @@ public/game/fonts/
 # Playwright default artifacts (maintained config uses output/).
 test-results/
 playwright-report/
+
+# Generated from the canonical vocabulary before dev/build.
+public/data/levels/

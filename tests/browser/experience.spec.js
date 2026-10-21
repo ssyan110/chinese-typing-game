@@ -8,9 +8,9 @@ test('home does not preload hidden battle and journey illustrations',async({page
 });
 
 test('a vocabulary response slower than fifteen seconds still opens the course',async({page})=>{
- await page.route('**/data/hsk.json',async route=>{
+ await page.route('**/data/levels/hsk/1.json',async route=>{
   await new Promise(resolve=>setTimeout(resolve,16000));
-  await route.fulfill({path:fileURLToPath(new URL('../../public/data/hsk.json',import.meta.url)),contentType:'application/json'});
+  await route.fulfill({path:fileURLToPath(new URL('../../public/data/levels/hsk/1.json',import.meta.url)),contentType:'application/json'});
  });
  await page.goto('./');await page.locator('[data-mode=simplified]').click();
  await expect(page.locator('#enter-lobby')).toBeEnabled({timeout:22000});
@@ -89,4 +89,12 @@ test('readiness can be cancelled without starting or writing an empty practice r
  }
  await page.locator('#start-ready').press('Escape');await expect(page.locator('#lobby-screen')).toBeVisible();
  expect((await page.evaluate(()=>JSON.parse(localStorage.getItem('tulinh.save.v1')))).records).toHaveLength(0);
+});
+
+test('new students load only the selected vocabulary level and no muted music',async({page})=>{
+ const requests=[];page.on('request',request=>requests.push(new URL(request.url()).pathname));
+ await page.goto('./');await page.locator('[data-mode=simplified]').click();
+ await expect(page.locator('#pool-description')).toContainText('300');
+ expect(requests.filter(path=>path.includes('/data/'))).toEqual([expect.stringContaining('/data/levels/hsk/1.json')]);
+ expect(requests.some(path=>path.includes('/original/audio/'))).toBe(false);
 });

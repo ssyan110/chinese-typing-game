@@ -47,11 +47,11 @@ test('next-day recall hides hanzi and stores hinted answers without crediting ma
 });
 test('failed vocabulary load exposes a direct retry that recovers',async({page})=>{
  await page.goto('./');
- await page.route('**/data/hsk.json',route=>route.abort());
+ await page.route('**/data/levels/hsk/1.json',route=>route.abort());
  await page.locator('[data-mode=simplified]').click();
  await expect(page.getByRole('button',{name:'Tải lại từ vựng'})).toBeVisible();
  await expect(page.locator('#enter-lobby')).toBeDisabled();
- await page.unroute('**/data/hsk.json');await page.getByRole('button',{name:'Tải lại từ vựng'}).click();
+ await page.unroute('**/data/levels/hsk/1.json');await page.getByRole('button',{name:'Tải lại từ vựng'}).click();
  await expect(page.locator('#enter-lobby')).toBeEnabled();
 });
 test('independent next-day recall is saved and postpones the word after reload',async({page})=>{
