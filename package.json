@@ -8,10 +8,12 @@
     "build": "vite build && node scripts/stage-summoner-public.mjs",
     "preview": "vite preview --host 0.0.0.0",
     "test": "node --test tests/summoner*.test.js",
-    "build:vocabulary": "node scripts/build-vocabulary.mjs",
+    "build:vocabulary": "node scripts/build-vocabulary.mjs && node scripts/split-vocabulary.mjs",
     "build:art": "node scripts/build-original-art.mjs",
     "animation:studio": "npm --prefix animation-lab run studio",
-    "test:browser": "playwright test"
+    "test:browser": "playwright test",
+    "predev": "node scripts/split-vocabulary.mjs",
+    "prebuild": "node scripts/split-vocabulary.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.64.1",

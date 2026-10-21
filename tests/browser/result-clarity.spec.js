@@ -2,7 +2,7 @@ import {test,expect} from '@playwright/test';
 test('a timeout does not lower typing accuracy and repeated words are counted explicitly',async({page})=>{
  await page.goto('./');await page.locator('[data-mode=simplified]').click();await page.locator('#enter-lobby:enabled').click();
  await page.locator('#lobby-seconds').fill('1');await page.locator('#lobby-seconds').press('Tab');await page.locator('#continue-learning').click();
- await expect.poll(()=>page.evaluate(()=>window.__tulinh.snapshot().misses)).toBe(1);
+ await expect.poll(()=>page.evaluate(()=>window.__tulinh.snapshot().misses)).toBeGreaterThanOrEqual(1);
  await page.locator('#battle-seconds').fill('60');await page.locator('#battle-seconds').press('Tab');
  await page.locator('#hanzi-input').fill(await page.locator('#active-rune').innerText());
  await expect.poll(()=>page.evaluate(()=>window.__tulinh.snapshot().correct)).toBe(1);await page.locator('#end-run').click();

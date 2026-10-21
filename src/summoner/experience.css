@@ -53,3 +53,7 @@ body.high-contrast #battle-ready #ready-description,body.high-contrast #battle-r
  #battle-ready .ready-actions{flex-direction:row;align-items:center}
  #battle-ready .eyebrow{margin-bottom:6px}
 }
+/* Six result metrics use balanced rows on tablets and small screens. */
+#result-metrics:has(>div:nth-child(6)){grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:600px){#result-metrics:has(>div:nth-child(6)){grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1280px){#result-metrics:has(>div:nth-child(6)){grid-template-columns:repeat(6,minmax(0,1fr))}}

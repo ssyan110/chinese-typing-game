@@ -1,3 +1,4 @@
+import {createVocabularyLoader,VOCABULARY_LEVELS as levels} from './vocabulary-loader.js';
 import {typingAccuracyLabel} from './result-metrics.js';
 import {JOURNEY_STOPS,chapterSetting} from './journey-route.js';
 import {installLearning,compareAnswer} from './learning.js';
@@ -15,7 +16,7 @@ import {Duel,ENCOUNTERS,selectVocabulary} from './engine.js';
 import {chaptersFor,progressScope,readProgress,markCompleted,isCompleted,wordLabel,hasChapterWon,markChapterWon} from './curriculum.js';
 const $=id=>document.getElementById(id),asset=path=>new URL(path,document.baseURI).href;
 const names={simplified:'Chữ giản thể',traditional:'Chữ phồn thể',zhuyin:'Chú âm'};
-const levels={hsk:['1','2','3','4','5','6','7-9'],tocfl:['N1','N2','A1','A2','B1','B2','C1']};
+const loadVocabulary=createVocabularyLoader(path=>fetch(asset(path),{signal:AbortSignal.timeout(45000),priority:'high'}));
 const symbols={'1':'ㄅ',q:'ㄆ',a:'ㄇ',z:'ㄈ','2':'ㄉ',w:'ㄊ',s:'ㄋ',x:'ㄌ',e:'ㄍ',d:'ㄎ',c:'ㄏ',r:'ㄐ',f:'ㄑ',v:'ㄒ','5':'ㄓ',t:'ㄔ',g:'ㄕ',b:'ㄖ',y:'ㄗ',h:'ㄘ',n:'ㄙ',u:'ㄧ',j:'ㄨ',m:'ㄩ','8':'ㄚ',i:'ㄛ',k:'ㄜ',',':'ㄝ','9':'ㄞ',o:'ㄟ',l:'ㄠ','.':'ㄡ','0':'ㄢ',p:'ㄣ',';':'ㄤ','/':'ㄥ','-':'ㄦ','3':'ˇ','4':'ˋ','6':'ˊ','7':'˙'};
 let mobileLayout=null,navigation=null,motion=null,runId=null,awaitingReady=false;const deletedRunIds=new Set();let records=[],practice={};
 let storageReady=false,storageError='',restoreLobby=false;
@@ -23,7 +24,7 @@ const saveStore=createSaveStore({storage:{getItem:key=>localStorage.getItem(key)
 const combatSnapshot=g=>({hp:g.hp,shield:g.shield,enemyHp:g.enemyHp,kind:g.kind});
 let openings={};try{const value=JSON.parse(sessionStorage.getItem('tulinh.openings.v1')||'{}');if(value&&typeof value==='object'&&!Array.isArray(value))openings=value;}catch{}
 let saved={};try{const value=JSON.parse(localStorage.getItem('tulinh.settings.v1')||'{}');if(value&&typeof value==='object'&&!Array.isArray(value))saved=value;}catch{}
-const selection={mode:null,system:'hsk',level:'1',cumulative:false};let pool=[],cache={},game=null,composing=false,lastRune='',lastRevision=-1,lastHp=100,resultShown=false,lastAccepted={text:'',at:0},compositionRune='',suppressSubmitUntil=0,reviewWords=[],lastLaunch={encounter:'guardian',kind:'duel'};
+const selection={mode:null,system:'hsk',level:'1',cumulative:false};let pool=[],game=null,composing=false,lastRune='',lastRevision=-1,lastHp=100,resultShown=false,lastAccepted={text:'',at:0},compositionRune='',suppressSubmitUntil=0,reviewWords=[],lastLaunch={encounter:'guardian',kind:'duel'};
 let story=emptyStory(),storyUI=null,learningUI=null;
 let progress=readProgress(null),progressSaved=true,chapterPage=0;
 const storageNotice=document.createElement('p');storageNotice.id='save-status';storageNotice.setAttribute('role','status');storageNotice.hidden=true;document.querySelector('main').before(storageNotice);
@@ -55,8 +56,8 @@ function renderCurriculum(){
   const button=document.createElement('button');button.className='chapter-row'+(complete?' completed':'')+(current?' current':'');button.dataset.chapter=chapter.number;
   button.setAttribute('aria-label',`Chặng ${chapter.number} · ${setting.name} · ${chapter.done}/${chapter.words.length} từ đã nhập đúng`);
   const art=document.createElement('span');art.className='chapter-art';art.dataset.scene=chapter.encounter;
-  const scene=document.createElement('img');scene.className='chapter-scene';scene.src=asset(`original/art/journey/${setting.id}-background.png`);scene.alt='';scene.loading='lazy';
-  const creature=document.createElement('img');creature.className='chapter-creature';creature.src=asset(`original/art/journey/${chapter.encounter}.png`);creature.alt='';creature.loading='lazy';
+  const scene=document.createElement('img');scene.className='chapter-scene';scene.src=asset(`original/art/journey/${setting.id}-background.png`);scene.alt='';scene.loading='lazy';scene.fetchPriority='low';
+  const creature=document.createElement('img');creature.className='chapter-creature';creature.src=asset(`original/art/journey/${chapter.encounter}.png`);creature.alt='';creature.loading='lazy';creature.fetchPriority='low';
   const number=document.createElement('b');number.className='chapter-number';number.textContent=String(chapter.number).padStart(2,'0');
   const status=document.createElement('span');status.className='chapter-status';iconLabel(status,complete?'Hoàn thành thử thách':chapter.done===chapter.words.length?'Đủ lượt từ vựng':chapter.done?'Đang luyện':current?'Tiếp theo':'Chưa luyện',complete?'check':chapter.done?'clock':current?'play':'book');
   art.append(scene,creature,number,status);
@@ -79,14 +80,14 @@ function showScreen(id){document.querySelectorAll('main>.screen').forEach(n=>n.h
 function formatTime(sec){const n=Math.floor(sec);return `${Math.floor(n/60)}:${String(n%60).padStart(2,'0')}`;}
 function selectionLabel(){return `${names[selection.mode]} · ${selection.system==='hsk'?'HSK '+selection.level.replace('-','–'):'TOCFL '+selection.level}${selection.cumulative?' · ôn cả cấp trước':''}`;}
 function applySettings(){document.body.classList.toggle('reduced-motion',settings.reduced);document.body.classList.toggle('high-contrast',settings.contrast);$('reduce-motion').checked=settings.reduced;$('high-contrast').checked=settings.contrast;$('volume').value=Math.round(volume*100);setText('sound-toggle',muted?'Âm thanh: tắt':'Âm thanh: bật');$('sound-toggle').setAttribute('aria-pressed',String(!muted));}
-function playMusic(){const track=screen==='battle-screen'?'inkstorm-duel':'lantern-courtyard';if(currentTrack!==track){music?.pause();currentTrack=track;music=new Audio(asset(`original/audio/${track}.mp3`));music.loop=true;}music.volume=volume*.55;if(muted)music.pause();else music.play().catch(()=>{muted=true;applySettings();});}
+function playMusic(){if(muted){music?.pause();return;}const track=screen==='battle-screen'?'inkstorm-duel':'lantern-courtyard';if(currentTrack!==track){music?.pause();currentTrack=track;music=new Audio(asset(`original/audio/${track}.mp3`));music.loop=true;}music.volume=volume*.55;if(muted)music.pause();else music.play().catch(()=>{muted=true;applySettings();});}
 function sfx(kind){if(muted)return;const sound=new Audio(asset('original/audio/'+({correct:'cue-answer_correct',wrong:'cue-answer_wrong',hit:'cue-monster_attack',win:'cue-level_up'}[kind])+'.mp3'));sound.volume=volume;sound.play().catch(()=>{});}
 function syncLevelOptions(){const select=$('vocab-level');select.replaceChildren();for(const key of levels[selection.system]){const option=document.createElement('option');option.value=key;option.textContent=selection.system==='hsk'?'HSK '+key.replace('-','–'):({N1:'Dự bị 1',N2:'Dự bị 2',C1:'C1–C2'}[key]||key);select.append(option);}if(levels[selection.system].includes(selection.level))select.value=selection.level;else selection.level=select.value;}
 let requestVersion=0;
 async function updatePool(){
  const version=++requestVersion,system=selection.system;$('enter-lobby').disabled=true;setText('pool-description','Đang tải từ vựng…');setText('load-message','');
- try{if(!cache[system]){const response=await fetch(asset(`data/${system}.json`),{signal:AbortSignal.timeout(45000)});if(!response.ok)throw Error('HTTP '+response.status);cache[system]=await response.json();}if(version!==requestVersion)return;
- pool=selectVocabulary(cache[system],system,selection.level,selection.cumulative,selection.mode);setText('pool-description',`${pool.length.toLocaleString('vi-VN')} từ trong bộ đã chọn · ${chapters().length} chặng để luyện hết.`);setText('curriculum-note',system==='hsk'?'HSK 7–9 dùng chung danh sách nâng cao.':'TOCFL C1–C2 dùng chung danh sách lưu loát.');$('enter-lobby').disabled=!pool.length;if(!pool.length)setText('load-message','Chưa có dữ liệu cho lựa chọn này. Hãy chọn cấp độ khác.');
+ try{const rows=await loadVocabulary(system,selection.level,selection.cumulative);if(version!==requestVersion)return;
+ pool=selectVocabulary(rows,system,selection.level,selection.cumulative,selection.mode);setText('pool-description',`${pool.length.toLocaleString('vi-VN')} từ trong bộ đã chọn · ${chapters().length} chặng để luyện hết.`);setText('curriculum-note',system==='hsk'?'HSK 7–9 dùng chung danh sách nâng cao.':'TOCFL C1–C2 dùng chung danh sách lưu loát.');$('enter-lobby').disabled=!pool.length;if(!pool.length)setText('load-message','Chưa có dữ liệu cho lựa chọn này. Hãy chọn cấp độ khác.');
  }catch{if(version!==requestVersion)return;pool=[];setText('pool-description','Không tải được từ vựng.');setText('load-message','Kiểm tra kết nối mạng rồi thử lại.');const retry=document.createElement('button');retry.type='button';retry.className='secondary-button';retry.textContent='Tải lại từ vựng';retry.onclick=updatePool;$('load-message').append(retry);}
 }
 function focusSetupChoice(){const heading=$('choice-title');heading.tabIndex=-1;document.querySelector('.setup-form').scrollIntoView({block:'start',behavior:'instant'});heading.focus({preventScroll:true});}
