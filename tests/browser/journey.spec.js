@@ -3,7 +3,7 @@ import {JOURNEY_STOPS} from '../../src/summoner/journey-route.js';
 // Keep DOM traces and explicit outcome screenshots without encoding thousands
 // of intermediate WebGL screenshots during a 310-answer journey.
 test.use({trace:{mode:'retain-on-failure',screenshots:false,snapshots:true,sources:true}});
-async function lobby(page,mode){await page.goto('./');await page.locator('#settings-toggle').click();await page.locator('#reduce-motion').check();await page.locator('#settings-toggle').click();await page.locator(`[data-mode=${mode}]`).click();await page.locator('#enter-lobby').click();await page.locator('#lobby-seconds').fill('60');await page.locator('#lobby-seconds').press('Tab');}
+async function lobby(page,mode){await page.goto('./');await page.locator('#settings-toggle').click();await page.locator('#reduce-motion').check();await page.locator('#settings-toggle').click();await page.locator(`[data-mode=${mode}]`).click();await page.locator('#enter-lobby').click();await page.locator('#lobby-seconds').fill('60');await page.locator('#lobby-seconds').press('Tab');await page.locator('.journey-overview summary').click();}
 for(const mode of ['simplified','traditional','zhuyin'])test(`eight-stop journey preserves ${mode} practice through the homecoming ending`,async({page})=>{
  test.setTimeout(240_000); // 310 full answers; mobile Zhuyin presses each visible symbol.
  if(mode==='zhuyin')await page.setViewportSize({width:390,height:844});

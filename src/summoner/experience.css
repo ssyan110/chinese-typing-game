@@ -1,0 +1,55 @@
+/* Task flow and focus: retain Playground's art direction. */
+#choose-practice{margin-top:16px;position:relative;z-index:2}
+.setup-form{scroll-margin-top:24px}
+#setup-screen:has(#level-form:not([hidden])) .setup-story{display:none}
+#setup-screen:has(#level-form:not([hidden])) .setup-form{max-width:760px;margin:0 auto;padding:28px 0}
+#setup-screen:has(#level-form:not([hidden])) #level-form{max-width:none}
+#choice-title[tabindex="-1"]:focus{outline:none}
+#lobby-screen>.timing-card{margin:0 0 24px;border:1px solid #cce2eb}
+.journey-overview{margin:22px 0 0;border-top:1px solid var(--line)}
+.journey-overview summary{cursor:pointer;min-height:48px;padding:16px 0;color:var(--teal);font-size:14px;font-weight:600}
+.journey-overview .journey-stops{margin-top:4px}
+.journey-route-status{font-size:13px;color:var(--muted)}
+.history-dialog .history-heading{position:sticky;top:-1px;z-index:2;background:#fff;padding:8px 0 14px;margin-top:0}
+.history-dialog .history-heading [data-history-close]{background:#edf7fc}
+.history-metrics{background:#edf7fc;border-radius:12px}
+.settings-bar label{min-height:44px;padding-block:8px}
+/* The native dialog makes background controls inert: there is no editable
+   answer field in a waiting game, and no second start step after resume. */
+#battle-ready:not([open]){display:none}
+#battle-ready[open]{display:block;position:fixed;inset:0;margin:auto;width:min(480px,calc(100vw - 32px));max-width:480px;max-height:calc(100dvh - 32px);overflow:auto;padding:32px;font-size:15px;line-height:1.7;border-radius:24px}
+#battle-ready .eyebrow{color:#176e72;font-size:11px;letter-spacing:.08em;margin-bottom:12px}
+#battle-ready h2{font-size:30px;line-height:1.3;letter-spacing:-.025em;margin:0 0 16px}
+#battle-ready #ready-description{font-size:15px;color:#365d72;margin-bottom:20px}
+#battle-ready .ready-context{padding:14px 16px;background:#edf7fc;border:1px solid #d2e7ef;border-radius:14px;font-size:13px;color:#365d72;margin-bottom:24px}
+#battle-ready .ready-actions{display:flex;flex-direction:column;gap:12px;margin:0}
+#battle-ready button{white-space:normal;min-height:48px;padding:12px 18px;font-size:15px;width:100%;height:auto}
+#battle-ready .text-button{margin:0;min-height:44px}
+#battle-ready::backdrop{background:#12344bcc;opacity:1;backdrop-filter:blur(6px)}
+body.awaiting-ready .battle-heading>div:first-child{display:block}
+body.awaiting-ready .battle-tools label{display:flex}
+body.high-contrast #battle-ready #ready-description,body.high-contrast #battle-ready .ready-context{color:#163c53}
+@media(max-width:760px){
+ #setup-screen .home-intro{min-height:310px}
+ #choose-practice{font-size:13px;padding:11px 16px;min-height:44px}
+ #setup-screen .setup-story{min-height:575px}
+ #setup-screen:has(#level-form:not([hidden])) .setup-form{padding:18px 4px}
+ #battle-ready[open]{padding:26px 22px}
+ #battle-ready h2{font-size:26px}
+ #lobby-screen>.timing-card{padding:18px 16px}
+ .encounter-cards{grid-template-columns:1fr}
+ .encounter-card{display:grid;grid-template-columns:96px minmax(0,1fr);column-gap:18px;padding:20px;text-align:left}
+ .encounter-card .encounter-number{position:absolute;left:20px;top:12px}
+ .encounter-card img{grid-column:1;grid-row:1/4;width:96px;height:130px;object-fit:contain;margin:12px 0 0}
+ .encounter-card>strong{grid-column:2;font-size:22px;margin:14px 0 0}
+ .encounter-card>p{grid-column:2;font-size:13px;min-height:0;margin:10px 0 14px}
+ .encounter-card .encounter-cta{grid-column:2;font-size:12px}
+}
+@media(max-height:450px){
+ #battle-ready[open]{max-height:calc(100dvh - 16px);padding:18px 22px}
+ #battle-ready h2{font-size:23px;margin-bottom:8px}
+ #battle-ready #ready-description{font-size:13px;margin-bottom:10px}
+ #battle-ready .ready-context{padding:8px 12px;font-size:12px;margin-bottom:12px}
+ #battle-ready .ready-actions{flex-direction:row;align-items:center}
+ #battle-ready .eyebrow{margin-bottom:6px}
+}

@@ -16,8 +16,8 @@ export function makeDeck(words,rng=Math.random,previousFirst){
  return ()=>{if(!deck.length){deck=[...words];for(let i=deck.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]];}if(deck.length>1&&deck.at(-1).id===last)[deck[0],deck[deck.length-1]]=[deck.at(-1),deck[0]];}const word=deck.pop();last=word.id;return word;};
 }
 export class Duel{
- constructor({words,mode='simplified',encounter='guardian',seconds=5,kind='duel',rng=Math.random,previousFirst,initialPractice={}}={}){
-  this.words=words;this.mode=mode;this.encounter=ENCOUNTERS[encounter]?encounter:'guardian';this.seconds=Math.max(1,Math.min(60,Number(seconds)||5));this.kind=kind;const draw=makeDeck(words,rng,previousFirst);this.battleWords=kind==='duel'?Array.from({length:Math.min(20,words.length)},()=>draw()):words;this.deck=kind==='duel'?makeDeck(this.battleWords,rng,previousFirst):draw;this.practiceGoal=this.learning?2:1;
+ constructor({words,mode='simplified',encounter='guardian',seconds=6,kind='duel',rng=Math.random,previousFirst,initialPractice={}}={}){
+  this.words=words;this.mode=mode;this.encounter=ENCOUNTERS[encounter]?encounter:'guardian';this.seconds=Math.max(1,Math.min(60,Number(seconds)||6));this.kind=kind;const draw=makeDeck(words,rng,previousFirst);this.battleWords=kind==='duel'?Array.from({length:Math.min(20,words.length)},()=>draw()):words;this.deck=kind==='duel'?makeDeck(this.battleWords,rng,previousFirst):draw;this.practiceGoal=this.learning?2:1;
   this.practiceCounts=new Map(this.battleWords.map(w=>[w.id,this.learning?Math.max(0,Math.min(2,Number(initialPractice[w.id])||0)):0]));
   if(this.learning&&[...this.practiceCounts.values()].every(n=>n===2))this.practiceCounts=new Map(this.battleWords.map(w=>[w.id,0]));
   this.completedIds=new Set(this.battleWords.filter(w=>this.practiceCounts.get(w.id)>=this.practiceGoal).map(w=>w.id));this.practiceDone=[...this.practiceCounts.values()].reduce((a,b)=>a+b,0);this.practiceTotal=this.battleWords.length*this.practiceGoal;this.extraPractice=new Set();this.campaignQueue=[];
