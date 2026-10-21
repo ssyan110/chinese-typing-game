@@ -1,4 +1,6 @@
 import {test,expect} from '@playwright/test';
+// Geometry tests use the supported reduced-motion preference; gameplay and
+// Safari suites continue to exercise animated rendering separately.
 const sizes=[
  [320,568,true],[390,844,true],[430,932,true],[568,320,true],[844,390,true],
  [768,1024,true],[1024,638,true],[820,1180,true],[1180,720,true],
@@ -7,7 +9,7 @@ const sizes=[
 ];
 async function noOverflow(page){expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);}
 for(const [width,height,touch] of sizes)test(`${touch?'touch':'desktop'} ${width}x${height}: core screens and word submission`,async({browser,baseURL},testInfo)=>{
-  const context=await browser.newContext({baseURL,viewport:{width,height},isMobile:touch,hasTouch:touch});const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
+  const context=await browser.newContext({baseURL,reducedMotion:'reduce',viewport:{width,height},isMobile:touch,hasTouch:touch});const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
   try{
    await page.goto('./');await expect(page.locator('#choose-practice')).toBeVisible();await noOverflow(page);
    await page.locator('[data-mode=simplified]').click();await noOverflow(page);await page.locator('#enter-lobby:enabled').click();await noOverflow(page);
