@@ -6,7 +6,7 @@ export default defineConfig({
  reporter: [['list']],
  projects:[
   {name:'chromium',testIgnore:'**/safari.spec.js',use:process.env.PLAYWRIGHT_CHANNEL?{channel:process.env.PLAYWRIGHT_CHANNEL}:{}},
-  {name:'webkit',testMatch:'**/safari.spec.js',use:{browserName:'webkit'}}
+  {name:'webkit',testMatch:['**/safari.spec.js','**/device-layout.spec.js','**/device-pages.spec.js'],use:{browserName:'webkit'}}
  ],
  webServer: external ? undefined : {
   command: 'SITE_BASE=/chinese-typing-game/ npm run build && SITE_BASE=/chinese-typing-game/ node scripts/prepare-pages.mjs && npx vite preview --host 127.0.0.1 --port 5187 --base=/chinese-typing-game/',

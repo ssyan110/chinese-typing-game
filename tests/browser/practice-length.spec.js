@@ -59,7 +59,7 @@ test('chapter two with a mistake on every presentation never shows a word more t
  await lobby(page);await page.locator('[data-chapter="2"]').click();
  const state=await play(page,{size:20,total:60,wrong:true});
  expect(state.result.rows.every(r=>r.shown===3&&r.correct===3&&r.wrong===3)).toBe(true);
- await expect(page.locator('#review-errors')).toHaveText('Ôn 20 từ sai');
+ await expect(page.locator('#review-errors')).toHaveText('Ôn lại 20 từ');
  await page.screenshot({path:'output/practice-second-chapter-mistakes.png'});
 });
 test('partial first chapter resumes after reload with proportional HP and no repeated completed words',async({page})=>{

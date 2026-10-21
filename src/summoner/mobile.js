@@ -19,8 +19,8 @@ export function installMobileLayout(){
   if(!state.mobile||body.dataset.screen!=='battle-screen')return;
   const input=body.dataset.mode==='zhuyin'?byId('touch-keyboard'):byId('cast-form');
   const top=arena.getBoundingClientRect().top+scrollY,bottom=parseFloat(getComputedStyle(document.querySelector('main')).paddingBottom)||16,available=state.height-top-slot.offsetHeight-input.offsetHeight-16-bottom;
-  const landscape=width>state.height&&state.height<=540;
-  const height=landscape?Math.max(130,Math.floor(state.height-top-bottom)):Math.max(130,Math.min(480,Math.floor(available)));
+  const landscape=width>state.height&&(state.height<=540||width>=760);
+  const height=landscape?Math.max(130,Math.floor(state.height-top-bottom-8)):Math.max(130,Math.min(480,Math.floor(available)));
   body.classList.toggle('compact-stage',height<260);
   if(root.style.getPropertyValue('--mobile-arena-height')!==height+'px')root.style.setProperty('--mobile-arena-height',height+'px');
   if(document.activeElement===byId('hanzi-input')&&!state.keyboard)keepVisible();
