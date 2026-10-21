@@ -136,8 +136,9 @@ for (const mode of ['simplified', 'traditional', 'zhuyin']) {
     }
    }
    await page.locator('#pause-button').click(); await page.locator('#resume').click();
-   await expect(page.locator('#start-ready')).toBeVisible();
-   await ready(page); await answer(page, mode);
+   await expect(page.locator('#start-ready')).toBeHidden();
+   await expect.poll(()=>page.evaluate(()=>window.__tulinh.snapshot().status)).toBe('playing');
+   await answer(page, mode);
    expect(await page.evaluate(() => window.__tulinh.snapshot().correct)).toBe(2);
   } finally { await context.close(); }
  });

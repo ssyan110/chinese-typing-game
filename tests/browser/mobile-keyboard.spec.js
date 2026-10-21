@@ -38,10 +38,10 @@ async function fits(page, selectors, height, top) {
  }
 }
 for (const mode of ['simplified', 'traditional']) {
- test(`phone ${mode}: IME keeps HP, feedback, ready and input visible at 180–420px`, async ({browser,baseURL}) => {
+ test(`phone ${mode}: IME keeps HP, feedback and input visible at 180–420px`, async ({browser,baseURL}) => {
   const {context,page} = await keyboardPage(browser,baseURL,mode);
   try {
-   // Produce genuine actionable feedback, then regain the ready state after pause.
+   // Produce genuine actionable feedback, then resume directly with one click after pause.
    await page.locator('#start-ready').click();
    await page.locator('#hanzi-input').fill('錯誤');
    await page.locator('#cast-form').evaluate(form=>form.requestSubmit());
@@ -53,9 +53,10 @@ for (const mode of ['simplified', 'traditional']) {
    for (const height of [420,360,300,240,200,180]) {
     await viewport(page,{height,offsetTop:35});
     await expect(page.locator('body')).toHaveClass(/native-keyboard/);
-    await fits(page,['#active-rune','#rune-seconds','#hanzi-input','#hero-hp-label','#battle-notice','#pause-button','#start-ready'],height,35);
+    await fits(page,['#active-rune','#rune-seconds','#hanzi-input','#hero-hp-label','#battle-notice','#pause-button'],height,35);
     const after = await page.evaluate(()=>window.__tulinh.snapshot());
-    expect(after.remaining).toBe(before.remaining);
+    expect(after.status).toBe('playing');
+    expect(after.remaining).toBeLessThanOrEqual(before.remaining);
     expect(after.hp).toBe(before.hp);
    }
    // Explicit long-label layout fixture; this is not a vocabulary correctness test.
@@ -66,7 +67,7 @@ for (const mode of ['simplified', 'traditional']) {
    expect(target.y).toBeGreaterThanOrEqual(hp.y + hp.height);
    // A pan moves the whole fitted UI; zoom must remain under browser control.
    await viewport(page,{height:240,offsetTop:70});
-   await fits(page,['#hero-hp-label','#battle-notice','#hanzi-input','#start-ready'],240,70);
+   await fits(page,['#hero-hp-label','#battle-notice','#hanzi-input'],240,70);
    await viewport(page,{scale:2});
    await expect(page.locator('body')).not.toHaveClass(/native-keyboard/);
    await page.locator('#hanzi-input').evaluate(node=>node.blur());

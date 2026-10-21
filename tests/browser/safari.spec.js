@@ -23,7 +23,8 @@ for(const mode of ['simplified','traditional'])test(`Safari phone ${mode}: tap s
   await page.locator('#hanzi-input').fill(word);await page.locator('#hanzi-input').dispatchEvent('compositionend',{data:word});
   await expect.poll(()=>page.evaluate(()=>window.__tulinh.snapshot().correct)).toBe(1);
   await page.locator('#pause-button').tap();await page.locator('#resume').tap();
-  await page.locator('#start-ready').tap();
+  await expect(page.locator('#start-ready')).toBeHidden();
+  await expect(page.locator('#hanzi-input')).toBeFocused();
   await expect.poll(()=>page.evaluate(()=>window.__tulinh.snapshot().status)).toBe('playing');
  }finally{await context.close();}
 });
@@ -44,11 +45,12 @@ test('Safari paused scene paints at its visible size before starting',async({bro
   await expect.poll(()=>page.locator('#arena canvas').evaluate(n=>n.width===Math.floor(n.clientWidth*Math.min(devicePixelRatio,1.5)))).toBe(true);
   await page.setViewportSize({width:430,height:780});
   await expect.poll(()=>page.locator('#arena canvas').evaluate(n=>n.width===Math.floor(n.clientWidth*Math.min(devicePixelRatio,1.5)))).toBe(true);
+  await page.locator('#start-ready').tap();
   await page.locator('#hanzi-input').tap();
   await page.evaluate(()=>{window.__safariHeight=400;visualViewport.dispatchEvent(new Event('resize'));});
   await expect(page.locator('body')).toHaveClass(/native-keyboard/);
   await expect.poll(()=>page.locator('#arena canvas').evaluate(n=>n.clientHeight)).toBeGreaterThan(30);
-  for(const selector of ['#active-rune','#hero-hp-label','#hanzi-input','#start-ready']){
+  for(const selector of ['#active-rune','#hero-hp-label','#hanzi-input','#pause-button']){
    const box=await page.locator(selector).boundingBox();
    expect(box.y).toBeGreaterThanOrEqual(35);expect(box.y+box.height).toBeLessThanOrEqual(435);
   }

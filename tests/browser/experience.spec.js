@@ -1,0 +1,75 @@
+import {test,expect} from '@playwright/test';
+
+async function course(page,mode='simplified'){
+ await page.goto('./');await page.locator(`[data-mode=${mode}]`).click();
+ await page.locator('#enter-lobby:enabled').click();
+ await page.locator('#lobby-seconds').fill('60');await page.locator('#lobby-seconds').press('Tab');
+}
+
+for(const mode of ['simplified','traditional','zhuyin'])test(`phone ${mode}: visible start dialog protects input and starts with one tap`,async({page})=>{
+ await page.setViewportSize({width:390,height:844});await course(page,mode);
+ await page.locator('#continue-learning').click();
+ const dialog=page.locator('#battle-ready');await expect(dialog).toBeVisible();
+ expect(await dialog.evaluate(n=>n.matches(':modal'))).toBe(true);
+ await expect(page.locator('#start-ready')).toBeFocused();
+ const before=await page.evaluate(()=>window.__tulinh.snapshot());
+ await page.waitForTimeout(1100);
+ const waiting=await page.evaluate(()=>window.__tulinh.snapshot());
+ expect(waiting.remaining).toBe(before.remaining);expect(waiting.hp).toBe(before.hp);
+ await page.locator('#start-ready').click();await expect(dialog).toBeHidden();
+ await expect.poll(()=>page.evaluate(()=>window.__tulinh.snapshot().status)).toBe('playing');
+ if(mode!=='zhuyin'){
+  await expect(page.locator('#hanzi-input')).toBeFocused();
+  const pause=await page.locator('#pause-button').boundingBox();expect(pause.y).toBeGreaterThanOrEqual(0);
+  await page.locator('#hanzi-input').fill(await page.locator('#active-rune').innerText());
+  await expect.poll(()=>page.evaluate(()=>window.__tulinh.snapshot().correct)).toBe(1);
+ }
+ await page.locator('#pause-button').click();await page.locator('#resume').click();
+ await expect(dialog).toBeHidden();
+ await expect.poll(()=>page.evaluate(()=>window.__tulinh.snapshot().status)).toBe('playing');
+ if(mode!=='zhuyin')await expect(page.locator('#hanzi-input')).toBeFocused();
+});
+
+test('mode choice brings the next form into view and announces its heading',async({page})=>{
+ await page.setViewportSize({width:390,height:844});await page.goto('./');
+ await page.locator('[data-mode=simplified]').click();
+ await expect(page.locator('#choice-title')).toBeFocused();
+ const box=await page.locator('#vocab-system').boundingBox();expect(box.y).toBeGreaterThanOrEqual(0);expect(box.y+box.height).toBeLessThan(844);
+ await expect(page.locator('#pool-description')).toContainText('16 chặng');
+});
+
+test('timing is visible before both journey and chapter entry points',async({page})=>{
+ await course(page);
+ expect(await page.locator('.timing-card').evaluate(n=>Boolean(n.compareDocumentPosition(document.getElementById('journey-map'))&Node.DOCUMENT_POSITION_FOLLOWING))).toBe(true);
+ await expect(page.locator('.journey-stops')).toBeHidden();
+ await page.locator('.journey-overview summary').click();await expect(page.locator('button[data-station=village]')).toBeVisible();
+});
+
+test('stop and view results opens the saved results directly',async({page})=>{
+ await course(page);await page.locator('#continue-learning').click();
+ await page.locator('#hanzi-input').fill(await page.locator('#active-rune').innerText());
+ await page.locator('#end-run').click();await expect(page.locator('#result-screen')).toBeVisible();
+ await expect(page.locator('#pause-dialog')).toBeHidden();
+ expect((await page.evaluate(()=>window.__tulinh.snapshot())).result.correct).toBe(1);
+ const save=await page.evaluate(()=>JSON.parse(localStorage.getItem('tulinh.save.v1')));expect(save.records[0].correct).toBe(1);
+});
+
+test('a stopped story battle offers direct continuation with the same saved practice',async({page})=>{
+ await course(page);await page.locator('#settings-toggle').click();await page.locator('#reduce-motion').check();await page.locator('#settings-toggle').click();
+ await page.locator('.journey-continue').click();await page.locator('#journey-action').click();await page.locator('#journey-action').click();
+ await page.locator('#hanzi-input').fill(await page.locator('#active-rune').innerText());
+ await page.locator('#end-run').click();await expect(page.locator('#continue-curriculum')).toBeVisible();
+ await page.locator('#continue-curriculum').click();
+ await expect(page.locator('#battle-title')).toHaveText('Làng Thanh Hòa');
+ expect((await page.evaluate(()=>window.__tulinh.snapshot())).practiceDone).toBe(1);
+});
+
+test('readiness can be cancelled without starting or writing an empty practice record',async({page})=>{
+ await page.setViewportSize({width:320,height:568});await course(page);await page.locator('#continue-learning').click();
+ for(const size of [{width:320,height:568},{width:568,height:320}]){
+  await page.setViewportSize(size);
+  const box=await page.locator('#start-ready').boundingBox();expect(box.y).toBeGreaterThanOrEqual(0);expect(box.y+box.height).toBeLessThanOrEqual(size.height);
+ }
+ await page.locator('#start-ready').press('Escape');await expect(page.locator('#lobby-screen')).toBeVisible();
+ expect((await page.evaluate(()=>JSON.parse(localStorage.getItem('tulinh.save.v1')))).records).toHaveLength(0);
+});

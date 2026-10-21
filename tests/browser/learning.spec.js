@@ -3,8 +3,8 @@ async function lobby(page){
  await page.goto('./');await expect(page.locator('#save-status')).toBeHidden();
  await page.locator('[data-mode=simplified]').click();await page.locator('#enter-lobby:enabled').click();
 }
-test('new players get ten seconds while returning players keep their saved timing',async({page})=>{
- await lobby(page);await expect(page.locator('#lobby-seconds')).toHaveValue('10');
+test('new players get six seconds while returning players keep their saved timing',async({page})=>{
+ await lobby(page);await expect(page.locator('#lobby-seconds')).toHaveValue('6');
  await page.locator('#lobby-seconds').fill('8');await page.locator('#lobby-seconds').press('Tab');
  await page.reload();await page.locator('#return-course').click();
  await expect(page.locator('#lobby-seconds')).toHaveValue('8');
@@ -76,7 +76,7 @@ test('wrong answer shows character comparison and voluntary stop hides failure r
  const target=await page.locator('#active-rune').innerText();
  await page.locator('#hanzi-input').fill('错'+target);await page.locator('#cast-form button').click();
  await expect(page.locator('#input-hint')).toContainText('Mẫu:');await expect(page.locator('#input-hint .answer-difference').first()).toBeVisible();
- await page.locator('#end-run').click();await page.locator('#quit-paused').click();
+ await page.locator('#end-run').click();
  await expect(page.locator('#result-stars')).toBeHidden();await expect(page.locator('#result-metrics')).not.toContainText('Xếp hạng');await expect(page.locator('#result-coverage')).toContainText('Lượt này:');
  await page.screenshot({path:'output/learning-result-desktop.png'});
 });
