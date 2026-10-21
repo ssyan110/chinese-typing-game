@@ -27,7 +27,8 @@ Every regular vocabulary chapter uses one of the eight environments; chapters be
 - Six seconds per rune for new players by default (existing saved settings are preserved), adjustable from 1–60 seconds. Pause freezes the battle. Keyboard/mouse and on-screen Zhuyin symbol buttons are available.
 - Phone challenges open a central **Bắt đầu** dialog before timing starts. Background controls are inert until the student starts or returns to chapter selection. Starting closes the dialog and focuses Hanzi input in the same tap. After an explicit pause, **Tiếp tục** resumes directly; a supply choice also resumes directly. Prepare the Chinese input method before starting. The compact keyboard layout keeps HP, the target, answer feedback and input visible; small phones use a reflowed Zhuyin touch grid without changing physical key mappings.
 - Optional word-by-word results are available after victory, defeat and voluntary stop, with mistakes first. Mistake review is untimed and does not deduct HP.
-- Stars for standard duels and curriculum chapters: win with ≥90% accuracy = three, ≥75% = two, otherwise one. A failed/incomplete run gets zero. Endless and review do not receive stars. Full rules are shown in results.
+- Results distinguish typing accuracy (`correct / (correct + errors)`) from the rating ratio (`correct / (correct + errors + timeouts)`). With 30 correct, no errors and three timeouts these are 100% and 91%; existing star/rank rules and saved records are preserved. Distinct vocabulary and successful input counts are labeled separately, with errors and timeouts in separate table columns.
+- Stars for standard duels and curriculum chapters: win with ≥90% rating ratio = three, ≥75% = two, otherwise one. A failed/incomplete run gets zero. Endless and review do not receive stars. Full rules are shown in results.
 
 The top menu opens **Lịch sử trên máy**: local session results, word details, dates, course/chapter links, and a visible storage notice. Up to 128 recent sessions are stored locally, with no cloud sync. See `docs/practice-and-motion-2026-10-17.md` for behavior and validation.
 
@@ -53,7 +54,7 @@ npm run test:browser
 
 The active application uses `src/summoner/engine.js`, `curriculum.js`, `app.js`, `mobile.js`, `style.css`, `arena-layout.css`, `mobile.css` and the root `index.html` entry. Edit that root HTML for UI changes. `src/summoner/shell.html` is a standalone launcher for the published game, not a second app entry. Opening either HTML file directly redirects to the online game and requires Internet access; use the Vite development/preview URL for local testing. The browser uses native modules, HTML/CSS, the DOM arena with a lazily loaded scene with an articulated 3D hero and 3D opponents/effects and browser-native feedback and standard Audio; there are no inherited game-runtime imports.
 
-Phone/tablet play has touch controls beside the arena, landscape layout, safe-area padding and a visual-viewport layout for Chinese software keyboards. Rotation preserves the current duel and all existing curriculum progress. See `docs/mobile-2026-10-16.md` for device sizes, checks and physical-device limitations.
+Phone/tablet play has touch controls beside the arena, landscape layout, safe-area padding and a visual-viewport layout for Chinese software keyboards. Rotation preserves the current duel and all existing curriculum progress. See `docs/mobile-2026-10-16.md` and `docs/device-ux-2026-10-21.md` for device sizes, result definitions, checks and physical-device limitations.
 
 `npm test` runs the independent summoner tests, including real vocabulary validation. Historical adaptation tests/scripts remain as historical development records and are not acceptance tests for this engine.
 

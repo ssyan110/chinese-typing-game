@@ -160,3 +160,21 @@
  body.native-keyboard.keyboard-tight[data-mode] #pause-button{height:30px;min-height:30px}
  body.native-keyboard.keyboard-tight[data-mode] #start-ready{height:30px;min-height:30px}
 }
+
+/* Tablets need the landscape deck even when Safari leaves over 540px.
+   Stacking all controls previously reduced the iPad battle canvas to 2px. */
+@media (min-width:760px) and (max-width:1024px) and (orientation:landscape),(min-width:760px) and (max-width:1400px) and (pointer:coarse) and (orientation:landscape){
+ body[data-screen=battle-screen]:not(.native-keyboard) .site-header{display:none}
+ body:not(.native-keyboard) .battle-heading{min-height:44px;margin-bottom:8px;align-items:center}
+ body:not(.native-keyboard) .battle-heading h1{font-size:20px;margin:0}
+ body:not(.native-keyboard) .battle-heading .eyebrow,body:not(.native-keyboard) .battle-heading>div>p:last-child{display:none}
+ body:not(.native-keyboard) .battle-tools{flex-direction:row;align-items:center}
+ body[data-mode] .arena-column{display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,40%);grid-template-rows:auto minmax(0,1fr);gap:12px}
+ body[data-mode] #arena{grid-column:1;grid-row:1/3;align-self:stretch}
+ .mobile-spells{grid-column:2;grid-row:1}
+ .cast-form,.touch-keyboard{grid-column:2;grid-row:2;align-self:start;min-width:0}
+ body.native-keyboard[data-mode] .arena-column{display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,40%);grid-template-rows:auto minmax(0,1fr);gap:8px}
+ body.native-keyboard[data-mode] #arena{height:100%;min-height:0;--stage-top:28px;--prompt-room:72px}
+ body.native-keyboard .mobile-spells .battle-notice{padding:4px}
+ body.native-keyboard[data-mode] .cast-form{align-self:start}
+}

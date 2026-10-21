@@ -42,7 +42,7 @@ export function decorateIcons(root=document){
  for(const n of root.querySelectorAll('[data-icon]'))if(!n.querySelector(':scope > .ui-icon'))iconLabel(n,n.dataset.iconLabel||n.textContent,n.dataset.icon);
  for(const n of root.querySelectorAll('[data-symbol]'))n.replaceChildren(icon(n.dataset.symbol));
 }
-export function metricLabel(node,label){const names={'Chính xác':'target','Điểm':'star','Phù văn đúng':'check','Lần đúng':'check','Nhập sai':'close','Hết giờ':'clock','Thời gian':'clock','Chuỗi dài nhất':'chain','Chuỗi tốt nhất':'chain','Xếp hạng':'trophy'};return iconLabel(node,label,names[label]||'chart');}
+export function metricLabel(node,label){const names={'Độ chính xác khi nhập':'target','Tỷ lệ tính hạng':'trophy','Lượt nhập đúng':'check','Chính xác':'target','Điểm':'star','Phù văn đúng':'check','Lần đúng':'check','Nhập sai':'close','Hết giờ':'clock','Thời gian':'clock','Chuỗi dài nhất':'chain','Chuỗi tốt nhất':'chain','Xếp hạng':'trophy'};return iconLabel(node,label,names[label]||'chart');}
 
 export function rating(node,count,kind=''){
  if(count===null){node.replaceChildren(document.createTextNode(kind==='review'?'ÔN TẬP':'LIÊN HOÀN'));node.removeAttribute('role');return;}
