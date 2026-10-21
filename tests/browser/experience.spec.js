@@ -1,4 +1,21 @@
 import {test,expect} from '@playwright/test';
+import {fileURLToPath} from 'node:url';
+
+test('home does not preload hidden battle and journey illustrations',async({page})=>{
+ const hiddenArt=[];page.on('request',r=>{if(/\/original\/art\/journey\/(?:hero|guardian|moth|sentinel|village)\.png/.test(r.url()))hiddenArt.push(r.url());});
+ await page.goto('./');await expect(page.locator('#choose-practice')).toBeVisible();
+ await page.waitForTimeout(250);expect(hiddenArt).toEqual([]);
+});
+
+test('a vocabulary response slower than fifteen seconds still opens the course',async({page})=>{
+ await page.route('**/data/hsk.json',async route=>{
+  await new Promise(resolve=>setTimeout(resolve,16000));
+  await route.fulfill({path:fileURLToPath(new URL('../../public/data/hsk.json',import.meta.url)),contentType:'application/json'});
+ });
+ await page.goto('./');await page.locator('[data-mode=simplified]').click();
+ await expect(page.locator('#enter-lobby')).toBeEnabled({timeout:22000});
+ await expect(page.locator('#pool-description')).toContainText('300');
+});
 
 async function course(page,mode='simplified'){
  await page.goto('./');await page.locator(`[data-mode=${mode}]`).click();
