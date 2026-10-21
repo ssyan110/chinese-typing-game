@@ -37,17 +37,17 @@ for (const mode of ['simplified', 'traditional', 'zhuyin']) {
    await answer(page, mode);
   }
   const result = await page.evaluate(() => window.__tulinh.snapshot().result);
-  expect(result.status).toBe('won'); expect(result.correct).toBe(60);
+  expect(result.status).toBe('won'); expect(result.correct).toBe(30);
   expect(result.errors).toBe(0); expect(result.misses).toBe(0);
-  await expect(page.locator('#result-coverage')).toContainText('20 /');
+  await expect(page.locator('#result-coverage')).toContainText('15 /');
   await page.locator('#word-review summary').click();
-  await expect(page.locator('#review-rows tr')).toHaveCount(20);
+  await expect(page.locator('#review-rows tr')).toHaveCount(15);
   await page.reload();
   await page.locator('#history-toggle').click();
   await expect(page.locator('.history-record')).toHaveCount(1);
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('tulinh.save.v1')));
-  expect(saved.records[0].correct).toBe(60);
-  expect(Object.keys(saved.progress.scopes[`${mode}:${saved.records[0].selection.system}`])).toHaveLength(20);
+  expect(saved.records[0].correct).toBe(30);
+  expect(Object.keys(saved.progress.scopes[`${mode}:${saved.records[0].selection.system}`])).toHaveLength(15);
   expect(errors).toEqual([]);
  });
 }
@@ -56,13 +56,13 @@ for (const [label, mobile] of [['mobile', true], ['desktop', false]]) test(`${la
  const context = mobile ? await browser.newContext({baseURL, viewport: {width: 390, height: 844}, isMobile: true, hasTouch: true}) : null;
  const testPage = context ? await context.newPage() : page;
  try {
-  await lobby(testPage); await testPage.locator('#continue-learning').click(); if (mobile) await ready(testPage);
+  await lobby(testPage); await testPage.locator('[data-chapter="2"]').click(); if (mobile) await ready(testPage);
   for (const spell of ['ward', 'mend', 'strike']) {
    await testPage.locator(`[data-spell=${spell}]`).click();
    await expect(testPage.locator('#hanzi-input')).toBeFocused();
   }
   for (const reward of ['heal', 'power', 'shield']) {
-   for (let i = 0; i < 5; i++) await answer(testPage, 'simplified');
+   for (let i = 0; i < 10; i++) await answer(testPage, 'simplified');
    await expect(testPage.locator('#reward-dialog')).toBeVisible(); await testPage.locator(`[data-reward=${reward}]`).click();
    await expect.poll(() => testPage.evaluate(() => window.__tulinh.snapshot().status)).toBe('playing');
    if (mobile) await expect(testPage.locator('#start-ready')).toBeHidden();
@@ -75,7 +75,7 @@ for (const [label, mobile] of [['mobile', true], ['desktop', false]]) test(`${la
 });
 test('twenty-word mistake review finishes every word through the UI', async ({page}) => {
  await lobby(page);
- await page.locator('#continue-learning').click();
+ await page.locator('[data-chapter="2"]').click();
  // Deliberately make mistakes on twenty distinct targets before correcting each.
  for (let i = 0; i < 20; i++) {
   if (await page.evaluate(() => window.__tulinh.snapshot().status) === 'reward') await page.locator('[data-reward=heal]').click();
