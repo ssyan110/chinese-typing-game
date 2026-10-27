@@ -71,7 +71,7 @@ function renderCurriculum(){
 function renderCatalog(){const chapter=chapters()[Number($('catalog-chapter').value)-1];$('catalog-words').replaceChildren();for(const word of chapter?.words||[]){const item=document.createElement('span'),done=isCompleted(progress,scope(),word,selection.mode);item.className=done?'word-complete':'';item.textContent=wordLabel(word,selection.mode);if(done){item.append(icon('check'));item.setAttribute('aria-label',wordLabel(word,selection.mode)+' · đã hoàn thành');}item.lang=selection.mode==='simplified'?'zh-Hans':'zh-Hant';$('catalog-words').append(item);}}
 function startChapter(number,storyStation=null,storyName=null){const chapter=chapters()[number-1];if(!chapter)return;startBattle(chapter.encounter,'campaign',chapter.words,number,storyStation,storyName);}
 let seconds=Number.isInteger(saved.seconds)&&saved.seconds>=1&&saved.seconds<=60?saved.seconds:6;
-let muted=saved.sound!==true,volume=Number.isFinite(saved.volume)?Math.max(0,Math.min(1,saved.volume)):.35,music=null,currentTrack='',screen='setup-screen';
+let muted=saved.sound===false,volume=Number.isFinite(saved.volume)?Math.max(0,Math.min(1,saved.volume)):.2,music=null,currentTrack='',screen='setup-screen';
 let lastCourse=saved.lastCourse&&Object.hasOwn(names,saved.lastCourse.mode)&&Object.hasOwn(levels,saved.lastCourse.system)&&levels[saved.lastCourse.system].includes(saved.lastCourse.level)&&typeof saved.lastCourse.cumulative==='boolean'?saved.lastCourse:null;
 const settings={reduced:saved.reduced??matchMedia('(prefers-reduced-motion: reduce)').matches,contrast:saved.contrast===true};
 function saveSettings(){try{localStorage.setItem('tulinh.settings.v1',JSON.stringify({...settings,sound:!muted,volume,seconds,lastCourse}));}catch{}}

@@ -91,10 +91,27 @@ test('readiness can be cancelled without starting or writing an empty practice r
  expect((await page.evaluate(()=>JSON.parse(localStorage.getItem('tulinh.save.v1')))).records).toHaveLength(0);
 });
 
-test('new students load only the selected vocabulary level and no muted music',async({page})=>{
+test('muted students load only the selected vocabulary level and no music',async({page})=>{
+ await page.addInitScript(()=>localStorage.setItem('tulinh.settings.v1',JSON.stringify({sound:false})));
  const requests=[];page.on('request',request=>requests.push(new URL(request.url()).pathname));
  await page.goto('./');await page.locator('[data-mode=simplified]').click();
  await expect(page.locator('#pool-description')).toContainText('300');
  expect(requests.filter(path=>path.includes('/data/'))).toEqual([expect.stringContaining('/data/levels/hsk/1.json')]);
  expect(requests.some(path=>path.includes('/original/audio/'))).toBe(false);
+});
+
+test('new students get quiet music while saved sound preferences are preserved',async({page})=>{
+ await page.addInitScript(()=>{
+  window.__music=[];
+  window.Audio=class{constructor(src){this.src=src;window.__music.push(this);}play(){return Promise.resolve();}pause(){}};
+ });
+ await page.goto('./');await expect(page.locator('#sound-toggle')).toHaveAttribute('aria-pressed','true');
+ await page.locator('[data-mode=simplified]').click();
+ expect(await page.evaluate(()=>window.__music[0].volume)).toBeCloseTo(.11);
+ await page.locator('#settings-toggle').click();await expect(page.locator('#volume')).toHaveValue('20');
+ await page.locator('#volume').fill('30');await page.locator('#sound-toggle').click();
+ await page.reload();await expect(page.locator('#sound-toggle')).toHaveAttribute('aria-pressed','false');
+ await page.locator('#settings-toggle').click();await expect(page.locator('#volume')).toHaveValue('30');
+ await page.locator('[data-mode=simplified]').click();expect(await page.evaluate(()=>window.__music.length)).toBe(0);
+ await page.locator('#sound-toggle').click();expect(await page.evaluate(()=>window.__music[0].volume)).toBeCloseTo(.165);
 });
