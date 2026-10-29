@@ -188,7 +188,9 @@ $('leave-battle').onclick=()=>{game?.finish();saveRun();game=null;$('pause-dialo
 document.querySelectorAll('[data-reward]').forEach(b=>b.onclick=()=>{if(game?.reward(b.dataset.reward)){$('reward-dialog').close();previous=performance.now();renderBattle();mobileLayout?.refresh();if(game.mode!=='zhuyin')$('hanzi-input').focus({preventScroll:true});autoCast();}});$('replay').onclick=()=>lastLaunch.kind==='campaign'?startChapter(lastLaunch.chapter,lastLaunch.storyStation,lastLaunch.storyName):startBattle(lastLaunch.encounter,lastLaunch.kind,lastLaunch.kind==='review'?lastLaunch.words:pool);$('back-lobby').onclick=showLobby;$('review-errors').onclick=()=>startBattle(lastLaunch.encounter,'review',reviewWords);
 function focusChapters(){const heading=$('curriculum-title');heading.tabIndex=-1;heading.focus({preventScroll:true});$('chapter-list').scrollIntoView({block:'start',behavior:'instant'});}
 $('chapters-prev').onclick=()=>{chapterPage--;renderCurriculum();navigation.remember();focusChapters();};$('chapters-next').onclick=()=>{chapterPage++;renderCurriculum();navigation.remember();focusChapters();};$('catalog-chapter').onchange=renderCatalog;
-document.querySelector('.brand').onclick=e=>{e.preventDefault();if(screen==='battle-screen'&&game){pause();return;}showModes();};
+const brand=document.querySelector('.brand');
+const brandMark=document.createElement('img');brandMark.className='brand-mark';brandMark.src='/original/brand/hanzi-arena-mark.svg';brandMark.alt='';brandMark.setAttribute('aria-hidden','true');brand.prepend(brandMark);
+brand.onclick=e=>{e.preventDefault();if(screen==='battle-screen'&&game){pause();return;}showModes();};
 if(!document.fullscreenEnabled)$('fullscreen-toggle').hidden=true;
 $('fullscreen-toggle').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{$('fullscreen-toggle').title='Trình duyệt không cho mở toàn màn hình.';}};document.addEventListener('fullscreenchange',()=>{setText('fullscreen-toggle',document.fullscreenElement?'Thu nhỏ ↙':'Toàn màn hình ↗');});
 $('choose-practice').onclick=focusSetupChoice;
