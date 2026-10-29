@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">Đấu Trường Hán Tự mark</title>
+  <desc id="desc">A jade arena seal with a lantern and a character-like stroke.</desc>
+  <circle cx="128" cy="128" r="116" fill="#10273e" stroke="#68d8bf" stroke-width="10"/>
+  <path fill="#f0c47f" d="M128 36 151 59 128 82 105 59Z"/>
+  <path fill="#ffe5a1" d="M118 67h20v52h-20zM112 118h32v9h-32z"/>
+  <path fill="none" stroke="#68d8bf" stroke-linecap="round" stroke-width="13" d="M76 143h104M92 143l-17 45M164 143l17 45M128 133v62"/>
+  <path fill="none" stroke="#fffef8" stroke-linecap="round" stroke-width="10" d="m96 161 32-28 32 28"/>
+  <circle cx="128" cy="215" r="7" fill="#f0c47f"/>
+</svg>
