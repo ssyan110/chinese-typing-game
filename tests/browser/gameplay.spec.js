@@ -1,5 +1,6 @@
 import {test, expect} from '@playwright/test';
 async function lobby(page, mode = 'simplified') {
+ await page.route('https://www.googletagmanager.com/**', route => route.abort());
  await page.goto('./');
  await expect(page.locator('#save-status')).toBeHidden();
  await page.locator('#settings-toggle').click();
@@ -88,12 +89,16 @@ test('twenty-word mistake review finishes every word through the UI', async ({pa
  await expect(page.locator('#review-errors')).toContainText('20');
  await page.locator('#review-errors').click();
  await expect(page.locator('#round-label')).toContainText('/ 20');
- for (let i = 0; i < 20; i++) {
+ for (let i = 0; i < 19; i++) {
   expect(await page.evaluate(() => window.__tulinh.snapshot().status)).toBe('playing');
   await answer(page, 'simplified');
  }
- expect(await page.evaluate(() => window.__tulinh.snapshot().status)).toBe('won');
- await page.locator('#word-review summary').click(); await expect(page.locator('#review-rows tr')).toHaveCount(20);
+ await page.locator('#hanzi-input').fill(await page.locator('#active-rune').innerText());
+ await expect.poll(() => page.evaluate(() => window.__tulinh.snapshot().kind)).toBe('campaign');
+ const records=await page.evaluate(() => JSON.parse(localStorage.getItem('tulinh.save.v1')).records);
+ const review=records.findLast(record => record.kind==='review');
+ expect(review.status).toBe('won');expect(review.correct).toBe(20);expect(review.rows).toHaveLength(20);
+ await expect(page.locator('#battle-kind')).toContainText('CHẶNG 2');
 });
 test('single writer blocks a second tab, then transfers ownership and preserves deletion', async ({page, context}) => {
  await lobby(page); await page.locator('#continue-learning').click(); await answer(page, 'simplified');
