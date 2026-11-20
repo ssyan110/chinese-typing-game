@@ -2,6 +2,7 @@ import {test,expect} from '@playwright/test';
 import {fileURLToPath} from 'node:url';
 
 test('home does not preload hidden battle and journey illustrations',async({page})=>{
+ await page.route('https://www.googletagmanager.com/**',route=>route.abort());
  const hiddenArt=[];page.on('request',r=>{if(/\/original\/art\/journey\/(?:hero|guardian|moth|sentinel|village)\.png/.test(r.url()))hiddenArt.push(r.url());});
  await page.goto('./');await expect(page.locator('#choose-practice')).toBeVisible();
  await page.waitForTimeout(250);expect(hiddenArt).toEqual([]);
