@@ -62,6 +62,7 @@ test('repeated timeout stops at three presentations and leaves the word for revi
  const g=new Duel({words:words.slice(0,20),kind:'campaign',seconds:60});
  const r=finish(g,{timeout:true});assert.equal(r.status,'ended');assert.equal(r.rows.find(w=>w.id===words[0].id).shown,3);
  assert.equal(r.rows.find(w=>w.id===words[0].id).missed,3);assert.equal(r.practiceDone,r.practiceTotal);assert.ok(g.enemyHp>0);
+ assert.equal(g.practiceCounts.get(words[0].id),0);assert.equal(g.completedIds.has(words[0].id),false);assert.equal(r.practicedWords,19);
 });
 test('wrong then corrected counts as progress and schedules a single delayed extra practice',()=>{
  const g=new Duel({words:words.slice(0,20),kind:'campaign'}),id=g.target.id;

@@ -43,7 +43,7 @@ export class Duel{
  }
  completePresentation(){
   this.practiceDone++;
-  if(!this.campaignQueue.some(w=>w.id===this.target.id))this.completedIds.add(this.target.id);
+  if((this.practiceCounts.get(this.target.id)||0)>=this.practiceGoal)this.completedIds.add(this.target.id);
  }
  next(){
   if(this.status!=='playing')return;if(this.learning&&!this.campaignQueue.length){this.finishPractice();return;}const w=this.learning?this.campaignQueue.shift():this.deck();this.target={id:w.id,label:clean(this.mode==='zhuyin'?w.z:this.mode==='traditional'?w.t:w.s),input:clean(w.keys),word:w};
