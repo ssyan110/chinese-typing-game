@@ -31,3 +31,16 @@ test('recall evidence round trips through existing backup without changing progr
  assert.equal(restored.records[0].learningTask,'pinyin-recall');
  assert.deepEqual(restored.progress,data.progress);
 });
+
+test('copied warm-up words become due after 24h, including corrected entries; copying again cannot postpone recall',()=>{
+ const rows=pool.map((word,i)=>({id:word.id,label:word.s,correct:1,wrong:i===0?1:0,shown:1}));
+ const warmup=age=>record(age,rows,{kind:'review',learningTask:'typing-warmup'});
+ const first=warmup(86400000),again=warmup(0);
+ const history=parseBackup(exportBackup({progress:{version:1,scopes:{}},practice:{},records:[first,again]})).records;
+ const ids=(records,at)=>dueRecallWords(pool,records,selection,at).map(word=>word.id);
+ assert.deepEqual(ids(history,now-1),[]);
+ assert.deepEqual(ids(history,now),['1','2','3']);
+ const recall=record(0,[{id:'1',correct:1},{id:'2',correct:0}],{kind:'review',learningTask:'pinyin-recall'});
+ assert.deepEqual(ids([first,recall,again],now),['2','3']);
+ assert.deepEqual(dueRecallWords(pool,history,{...selection,mode:'traditional'},now),[]);
+});

@@ -19,7 +19,16 @@ test('three-word tutorial is untimed and does not change curriculum progress',as
  }
  await expect(page.locator('#learning-title')).toHaveText('Bạn đã thử xong 3 từ');
  const save=await page.evaluate(()=>JSON.parse(localStorage.getItem('tulinh.save.v1')));
- expect(save.records).toEqual([]);expect(save.progress.scopes).toEqual({});
+ expect(save.records).toHaveLength(1);
+ expect(save.records[0].learningTask).toBe('typing-warmup');
+ expect(save.records[0].rows).toHaveLength(3);
+ expect(save.progress.scopes).toEqual({});expect(save.practice).toEqual({});
+ await expect(page.locator('#learning-feedback')).toContainText('quay lại');
+ await page.getByRole('button',{name:'Về lộ trình',exact:true}).click();
+ await expect(page.locator('#learning-recall')).toBeHidden();
+ await page.locator('#history-toggle').click();
+ await expect(page.locator('.history-record').first()).toContainText('Làm quen bộ gõ');
+ await expect(page.locator('.history-record').first()).not.toContainText('Tỷ lệ tính hạng');
  await page.screenshot({path:'output/learning-tutorial-desktop.png'});
 });
 test('next-day recall hides hanzi and stores hinted answers without crediting mastery',async({page})=>{
@@ -86,4 +95,30 @@ test('mobile tutorial fits the viewport and closes without starting a battle',as
  const box=await page.locator('#learning-dialog').boundingBox();expect(box.x).toBeGreaterThanOrEqual(0);expect(box.x+box.width).toBeLessThanOrEqual(390);
  await page.screenshot({path:'output/learning-tutorial-mobile.png'});
  await page.getByRole('button',{name:'Về lộ trình',exact:true}).click();await expect(page.locator('#lobby-screen')).toBeVisible();
+});
+
+test('only a completed warm-up enrolls words, even when the learner leaves before viewing results',async({page})=>{
+ await lobby(page);
+ await page.locator('#learning-tutorial').click();
+ const submitWord=async()=>{
+  await page.locator('#learning-input').fill(await page.locator('#learning-prompt').innerText());
+  await page.locator('#learning-dialog form button').click();
+ };
+ await submitWord();
+ await page.getByRole('button',{name:'Về lộ trình',exact:true}).click();
+ const load=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('tulinh.save.v1')));
+ expect((await load()).records).toEqual([]);
+ await page.locator('#learning-tutorial').click();
+ await page.locator('#learning-input').fill('錯誤');
+ await page.locator('#learning-dialog form button').click();
+ for(let i=0;i<3;i++){
+  await submitWord();
+  if(i<2)await page.getByRole('button',{name:'Từ tiếp theo',exact:true}).click();
+ }
+ await page.reload();
+ const saved=await load();
+ expect(saved.records).toHaveLength(1);
+ expect(saved.records[0].learningTask).toBe('typing-warmup');
+ expect(saved.records[0].rows[0].wrong).toBe(1);
+ expect(saved.progress.scopes).toEqual({});
 });

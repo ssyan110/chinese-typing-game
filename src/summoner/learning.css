@@ -2,3 +2,7 @@
 .learning-panel h2{font-size:22px;margin:0 0 8px}.learning-panel p{line-height:1.7;max-width:70ch}.learning-panel button{margin:6px 12px 0 0}
 .learning-dialog{width:min(560px,calc(100% - 32px));max-height:85dvh;overflow:auto;box-sizing:border-box}.learning-dialog p{line-height:1.7}.learning-dialog form{display:grid;gap:12px}.learning-dialog input{width:100%;box-sizing:border-box;font-size:24px;padding:12px}.learning-dialog .learning-prompt{font-size:32px;overflow-wrap:anywhere}.learning-dialog button{margin:6px 8px 6px 0;min-height:44px}.learning-dialog [hidden]{display:none!important}
 #input-hint{overflow-wrap:anywhere}#input-hint .answer-difference{font-weight:700;text-decoration:underline;text-decoration-thickness:2px}
+
+.battle-tools label[hidden]{display:none}
+
+#defense-complete img{display:block;width:90px;height:90px;object-fit:contain;margin:0 auto 8px}

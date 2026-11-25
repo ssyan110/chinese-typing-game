@@ -1,7 +1,7 @@
 import {createVocabularyLoader,VOCABULARY_LEVELS as levels} from './vocabulary-loader.js';
 import {typingAccuracyLabel} from './result-metrics.js';
 import {JOURNEY_STOPS,chapterSetting} from './journey-route.js';
-import {installLearning,compareAnswer} from './learning.js';
+import {installLearning,compareAnswer,recallSchedule} from './learning.js';
 import './learning.css';
 import {installStory} from './story-ui.js';
 import {emptyStory} from './story-engine.js';
@@ -37,13 +37,22 @@ async function acquireStorage(){
  if(storageReady)return true;
  const acquired=await saveStore.acquire();
  if(acquired){try{const data=saveStore.load();progress=data.progress;practice=data.practice;records=data.records;story=data.story??emptyStory();saveStore.save(data);storageReady=true;storageError='';progressSaved=true;if(restoreLobby){restoreLobby=false;showLobby();}else if(screen==='lobby-screen')renderCurriculum();}catch{storageError='Không mở hoặc lưu được tiến độ. Bản lưu cũ vẫn được giữ. Hãy kiểm tra dung lượng và quyền lưu trữ của trình duyệt.';}}
- showStorageStatus();return storageReady;
+ showStorageStatus();if(storageReady)refreshHomeReview();return storageReady;
 }
 function persist(){try{if(!storageReady)throw Error('Save unavailable');saveStore.save({progress,practice,records,story});progressSaved=true;return true;}catch{progressSaved=false;return false;}}
 const scope=()=>progressScope(selection.mode,selection.system);
 const chapters=()=>chaptersFor(pool,selection.mode,progress,scope());
-function saveRun(){if(!game||!runId||deletedRunIds.has(runId))return;const r=game.result(),record={...r,rulesVersion:3,rows:r.rows.filter(w=>w.correct||w.wrong),id:runId,scope:selectionLabel(),selection:{...selection},chapter:lastLaunch.chapter,at:new Date().toISOString()};const at=records.findIndex(r=>r.id===runId);if(at>=0)records[at]=record;else records.push(record);records=records.slice(-128);persist();}
-function recordAnswer(word){if(!game.lastPracticeCredited){saveRun();return;}const finite=['campaign','duel'].includes(game.kind),goal=finite?game.practiceGoal:3,count=finite?game.practiceCounts.get(word.id):Math.min(3,(practiceFor(practice,scope(),[word],selection.mode)[word.id]||0)+1);savePracticeAnswer(practice,scope(),word,selection.mode,count>=goal?3:count);if(count>=goal)markCompleted(progress,scope(),word,selection.mode);saveRun();}
+function saveRun(){
+ if(!game||game.starter||lastLaunch.defenseTutorial||!runId||deletedRunIds.has(runId))return;
+ const result=game.result(),index=records.findIndex(record=>record.id===runId);
+ const prior=records[index];
+ // Reopening history or leaving the results screen must keep the promised review time.
+ const at=prior&&['won','lost','ended'].includes(prior.status)?prior.at:new Date().toISOString();
+ const record={...result,rulesVersion:3,rows:result.rows.filter(word=>word.correct||word.wrong),id:runId,scope:selectionLabel(),selection:{...selection},chapter:lastLaunch.chapter,at};
+ if(index>=0)records[index]=record;else records.push(record);
+ records=records.slice(-128);persist();
+}
+function recordAnswer(word){if(game.starter||lastLaunch.defenseTutorial)return;if(!game.lastPracticeCredited){saveRun();return;}const finite=['campaign','duel'].includes(game.kind),goal=finite?game.practiceGoal:3,count=finite?game.practiceCounts.get(word.id):Math.min(3,(practiceFor(practice,scope(),[word],selection.mode)[word.id]||0)+1);savePracticeAnswer(practice,scope(),word,selection.mode,count>=goal?3:count);if(count>=goal)markCompleted(progress,scope(),word,selection.mode);saveRun();}
 function renderCurriculum(){
  storyUI?.refreshMap();
  learningUI?.refresh();
@@ -76,7 +85,7 @@ let lastCourse=saved.lastCourse&&Object.hasOwn(names,saved.lastCourse.mode)&&Obj
 const settings={reduced:saved.reduced??matchMedia('(prefers-reduced-motion: reduce)').matches,contrast:saved.contrast===true};
 function saveSettings(){try{localStorage.setItem('tulinh.settings.v1',JSON.stringify({...settings,sound:!muted,volume,seconds,lastCourse}));}catch{}}
 function setText(id,value){const n=$(id);if(n.dataset.icon){iconLabel(n,value);return;}if(n.textContent!==String(value))n.textContent=value;}
-function showScreen(id){document.querySelectorAll('main>.screen').forEach(n=>n.hidden=n.id!==id);screen=id;document.body.dataset.screen=id;if(id!=='battle-screen'){awaitingReady=false;readyRow.close();document.body.classList.remove('awaiting-ready');}window.scrollTo({top:0,behavior:'instant'});mobileLayout?.refresh();if(id!=='battle-screen'){const heading=$(id).querySelector('h1,h2');if(heading){heading.tabIndex=-1;heading.focus({preventScroll:true});}}}
+function showScreen(id){document.querySelectorAll('main>.screen').forEach(n=>n.hidden=n.id!==id);screen=id;document.body.dataset.screen=id;if(id!=='battle-screen'){awaitingReady=false;readyRow.close();starterComplete.close();document.body.classList.remove('awaiting-ready');}window.scrollTo({top:0,behavior:'instant'});mobileLayout?.refresh();if(id!=='battle-screen'){const heading=$(id).querySelector('h1,h2');if(heading){heading.tabIndex=-1;heading.focus({preventScroll:true});}}}
 function formatTime(sec){const n=Math.floor(sec);return `${Math.floor(n/60)}:${String(n%60).padStart(2,'0')}`;}
 function selectionLabel(){return `${names[selection.mode]} · ${selection.system==='hsk'?'HSK '+selection.level.replace('-','–'):'TOCFL '+selection.level}${selection.cumulative?' · ôn cả cấp trước':''}`;}
 function applySettings(){document.body.classList.toggle('reduced-motion',settings.reduced);document.body.classList.toggle('high-contrast',settings.contrast);$('reduce-motion').checked=settings.reduced;$('high-contrast').checked=settings.contrast;$('volume').value=Math.round(volume*100);setText('sound-toggle',muted?'Âm thanh: tắt':'Âm thanh: bật');$('sound-toggle').setAttribute('aria-pressed',String(!muted));}
@@ -92,15 +101,98 @@ async function updatePool(){
 }
 function focusSetupChoice(){const heading=$('choice-title');heading.tabIndex=-1;document.querySelector('.setup-form').scrollIntoView({block:'start',behavior:'instant'});heading.focus({preventScroll:true});}
 function showLevels(){
+ clearHomeReview();
  $('mode-choices').hidden=true;returnCourse.hidden=true;$('level-form').hidden=false;$('home-back').hidden=true;setText('step-number','02');setText('step-label','CHỌN CẤP ĐỘ');setText('choice-title','Chọn bộ từ cho bạn.');setText('selected-mode',names[selection.mode]);$('vocab-system').value=selection.system;$('cumulative').checked=selection.cumulative;syncLevelOptions();showScreen('setup-screen');focusSetupChoice();playMusic();
 }
 function chooseMode(mode){selection.mode=mode;selection.system=mode==='simplified'?'hsk':'tocfl';selection.level=levels[selection.system][0];selection.cumulative=true;navigation?.visit('levels');showLevels();updatePool();}
-function showModes(){if(navigation&&!navigation.visit('modes'))return;game=null;returnCourse.hidden=!lastCourse;if(lastCourse)returnCourse.textContent='Luyện tiếp · '+names[lastCourse.mode]+' · '+lastCourse.system.toUpperCase()+' '+lastCourse.level;$('home-back').hidden=false;$('mode-choices').hidden=false;$('level-form').hidden=true;setText('step-number','01');setText('step-label','CHỌN NỘI DUNG');setText('choice-title','Bạn muốn luyện gì?');showScreen('setup-screen');playMusic();}
+function showModes(){if(navigation&&!navigation.visit('modes'))return;game=null;returnCourse.hidden=!lastCourse;if(lastCourse)returnCourse.textContent='Luyện tiếp · '+names[lastCourse.mode]+' · '+lastCourse.system.toUpperCase()+' '+lastCourse.level;$('home-back').hidden=false;$('mode-choices').hidden=false;$('level-form').hidden=true;setText('step-number','01');setText('step-label','CHỌN NỘI DUNG');setText('choice-title','Bạn muốn luyện gì?');showScreen('setup-screen');refreshHomeReview();playMusic();}
 function renderLocalRecord(){const localRecords=records.filter(r=>r.scope===selectionLabel()&&r.kind==='duel');setText('local-record',localRecords.length?`${localRecords.length} trận đã lưu cho lựa chọn này · Điểm cao nhất ${Math.max(...localRecords.map(r=>r.score)).toLocaleString('vi-VN')}`:'Thành tích của bộ từ này sẽ xuất hiện ở đây sau trận đầu tiên.');}
 function showLobby(){if(navigation&&!navigation.visit('lobby'))return;lastCourse={...selection};saveSettings();game=null;chapterPage=Math.max(0,chapterPage);renderCurriculum();showScreen('lobby-screen');setText('lobby-selection',selectionLabel());$('lobby-seconds').value=seconds;document.querySelectorAll('[data-seconds]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.seconds)===seconds)));renderLocalRecord();playMusic();}
 
+const defenseComplete=document.createElement('dialog');defenseComplete.className='learning-dialog';defenseComplete.id='defense-complete';defenseComplete.setAttribute('aria-labelledby','defense-complete-title');
+defenseComplete.innerHTML='<h2 id="defense-complete-title">Đỡ đòn thành công!</h2><p>Bạn đã nhập đúng phù văn, chặn đòn và phản công. Trong trận thật, hãy hoàn thành phù văn phòng thủ trước khi hết giờ.</p><button type="button" class="primary-button">Về chọn chặng</button>';
+const defenseHero=document.createElement('img');defenseHero.alt='Gấu trúc đỏ cầm đèn lồng';defenseComplete.prepend(defenseHero);
+document.body.append(defenseComplete);
+defenseComplete.querySelector('button').onclick=()=>{defenseComplete.close();showLobby();};
+defenseComplete.addEventListener('cancel',event=>{event.preventDefault();defenseComplete.close();showLobby();});
+
+const starterComplete=document.createElement('dialog');
+starterComplete.id='starter-complete';starterComplete.className='learning-dialog';
+starterComplete.setAttribute('aria-labelledby','starter-title');
+starterComplete.innerHTML='<h2 id="starter-title">Kết quả đấu thử</h2><p id="starter-summary"></p><button type="button" class="primary-button" id="starter-chapter"></button><button type="button" class="secondary-button" id="starter-timed"></button><button type="button" class="secondary-button" id="starter-exit">Về chọn chặng</button>';
+document.body.append(starterComplete);
+function leaveStarter(){starterComplete.close();showLobby();}
+$('starter-exit').onclick=leaveStarter;
+starterComplete.addEventListener('cancel',event=>{event.preventDefault();leaveStarter();});
+
 const returnCourse=document.createElement('button');returnCourse.id='return-course';returnCourse.type='button';returnCourse.className='secondary-button';returnCourse.hidden=true;$('mode-choices').before(returnCourse);
-returnCourse.onclick=async()=>{if(!lastCourse)return;Object.assign(selection,lastCourse);navigation?.visit('levels');showLevels();await updatePool();if(pool.length)showLobby();};
+function sameCourse(left,right){
+ return left?.mode===right.mode&&left.system===right.system&&left.level===right.level&&left.cumulative===right.cumulative;
+}
+function getResumeChapter(){
+ const list=chapters();
+ const latest=records.findLast(record=>record.kind==='campaign'&&sameCourse(record.selection,selection)&&list[record.chapter-1]);
+ if(latest&&latest.status!=='won'&&!hasChapterWon(progress,scope(),list[latest.chapter-1].words,selection.mode))return latest.chapter;
+ return list.find(chapter=>!hasChapterWon(progress,scope(),chapter.words,selection.mode))?.number||1;
+}
+let homeReviewCourse=null,homeReviewVersion=0,homeReviewTimer;
+function clearHomeReview(){
+ homeReviewVersion++;
+ clearTimeout(homeReviewTimer);
+ homeReviewCourse=null;
+ setText('choose-practice','Chọn cách luyện');
+}
+async function refreshHomeReview(){
+ if(screen!=='setup-screen'||$('mode-choices').hidden||!storageReady)return;
+ clearHomeReview();
+ const version=homeReviewVersion,courses=[];
+ for(const course of [lastCourse,...records.map(record=>record.selection).reverse()]){
+  if(!course||!['simplified','traditional'].includes(course.mode)||!levels[course.system]?.includes(course.level))continue;
+  if(!courses.some(item=>sameCourse(item,course))&&records.some(record=>record.selection?.mode===course.mode&&record.selection.system===course.system))courses.push(course);
+ }
+ let upcoming=Infinity;
+ for(const course of courses){
+  let words;
+  try{
+   const source=await loadVocabulary(course.system,course.level,course.cumulative);
+   words=selectVocabulary(source,course.system,course.level,course.cumulative,course.mode);
+  }catch{continue;}
+  if(version!==homeReviewVersion||screen!=='setup-screen')return;
+  const schedule=recallSchedule(words,records,course),now=Date.now();
+  const due=schedule.filter(entry=>entry.dueAt<=now).slice(0,5);
+  if(due.length){
+   homeReviewCourse=course;
+   setText('choose-practice',`Ôn lại ${due.length} từ · ${names[course.mode]} · ${course.system.toUpperCase()} ${course.level}`);
+   return;
+  }
+  if(schedule.length)upcoming=Math.min(upcoming,schedule[0].dueAt);
+ }
+ if(version===homeReviewVersion&&Number.isFinite(upcoming)){
+  homeReviewTimer=setTimeout(refreshHomeReview,Math.min(2147483647,Math.max(0,upcoming-Date.now())));
+ }
+}
+async function openSavedCourse(course,review=false){
+ if(!course)return;
+ Object.assign(selection,course);
+ navigation?.visit('levels');showLevels();
+ const request=updatePool(),version=requestVersion;
+ await request;
+ if(version!==requestVersion||!pool.length||screen!=='setup-screen'||$('level-form').hidden)return;
+ showLobby();
+ if(review&&screen==='lobby-screen')await learningUI.startRecall();
+}
+returnCourse.onclick=()=>openSavedCourse(lastCourse);
+function showRecallTiming(rows){
+ const note=$('result-recall-time');
+ const correctIds=new Set(rows.filter(row=>row.correct>0).map(row=>row.id));
+ const next=progressSaved&&records.some(record=>record.id===runId)
+  ?recallSchedule(pool,records,selection).find(entry=>correctIds.has(entry.word.id)):null;
+ note.hidden=!next;
+ if(next){
+  const time=new Intl.DateTimeFormat('vi-VN',{hour:'2-digit',minute:'2-digit',day:'numeric',month:'numeric'}).format(Math.ceil(next.dueAt/60000)*60000);
+  note.textContent=`Từ ${time}, quay lại trang đầu để thử nhớ chữ Hán từ phiên âm của những từ bạn vừa gõ đúng.`;
+ }
+}
 // Timed mobile play begins only through this visible, modal readiness step.
 const readyRow=document.createElement('dialog');readyRow.id='battle-ready';readyRow.className='ready-dialog';
 readyRow.setAttribute('aria-labelledby','ready-title');readyRow.setAttribute('aria-describedby','ready-description');
@@ -113,7 +205,7 @@ function armReady(){
  game?.pause();awaitingReady=true;document.body.classList.add('awaiting-ready');
  readyText.textContent=game?.mode==='zhuyin'?'Bấm Bắt đầu, rồi chạm ký hiệu chú âm hoặc dùng bàn phím tiếng Anh để nhập mẫu trên sân.':'Chuẩn bị bộ gõ tiếng Trung. Bấm Bắt đầu để mở ô nhập chữ. Nhập đúng cả từ trên sân sẽ tự thi triển.';
  setText('ready-title',game?.mode==='zhuyin'?'Sẵn sàng luyện chú âm?':'Sẵn sàng luyện chữ?');
- setText('ready-context',`${$('battle-title').textContent} · ${game?.kind==='endless'?'Đấu liên hoàn':`Còn ${game.practiceTotal-game.practiceDone} lượt luyện`} · ${seconds} giây mỗi mẫu. Đồng hồ chỉ chạy sau khi bấm Bắt đầu.`);
+ setText('ready-context',`${$('battle-title').textContent} · ${game?.kind==='endless'?'Đấu liên hoàn':`Còn ${game.practiceTotal-game.practiceDone} lượt luyện`} · ${game.untimed?'Không giới hạn thời gian.':seconds+' giây mỗi mẫu. Đồng hồ chỉ chạy sau khi bấm Bắt đầu.'}`);
  if(!readyRow.open)readyRow.showModal();readyButton.focus({preventScroll:true});
  renderBattle();mobileLayout?.refresh();
 }
@@ -129,17 +221,20 @@ readyButton.onclick=()=>{
  if(game.mode!=='zhuyin')$('hanzi-input').focus({preventScroll:true});
  previous=performance.now();game.resume();renderBattle();mobileLayout?.refresh();autoCast();
 };
-async function startBattle(encounter='guardian',kind='duel',words=pool,chapter=null,storyStation=null,storyName=null){
+async function startBattle(encounter='guardian',kind='duel',words=pool,chapter=null,storyStation=null,storyName=null,reviewReturn=null,defenseTutorial=false){
  if(!words.length)return;if(!storageReady&&!await acquireStorage()){storageNotice.tabIndex=-1;storageNotice.scrollIntoView({block:'center'});storageNotice.focus({preventScroll:true});return;}
  const replay=kind==='duel'||kind==='campaign'&&hasChapterWon(progress,scope(),words,selection.mode);
  const initialPractice=replay?{}:{...practiceFor(practice,scope(),words,selection.mode),...Object.fromEntries(words.filter(w=>isCompleted(progress,scope(),w,selection.mode)).map(w=>[w.id,2]))};
  if(kind==='campaign')for(const word of words)if(initialPractice[word.id]>=2){markCompleted(progress,scope(),word,selection.mode);savePracticeAnswer(practice,scope(),word,selection.mode,3);}
- awaitingReady=false;navigation?.visit('battle');lastLaunch={encounter,kind,words,chapter,storyStation,storyName};document.body.dataset.mode=selection.mode;const openingKey=[selection.mode,selection.system,selection.level,selection.cumulative,encounter,kind,chapter||0].join(':');game=new Duel({words,mode:selection.mode,encounter,kind,seconds,previousFirst:openings[openingKey],initialPractice});openings[openingKey]=game.target.id;openings=Object.fromEntries(Object.entries(openings).slice(-128));try{sessionStorage.setItem('tulinh.openings.v1',JSON.stringify(openings));}catch{}runId=String(Date.now())+'-'+Math.random().toString(36).slice(2,8);motion?.reset(encounter);$('arena').dataset.habitat=storyStation||(kind==='campaign'?chapterSetting(chapter).id:{guardian:'bamboo',moth:'harbor',sentinel:'village'}[encounter]);resultShown=false;lastRune='';lastRevision=-1;lastHp=100;composing=false;lastAccepted={text:'',at:0};$('hanzi-input').value='';$('battle-seconds').value=seconds;$('battle-seconds').disabled=kind==='review';$('pause-dialog').close();$('reward-dialog').close();$('cast-form').hidden=selection.mode==='zhuyin';$('touch-keyboard').hidden=selection.mode!=='zhuyin';$('spell-heading')?.classList.remove('unused');document.querySelectorAll('[data-spell]').forEach(b=>b.disabled=kind==='review');showScreen('battle-screen');setText('battle-title',storyName||(kind==='campaign'?chapterSetting(chapter).name:game.enemy.place));setText('battle-selection',selectionLabel());setText('battle-kind',kind==='review'?'ÔN LẠI · KHÔNG GIỚI HẠN THỜI GIAN':kind==='endless'?'ĐẤU LIÊN HOÀN':kind==='campaign'?`LỘ TRÌNH · CHẶNG ${chapter}`:'THỦ LĨNH · LUYỆN LẶP LẠI');$('enemy-art').src=asset(`original/art/journey/${encounter}.png`);$('enemy-art').alt=game.enemy.name+' · sinh vật triệu hồi';setText('enemy-name',game.enemy.name);renderBattle();playMusic();if(document.body.dataset.mobile==='true'&&kind!=='review')armReady();if(selection.mode!=='zhuyin'&&document.body.dataset.mobile!=='true')$('hanzi-input').focus({preventScroll:true});
+ // A chapter can have all its words practiced without its battle being won.
+ // Require one final answer to earn that victory, including after a reload.
+ if(kind==='campaign'&&!replay&&words.every(word=>initialPractice[word.id]>=2))initialPractice[words[0].id]=1;
+ awaitingReady=false;navigation?.visit('battle');lastLaunch={encounter,kind,words,chapter,storyStation,storyName,reviewReturn,defenseTutorial};document.body.dataset.mode=selection.mode;const openingKey=[selection.mode,selection.system,selection.level,selection.cumulative,encounter,kind,chapter||0].join(':');game=new Duel({words,mode:selection.mode,encounter,kind,seconds,previousFirst:openings[openingKey],initialPractice});if(defenseTutorial)game.defending=true;openings[openingKey]=game.target.id;openings=Object.fromEntries(Object.entries(openings).slice(-128));try{sessionStorage.setItem('tulinh.openings.v1',JSON.stringify(openings));}catch{}runId=String(Date.now())+'-'+Math.random().toString(36).slice(2,8);motion?.reset(encounter);$('arena').dataset.habitat=storyStation||(kind==='campaign'?chapterSetting(chapter).id:{guardian:'bamboo',moth:'harbor',sentinel:'village'}[encounter]);resultShown=false;lastRune='';lastRevision=-1;lastHp=100;composing=false;lastAccepted={text:'',at:0};$('hanzi-input').value='';$('battle-seconds').value=seconds;$('battle-seconds').disabled=game.untimed;document.querySelector('label[for=battle-seconds]').hidden=defenseTutorial||kind==='starter';$('pause-dialog').close();$('reward-dialog').close();$('cast-form').hidden=selection.mode==='zhuyin';$('touch-keyboard').hidden=selection.mode!=='zhuyin';$('spell-heading')?.classList.remove('unused');document.querySelectorAll('[data-spell]').forEach(b=>b.disabled=kind==='review');showScreen('battle-screen');setText('battle-title',defenseTutorial?'Thử phòng thủ':game.starter?'Đấu thử với 3 từ vừa gõ':storyName||(kind==='campaign'?chapterSetting(chapter).name:game.enemy.place));setText('battle-selection',selectionLabel());setText('battle-kind',defenseTutorial?'BÀI TẬP TÙY CHỌN · KHÔNG TÍNH GIỜ':game.starter?(game.untimed?'ĐẤU THỬ · KHÔNG TÍNH GIỜ':'ĐẤU THỬ · CÓ TÍNH GIỜ'):kind==='review'?(reviewReturn?'ÔN LẠI · XONG SẼ TRỞ VỀ CHẶNG':'ÔN LẠI · KHÔNG GIỚI HẠN THỜI GIAN'):kind==='endless'?'ĐẤU LIÊN HOÀN':kind==='campaign'?`LỘ TRÌNH · CHẶNG ${chapter}`:'THỦ LĨNH · LUYỆN LẶP LẠI');$('enemy-art').src=asset(`original/art/journey/${encounter}.png`);$('enemy-art').alt=game.enemy.name+' · sinh vật triệu hồi';setText('enemy-name',game.enemy.name);renderBattle();playMusic();if(document.body.dataset.mobile==='true'&&kind!=='review')armReady();if(selection.mode!=='zhuyin'&&document.body.dataset.mobile!=='true')$('hanzi-input').focus({preventScroll:true});
  if(kind==='campaign'&&game.practiceDone>0)setText('battle-kind',`CHẶNG ${chapter} · TIẾP TỤC BẢN LƯU · CÒN ${game.practiceTotal-game.practiceDone} LƯỢT`);
 }
 function cast(){if(!game||composing||game.mode==='zhuyin')return;const before=combatSnapshot(game);const text=$('hanzi-input').value,word=game.target.word,outcome=game.submit(text);if(outcome==='correct')recordAnswer(word);handleOutcome(outcome,text,before);}
 function handleOutcome(outcome,text='',before=null){
- if(before)motion?.play(combatFeedback(before,game,outcome));
+ if(before)motion?.play(lastLaunch.defenseTutorial&&outcome==='correct'?{outcome:'correct',spell:'strike',defending:true,enemyDamage:0,heroDamage:0,blocked:0,heal:0,counter:false}:combatFeedback(before,game,outcome));
  if(outcome==='correct'){$('hanzi-input').value='';sfx('correct');lastAccepted={text,at:performance.now()};}
  if(outcome==='wrong'){sfx('wrong');saveRun();}if(outcome==='partial')setText('input-hint','Gõ tiếp cho đủ phù văn rồi chọn chữ.');if(outcome==='preedit')setText('input-hint','Hãy chọn chữ Hán trong bộ gõ trước khi thi triển.');renderBattle();
  if(outcome==='wrong'&&game.mode!=='zhuyin'){
@@ -156,25 +251,43 @@ function renderBattle(){
  if(!game)return;const g=game;
  if(['won','lost','ended'].includes(g.status)){setText('hero-hp-label',`${g.hp} / 100`);setText('enemy-hp-label',`${g.enemyHp} / ${g.enemyMax}`);$('hero-hp-fill').style.width=g.hp+'%';$('enemy-hp-fill').style.width=(g.enemyHp/g.enemyMax*100)+'%';if(!resultShown&&!motion?.pending)showResult();return;}
  if(g.status==='reward'&&!$('reward-dialog').open&&!$('history-dialog').open&&!motion?.pending){setText('reward-title',g.kind==='campaign'?`Tiếp sức giữa trận · ${g.practiceDone}/${g.practiceTotal} lượt luyện`:g.kind==='endless'?`Đã hạ đối thủ · đợt ${g.round}`:`Tiếp sức giữa trận · ${g.practiceDone}/${g.practiceTotal} lượt luyện`);setText('reward-phase',g.kind==='endless'?'ĐÃ VƯỢT QUA MỘT ĐỢT':'NGHỈ GIỮA TRẬN');setText('reward-note',g.kind==='endless'?'Chọn 1 phần thưởng rồi vào đợt tiếp theo.':'Bạn vẫn đang ở cùng một chặng. Chọn 1 phần thưởng để tiếp tục luyện; đối thủ không hồi HP.');$('reward-dialog').showModal();sfx(g.kind==='endless'?'win':'correct');}
- if(g.revision===lastRevision)return;lastRevision=g.revision;setText('rune-seconds',awaitingReady?'Chưa tính giờ':g.kind==='review'?'Không giới hạn':Math.max(0,g.remaining).toFixed(1)+'s');$('rune-timer-fill').style.transform=`scaleX(${g.kind==='review'?1:Math.max(0,g.remaining/g.seconds)})`;
- setText('round-label',g.kind==='review'?`Đã ôn ${g.correct} / ${g.words.length}`:g.kind==='endless'?`Đợt ${g.round} · đối thủ mạnh hơn`:g.kind==='campaign'?`Chặng ${lastLaunch.chapter} · ${g.practiceDone}/${g.practiceTotal} lượt luyện`:`Luyện ${g.practiceDone}/${g.practiceTotal} lượt luyện`);setText('turn-label','Lượt '+g.turn);setText('hero-hp-label',`${g.hp} / 100`);setText('enemy-hp-label',`${g.enemyHp} / ${g.enemyMax}`);$('hero-hp-fill').style.width=g.hp+'%';$('enemy-hp-fill').style.width=(g.enemyHp/g.enemyMax*100)+'%';$('arena').classList.toggle('low-health',g.hp<=25);$('arena').classList.toggle('defense-turn',g.defending);setText('shield-label',`Hộ thuẫn ${g.shield}`);$('enemy-seals').hidden=!['campaign','duel'].includes(g.kind);setText('enemy-seals',`Đã luyện xong ${g.completedIds.size}/${g.battleWords.length} từ · mỗi từ 2 lượt + tối đa 1 lượt ôn`);if(g.kind==='endless')setText('enemy-name',`${g.enemy.name} · đợt ${g.round}`);setText('energy-label',`Năng lượng ${g.energy} / 3`);
+ if(g.revision===lastRevision)return;lastRevision=g.revision;setText('rune-seconds',awaitingReady?'Chưa tính giờ':g.untimed?'Không giới hạn':Math.max(0,g.remaining).toFixed(1)+'s');$('rune-timer-fill').style.transform=`scaleX(${g.untimed?1:Math.max(0,g.remaining/g.seconds)})`;
+ setText('round-label',lastLaunch.defenseTutorial?'Tập phòng thủ':g.kind==='review'?`Đã ôn ${g.correct} / ${g.words.length}`:g.kind==='endless'?`Đợt ${g.round} · đối thủ mạnh hơn`:g.kind==='campaign'?`Chặng ${lastLaunch.chapter} · ${g.practiceDone}/${g.practiceTotal} lượt luyện`:`Luyện ${g.practiceDone}/${g.practiceTotal} lượt luyện`);setText('turn-label','Lượt '+g.turn);setText('hero-hp-label',`${g.hp} / 100`);setText('enemy-hp-label',`${g.enemyHp} / ${g.enemyMax}`);$('hero-hp-fill').style.width=g.hp+'%';$('enemy-hp-fill').style.width=(g.enemyHp/g.enemyMax*100)+'%';$('arena').classList.toggle('low-health',g.hp<=25);$('arena').classList.toggle('defense-turn',g.defending);setText('shield-label',`Hộ thuẫn ${g.shield}`);$('enemy-seals').hidden=!['campaign','duel'].includes(g.kind);setText('enemy-seals',`Đã luyện xong ${g.completedIds.size}/${g.battleWords.length} từ · mỗi từ 2 lượt + tối đa 1 lượt ôn`);if(g.kind==='endless')setText('enemy-name',`${g.enemy.name} · đợt ${g.round}`);setText('energy-label',`Năng lượng ${g.energy} / 3`);
  if(g.hp<lastHp){$('arena').classList.remove('damage-flash');void $('arena').offsetWidth;$('arena').classList.add('damage-flash');sfx('hit');}lastHp=g.hp;
  const rune=`${g.round}/${g.turn}`;if(lastRune!==rune){lastRune=rune;$('hanzi-input').value='';setText('input-hint','Nhập đúng cả từ để tự thi triển. Bấm Thi triển nếu muốn kiểm tra câu trả lời.');$('active-rune').textContent=g.target.label;$('active-rune').lang=g.mode==='simplified'?'zh-Hans':'zh-Hant';$('active-rune').classList.toggle('long-rune',g.target.label.length>5);}
- setText('rune-action',g.kind==='review'?'PHÙ VĂN ÔN TẬP':g.defending?'PHÙ VĂN PHÒNG THỦ':'PHÙ VĂN TẤN CÔNG');
+ setText('rune-action',lastLaunch.defenseTutorial?'PHÙ VĂN PHÒNG THỦ':g.kind==='review'?'PHÙ VĂN ÔN TẬP':g.defending?'PHÙ VĂN PHÒNG THỦ':'PHÙ VĂN TẤN CÔNG');
  $('zhuyin-progress').replaceChildren();if(g.mode==='zhuyin'){[...g.target.label].forEach((ch,i)=>{const s=document.createElement('span');s.textContent=ch;s.className=i<g.progress?'done':i===g.progress?'current':'';$('zhuyin-progress').append(s);});$('active-rune').hidden=true;setText('input-hint','');}else $('active-rune').hidden=false;
  const cost={strike:0,ward:1,mend:2};document.querySelectorAll('[data-spell]').forEach(b=>{const chosen=b.dataset.spell===g.spell;b.classList.toggle('selected',chosen);b.setAttribute('aria-pressed',String(chosen));b.disabled=g.kind==='review'||g.energy<cost[b.dataset.spell];});
- setText('live-correct',g.correct);setText('live-accuracy',typingAccuracyLabel(g));setText('live-combo',g.combo);setText('enemy-intent',g.kind==='review'?'Luyện thoải mái':g.defending?'Chuẩn bị phòng thủ':'Phản đòn');setText('intent-detail',g.kind==='review'?'Không giới hạn thời gian. Nhập sai không mất HP.':g.defending?'Nhập đúng phù văn để chặn toàn bộ đòn đánh và phản công.':`Ra chiêu thành công: đối thủ còn HP sẽ phản đòn ${g.counterDamage} sát thương. Hết giờ: tối đa ${g.timeoutDamage} sát thương.`);setText('battle-notice',progressSaved?g.notice:'Không lưu được tiến độ. Giữ trang mở để tiếp tục.');
+ setText('live-correct',g.correct);setText('live-accuracy',typingAccuracyLabel(g));setText('live-combo',g.combo);setText('enemy-intent',lastLaunch.defenseTutorial?'Chuẩn bị phòng thủ':g.kind==='review'?'Luyện thoải mái':g.defending?'Chuẩn bị phòng thủ':'Phản đòn');setText('intent-detail',lastLaunch.defenseTutorial?'Nhập đúng phù văn để chặn đòn và phản công. Thử bao lâu cũng được, nhập sai không mất HP.':g.kind==='review'?'Không giới hạn thời gian. Nhập sai không mất HP.':g.defending?'Nhập đúng phù văn để chặn toàn bộ đòn đánh và phản công.':`Ra chiêu thành công: đối thủ còn HP sẽ phản đòn ${g.counterDamage} sát thương.${g.untimed?' Bạn có thể gõ theo tốc độ của mình.':` Hết giờ: tối đa ${g.timeoutDamage} sát thương.`}`);setText('battle-notice',lastLaunch.defenseTutorial?(g.notice||'Nhập đúng phù văn phòng thủ để chặn đòn. Bài tập không tính giờ.'):(progressSaved?g.notice:'Không lưu được tiến độ. Giữ trang mở để tiếp tục.'));
 }
 function pause(){if(readyRow.open)return;if(!game||(!awaitingReady&&game.status!=='playing'))return;game.pause();if(!$('pause-dialog').open)$('pause-dialog').showModal();}
 function resume(){if(!game||awaitingReady)return;$('pause-dialog').close();previous=performance.now();game.resume();renderBattle();if(game.mode!=='zhuyin')$('hanzi-input').focus({preventScroll:true});mobileLayout?.refresh();}
 function end(){if(!game)return;motion?.clear();$('pause-dialog').close();$('reward-dialog').close();game.finish();saveRun();renderBattle();}
 function showResult(){
+ if(game.starter){
+  resultShown=true;
+  const chapter=chapters().find(c=>c.remaining.length||!hasChapterWon(progress,scope(),c.words,selection.mode))?.number||1;
+  setText('starter-summary',`Bạn đã nhập đúng ${game.correct}/${game.words.length} từ trong trận thử. Trận thử không cộng tiến độ chặng.`);
+  setText('starter-chapter',`Vào chặng ${chapter} · ${seconds} giây mỗi từ`);
+  setText('starter-timed',`Đấu lại 3 từ này · ${seconds} giây mỗi từ`);
+  $('starter-timed').onclick=()=>{starterComplete.close();startBattle('guardian','starter-timed',lastLaunch.words);};
+  $('starter-chapter').onclick=()=>{starterComplete.close();startChapter(chapter);};
+  starterComplete.showModal();return;
+ }
+ if(lastLaunch.defenseTutorial){resultShown=true;if(game.status==='won'){defenseHero.src=asset('original/art/journey/hero.png');defenseComplete.showModal();}else showLobby();return;}
  resultShown=true;navigation?.visit('result');const g=game,r=g.result();if(g.kind==='campaign'&&g.status==='won'){const chapter=chapters()[lastLaunch.chapter-1];if(chapter)markChapterWon(progress,scope(),chapter.words,selection.mode);persist();}$('pause-dialog').close();$('reward-dialog').close();showScreen('result-screen');setText('result-title',r.kind==='campaign'&&r.status==='won'?'Đã hoàn thành chặng '+lastLaunch.chapter:r.kind==='review'?'Đã hoàn thành lượt ôn':r.status==='won'?'Bạn đã chiến thắng!':r.status==='lost'?'Trận đấu đã kết thúc':'Đã lưu lượt luyện');setText('result-selection',selectionLabel()+' · '+(lastLaunch.storyName||(g.kind==='campaign'?chapterSetting(lastLaunch.chapter).name:g.enemy.place)));$('result-stars').hidden=r.status==='ended'||r.kind==='review';rating($('result-stars'),r.stars,r.kind);$('result-stars').setAttribute('aria-label',r.stars===null?'Không chấm sao':`${r.stars} trên 3 sao`);
  $('result-metrics').replaceChildren();for(const [label,value]of [['Độ chính xác khi nhập',typingAccuracyLabel(r)],['Tỷ lệ tính hạng',r.accuracy+'%'],['Lượt nhập đúng',r.correct],['Chuỗi dài nhất',r.combo],['Điểm',r.score.toLocaleString('vi-VN')],...(r.status==='ended'||r.kind==='review'?[]:[['Xếp hạng',r.grade]])]){const div=document.createElement('div'),span=document.createElement('span'),b=document.createElement('strong');metricLabel(span,label);b.textContent=value;div.append(span,b);$('result-metrics').append(div);}
  setText('result-summary',`${r.kind==='endless'?'Vòng đã vượt: '+(r.round-1)+' · ':''}${r.errors} lần nhập sai · ${r.misses} lần hết giờ · ${formatTime(r.elapsed)} luyện tập. Độ chính xác khi nhập không tính lượt hết giờ. Tỷ lệ tính hạng tính cả nhập sai và hết giờ. ${r.status==='lost'?'HP đã về 0. Chọn chơi lại để bắt đầu với 100 HP.':g.learning&&r.status==='ended'&&r.practiceDone===r.practiceTotal?'Đã hết lượt trong trận. Ôn lại các từ chưa nhập đúng đủ 2 lần rồi tiếp tục chặng.':''}`);
  $('review-rows').replaceChildren();for(const item of r.rows){const row=document.createElement('tr');if(item.wrong)row.className='needs-review';for(const value of [item.label,item.correct,Math.max(0,item.wrong-item.missed),item.missed,item.shown]){const cell=document.createElement('td');cell.textContent=value;row.append(cell);}$('review-rows').append(row);}
  const remainingChapter=chapters().find(c=>c.remaining.length||!hasChapterWon(progress,scope(),c.words,selection.mode));$('continue-curriculum').hidden=!remainingChapter;setText('continue-curriculum',remainingChapter?`Tiếp tục chặng ${remainingChapter.number} →`:'');$('continue-curriculum').onclick=()=>startChapter(remainingChapter.number);if(lastLaunch.storyStation){$('continue-curriculum').hidden=false;setText('continue-curriculum',r.status==='won'?(lastLaunch.chapter===JOURNEY_STOPS.length?'Kết thúc hành trình →':'Tiếp tục hành trình →'):`Tiếp tục chặng ${lastLaunch.chapter} →`);$('continue-curriculum').onclick=r.status==='won'?()=>storyUI.afterWin(lastLaunch.chapter):()=>startChapter(lastLaunch.chapter,lastLaunch.storyStation,lastLaunch.storyName);}$('replay').classList.toggle('primary-button',$('continue-curriculum').hidden);$('replay').classList.toggle('secondary-button',!$('continue-curriculum').hidden);setText('result-coverage',`Lượt này: ${r.rows.length} từ khác nhau · ${r.correct} lượt nhập đúng. Một từ có thể xuất hiện nhiều lần; mỗi từ cần nhập đúng 2 lần để hoàn thành chặng. ${r.rows.filter(w=>w.wrong>0).length} từ cần ôn lại do nhập sai hoặc hết giờ. Tiến độ cả bộ: ${pool.filter(w=>isCompleted(progress,scope(),w,selection.mode)).length.toLocaleString('vi-VN')} / ${pool.length.toLocaleString('vi-VN')} từ của bộ này đã nhập đúng.${progressSaved?' Đã lưu trong trình duyệt.':' Không lưu được tiến độ; giữ trang mở để tiếp tục.'}`);$('word-review').open=false;setText('word-review-label',`Xem ${r.rows.length} từ / ký hiệu khác nhau đã luyện`);const ids=new Set(r.rows.filter(w=>w.wrong>0).map(w=>w.id));reviewWords=g.words.filter(w=>ids.has(w.id));$('review-errors').hidden=!reviewWords.length;setText('review-errors',`Ôn lại ${reviewWords.length} từ`);
- saveRun();playMusic();
+ const reviewFirst=r.kind!=='review'&&r.status!=='won'&&reviewWords.length>0;
+ const actions=$('review-errors').parentElement;actions.insertBefore(reviewFirst?$('review-errors'):$('continue-curriculum'),actions.firstElementChild);
+ $('review-errors').classList.toggle('primary-button',reviewFirst);$('review-errors').classList.toggle('secondary-button',!reviewFirst);
+ $('continue-curriculum').classList.toggle('primary-button',!reviewFirst);$('continue-curriculum').classList.toggle('secondary-button',reviewFirst);
+ if(r.kind==='campaign'&&r.status!=='won'){$('continue-curriculum').hidden=false;setText('continue-curriculum',`Tiếp tục chặng ${lastLaunch.chapter} →`);$('continue-curriculum').onclick=()=>startChapter(lastLaunch.chapter,lastLaunch.storyStation,lastLaunch.storyName);}
+ if(reviewFirst){$('replay').classList.remove('primary-button');$('replay').classList.add('secondary-button');if(r.kind==='campaign')setText('result-summary',$('result-summary').textContent+' Ôn các từ sai hoặc hết giờ không giới hạn thời gian. Ôn xong sẽ trở về chặng này.');}
+ saveRun();showRecallTiming(r.rows);playMusic();
+ if(r.kind==='review'&&r.status==='won'&&lastLaunch.reviewReturn){const origin=lastLaunch.reviewReturn;startChapter(origin.chapter,origin.storyStation,origin.storyName);}
 }
 for(const [id,e]of Object.entries(ENCOUNTERS)){const b=document.createElement('button');b.className='encounter-card';b.dataset.encounter=id;const num=document.createElement('span');num.className='encounter-number';num.textContent=String(Object.keys(ENCOUNTERS).indexOf(id)+1).padStart(2,'0')+' / '+({guardian:'CƠ BẢN',moth:'LINH HOẠT',sentinel:'CHIẾN THUẬT'}[id]);const img=document.createElement('img');img.loading='lazy';img.src=asset(`original/art/journey/${id}.png`);img.alt=e.name;const title=document.createElement('strong');title.textContent=e.place;const desc=document.createElement('p');desc.textContent=e.description;const cta=document.createElement('span');cta.className='encounter-cta';iconLabel(cta,'Đấu thủ lĩnh','forward');b.append(num,img,title,desc,cta);b.onclick=()=>startBattle(id);$('encounter-cards').append(b);}
 for(const keys of ['1234567890-','qwertyuiop','asdfghjkl;','zxcvbnm,./']){const row=document.createElement('div');row.className='key-row';for(const key of keys){const b=document.createElement('button');b.type='button';b.dataset.symbolKey=key;const symbol=document.createElement('b'),label=document.createElement('small');symbol.textContent=symbols[key];label.textContent=key.toUpperCase();b.append(symbol,label);b.setAttribute('aria-label',`${symbols[key]} · phím ${key.toUpperCase()}`);b.onclick=()=>pressSymbol(key);row.append(b);}$('zhuyin-keys').append(row);}
@@ -185,32 +298,33 @@ $('cast-form').onsubmit=e=>{e.preventDefault();if(performance.now()>=suppressSub
 function autoCast(){if(composing||!game||game.status!=='playing')return;const raw=$('hanzi-input').value;if(raw===lastAccepted.text&&performance.now()-lastAccepted.at<100){$('hanzi-input').value='';return;}game.edit(raw);if(raw.normalize('NFC').replace(/\s/g,'')===game.target.label)cast();}
 $('hanzi-input').addEventListener('input',autoCast);document.querySelectorAll('[data-spell]').forEach(b=>b.onclick=()=>{if(game?.choose(b.dataset.spell)){game.revision++;renderBattle();if(game.mode!=='zhuyin')$('hanzi-input').focus({preventScroll:true});keepZhuyinVisible();}});
 $('leave-battle').onclick=()=>{game?.finish();saveRun();game=null;$('pause-dialog').close();$('reward-dialog').close();showLobby();};$('pause-button').onclick=pause;$('resume').onclick=resume;$('quit-paused').onclick=end;$('end-run').onclick=end;$('quit-reward').onclick=end;$('pause-dialog').addEventListener('cancel',e=>{e.preventDefault();resume();});$('reward-dialog').addEventListener('cancel',e=>e.preventDefault());
-document.querySelectorAll('[data-reward]').forEach(b=>b.onclick=()=>{if(game?.reward(b.dataset.reward)){$('reward-dialog').close();previous=performance.now();renderBattle();mobileLayout?.refresh();if(game.mode!=='zhuyin')$('hanzi-input').focus({preventScroll:true});autoCast();}});$('replay').onclick=()=>lastLaunch.kind==='campaign'?startChapter(lastLaunch.chapter,lastLaunch.storyStation,lastLaunch.storyName):startBattle(lastLaunch.encounter,lastLaunch.kind,lastLaunch.kind==='review'?lastLaunch.words:pool);$('back-lobby').onclick=showLobby;$('review-errors').onclick=()=>startBattle(lastLaunch.encounter,'review',reviewWords);
+document.querySelectorAll('[data-reward]').forEach(b=>b.onclick=()=>{if(game?.reward(b.dataset.reward)){$('reward-dialog').close();previous=performance.now();renderBattle();mobileLayout?.refresh();if(game.mode!=='zhuyin')$('hanzi-input').focus({preventScroll:true});autoCast();}});$('replay').onclick=()=>lastLaunch.kind==='campaign'?startChapter(lastLaunch.chapter,lastLaunch.storyStation,lastLaunch.storyName):startBattle(lastLaunch.encounter,lastLaunch.kind,lastLaunch.kind==='review'?lastLaunch.words:pool,null,null,null,lastLaunch.reviewReturn);$('back-lobby').onclick=showLobby;$('review-errors').onclick=()=>{const origin=lastLaunch.kind==='campaign'&&game.status!=='won'?{chapter:lastLaunch.chapter,storyStation:lastLaunch.storyStation,storyName:lastLaunch.storyName}:lastLaunch.reviewReturn;startBattle(lastLaunch.encounter,'review',reviewWords,null,null,null,origin);};
 function focusChapters(){const heading=$('curriculum-title');heading.tabIndex=-1;heading.focus({preventScroll:true});$('chapter-list').scrollIntoView({block:'start',behavior:'instant'});}
 $('chapters-prev').onclick=()=>{chapterPage--;renderCurriculum();navigation.remember();focusChapters();};$('chapters-next').onclick=()=>{chapterPage++;renderCurriculum();navigation.remember();focusChapters();};$('catalog-chapter').onchange=renderCatalog;
 document.querySelector('.brand').onclick=e=>{e.preventDefault();if(screen==='battle-screen'&&game){pause();return;}showModes();};
 if(!document.fullscreenEnabled)$('fullscreen-toggle').hidden=true;
 $('fullscreen-toggle').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{$('fullscreen-toggle').title='Trình duyệt không cho mở toàn màn hình.';}};document.addEventListener('fullscreenchange',()=>{setText('fullscreen-toggle',document.fullscreenElement?'Thu nhỏ ↙':'Toàn màn hình ↗');});
-$('choose-practice').onclick=focusSetupChoice;
+$('choose-practice').onclick=()=>homeReviewCourse?openSavedCourse(homeReviewCourse,true):focusSetupChoice();
 $('settings-toggle').onclick=()=>{const open=$('settings').hidden;$('settings').hidden=!open;$('settings-toggle').setAttribute('aria-expanded',String(open));};$('reduce-motion').onchange=e=>{settings.reduced=e.target.checked;applySettings();saveSettings();};$('high-contrast').onchange=e=>{settings.contrast=e.target.checked;applySettings();saveSettings();};$('volume').oninput=e=>{volume=Number(e.target.value)/100;if(music)music.volume=volume*.55;saveSettings();};$('sound-toggle').onclick=()=>{muted=!muted;applySettings();saveSettings();playMusic();};
 window.addEventListener('keydown',e=>{if($('history-dialog').open||readyRow.open)return;if(e.key==='Escape'&&game){if(game.status==='playing'){e.preventDefault();pause();}else if(game.status==='paused'){e.preventDefault();resume();}return;}if(!game||game.status!=='playing'||game.mode!=='zhuyin'||e.repeat||e.isComposing||e.ctrlKey||e.metaKey||e.altKey||['INPUT','SELECT','TEXTAREA'].includes(e.target.tagName))return;const key=e.key.toLowerCase();if(Object.hasOwn(symbols,key)){e.preventDefault();pressSymbol(key);}});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});window.addEventListener('blur',()=>pause());
-let previous=performance.now();function frame(now){const dt=(now-previous)/1000;previous=now;motion?.frame(now,{active:!!game&&screen==='battle-screen',paused:game?.status==='paused'||$('reward-dialog').open||$('history-dialog').open});if(game&&screen==='battle-screen'){const before=combatSnapshot(game),misses=game.misses;game.tick(dt);if(game.misses>misses){motion?.play(combatFeedback(before,game,'timeout'));saveRun();}renderBattle();if(game.status==='playing'){setText('battle-clock',formatTime(game.elapsed));setText('rune-seconds',game.kind==='review'?'Không giới hạn':Math.max(0,game.remaining).toFixed(1)+'s');$('rune-timer-fill').style.transform=`scaleX(${game.kind==='review'?1:Math.max(0,game.remaining/game.seconds)})`;$('rune-zone').classList.toggle('urgent',game.kind!=='review'&&game.remaining<=2);}}requestAnimationFrame(frame);}mobileLayout=installMobileLayout();
+let previous=performance.now();function frame(now){const dt=(now-previous)/1000;previous=now;motion?.frame(now,{active:!!game&&screen==='battle-screen',paused:game?.status==='paused'||$('reward-dialog').open||$('history-dialog').open});if(game&&screen==='battle-screen'){const before=combatSnapshot(game),misses=game.misses;game.tick(dt);if(game.misses>misses){motion?.play(combatFeedback(before,game,'timeout'));saveRun();}renderBattle();if(game.status==='playing'){setText('battle-clock',formatTime(game.elapsed));setText('rune-seconds',game.untimed?'Không giới hạn':Math.max(0,game.remaining).toFixed(1)+'s');$('rune-timer-fill').style.transform=`scaleX(${game.untimed?1:Math.max(0,game.remaining/game.seconds)})`;$('rune-zone').classList.toggle('urgent',!game.untimed&&game.remaining<=2);}}requestAnimationFrame(frame);}mobileLayout=installMobileLayout();
 navigation=installNavigation({capture:()=>({selection:{...selection},chapterPage}),blocked:()=>screen==='battle-screen'&&game&&['playing','paused','reward'].includes(game.status),onBlocked:pause,restore:async(route,data,current)=>{
+ $('learning-dialog')?.close();
  $('pause-dialog').close();$('reward-dialog').close();
  if(route==='modes'){showModes();return;}
  if(!data?.selection?.mode){showModes();return;}
  Object.assign(selection,data.selection);chapterPage=data.chapterPage||0;game=null;showLevels();await updatePool();if(!current())return;
  if(['lobby','battle','result','story'].includes(route))showLobby();
-}});motion=installCombatMotion({arena:$('arena'),hero:$('hero-art'),enemy:$('enemy-art'),reduced:()=>settings.reduced});const historyUI=installHistory({button:$('history-toggle'),dialog:$('history-dialog'),progress:()=>progress,records:()=>records,onDelete:record=>{const next=record?records.filter(r=>r!==record):[];saveStore.save({progress,practice,records:next,story});if(runId&&(!record||record.id===runId))deletedRunIds.add(runId);records=next;if(screen==='lobby-screen')renderLocalRecord();},onContinue:async record=>{if(game){game.finish();saveRun();}game=null;$('pause-dialog').close();$('reward-dialog').close();Object.assign(selection,record.selection);showLevels();await updatePool();chapterPage=Math.floor(((record.chapter||1)-1)/12);showLobby();}});const openHistory=$('history-toggle').onclick;$('history-toggle').onclick=()=>{pause();saveRun();openHistory();};decorateIcons();applySettings();showModes();acquireStorage();requestAnimationFrame(frame);
+}});motion=installCombatMotion({arena:$('arena'),hero:$('hero-art'),enemy:$('enemy-art'),reduced:()=>settings.reduced});const historyUI=installHistory({button:$('history-toggle'),dialog:$('history-dialog'),progress:()=>progress,records:()=>records,onDelete:record=>{const next=record?records.filter(r=>r!==record):[];saveStore.save({progress,practice,records:next,story});if(runId&&(!record||record.id===runId))deletedRunIds.add(runId);records=next;refreshHomeReview();if(screen==='lobby-screen'){renderLocalRecord();learningUI?.refresh();}},onContinue:async record=>{if(game){game.finish();saveRun();}game=null;$('pause-dialog').close();$('reward-dialog').close();Object.assign(selection,record.selection);showLevels();await updatePool();chapterPage=Math.floor(((record.chapter||1)-1)/12);showLobby();}});const openHistory=$('history-toggle').onclick;$('history-toggle').onclick=()=>{pause();saveRun();openHistory();};decorateIcons();applySettings();showModes();acquireStorage();requestAnimationFrame(frame);
 // Read-only diagnostics for browser QA; gameplay remains driven by UI events.
 window.__tulinh={story:()=>storyUI?.snapshot(),snapshot:()=>game?{screen,mode:selection.mode,status:game.status,hp:game.hp,enemyHp:game.enemyHp,enemyMax:game.enemyMax,targetId:game.target.id,seals:game.completedIds.size,practiceDone:game.practiceDone,practiceTotal:game.practiceTotal,round:game.round,turn:game.turn,correct:game.correct,errors:game.errors,misses:game.misses,remaining:game.remaining,kind:game.kind,target:game.target.label,progress:game.progress,energy:game.energy,result:game.result()}:null};
 
 window.addEventListener('pagehide',()=>{restoreLobby=screen==='battle-screen';game?.finish();saveRun();game=null;saveStore.release();storageReady=false;});
 window.addEventListener('pageshow',()=>acquireStorage());
-window.addEventListener('focus',()=>{if(!storageReady)acquireStorage();});
+window.addEventListener('focus',()=>{if(!storageReady)acquireStorage();else refreshHomeReview();});
 
-installBackup({dialog:$('history-dialog'),snapshot:()=>{if(!storageReady)throw Error('Save unavailable');saveRun();return {progress,practice,records,story};},canImport:()=>saveStore.status().writable&&!['battle-screen','journey-screen'].includes(screen),replace:data=>{saveStore.save(data);progress=data.progress;practice=data.practice;records=data.records;story=data.story??emptyStory();runId=null;storageReady=true;storageError='';showStorageStatus();progressSaved=true;historyUI.render();if(screen==='lobby-screen'){renderCurriculum();renderLocalRecord();}}});
+installBackup({dialog:$('history-dialog'),snapshot:()=>{if(!storageReady)throw Error('Save unavailable');saveRun();return {progress,practice,records,story};},canImport:()=>saveStore.status().writable&&!['battle-screen','journey-screen'].includes(screen),replace:data=>{saveStore.save(data);progress=data.progress;practice=data.practice;records=data.records;story=data.story??emptyStory();runId=null;storageReady=true;storageError='';showStorageStatus();progressSaved=true;historyUI.render();refreshHomeReview();if(screen==='lobby-screen'){renderCurriculum();renderLocalRecord();}}});
 
 // Journey writes share the existing writer lock and atomic save with the course.
 storyUI=installStory({
@@ -219,9 +333,12 @@ storyUI=installStory({
  startBattle:startChapter
 });
 
-learningUI=installLearning({selection:()=>selection,pool:()=>pool,records:()=>records,ensureStorage:acquireStorage,saveRecall:({rows,elapsed})=>{
- const correct=rows.reduce((sum,row)=>sum+row.correct,0),errors=rows.length-correct;
- const record={id:'recall-'+Date.now(),scope:selectionLabel(),selection:{...selection},kind:'review',learningTask:'pinyin-recall',status:'won',at:new Date().toISOString(),rows,correct,errors,misses:0,elapsed,accuracy:Math.round(correct/rows.length*100),score:0,combo:0};
+learningUI=installLearning({getResumeChapter,resumeChapter:startChapter,startStarterBattle:words=>startBattle('guardian','starter',words),selection:()=>selection,pool:()=>pool,records:()=>records,ensureStorage:acquireStorage,startDefense:()=>startBattle('guardian','review',pool.slice(0,1),null,null,null,null,true),saveRecall:({rows,elapsed,learningTask='pinyin-recall'})=>{
+ const record={id:learningTask+'-'+crypto.randomUUID(),scope:selectionLabel(),selection:{...selection},kind:'review',learningTask,status:'won',at:new Date().toISOString(),rows,elapsed};
+ if(learningTask==='pinyin-recall'){
+  const correct=rows.reduce((sum,row)=>sum+row.correct,0);
+  Object.assign(record,{correct,errors:rows.length-correct,misses:0,accuracy:Math.round(correct/rows.length*100),score:0,combo:0});
+ }
  const next=[...records,record].slice(-128);
  try{saveStore.save({progress,practice,records:next,story});records=next;return true;}catch{return false;}
 }});

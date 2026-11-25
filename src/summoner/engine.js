@@ -17,23 +17,25 @@ export function makeDeck(words,rng=Math.random,previousFirst){
 }
 export class Duel{
  constructor({words,mode='simplified',encounter='guardian',seconds=6,kind='duel',rng=Math.random,previousFirst,initialPractice={}}={}){
-  this.words=words;this.mode=mode;this.encounter=ENCOUNTERS[encounter]?encounter:'guardian';this.seconds=Math.max(1,Math.min(60,Number(seconds)||6));this.kind=kind;const draw=makeDeck(words,rng,previousFirst);this.battleWords=kind==='duel'?Array.from({length:Math.min(20,words.length)},()=>draw()):words;this.deck=kind==='duel'?makeDeck(this.battleWords,rng,previousFirst):draw;this.practiceGoal=this.learning?2:1;
-  this.practiceCounts=new Map(this.battleWords.map(w=>[w.id,this.learning?Math.max(0,Math.min(2,Number(initialPractice[w.id])||0)):0]));
+  this.words=words;this.mode=mode;this.encounter=ENCOUNTERS[encounter]?encounter:'guardian';this.seconds=Math.max(1,Math.min(60,Number(seconds)||6));this.kind=kind;const draw=makeDeck(words,rng,previousFirst);this.battleWords=kind==='duel'?Array.from({length:Math.min(20,words.length)},()=>draw()):words;this.deck=kind==='duel'?makeDeck(this.battleWords,rng,previousFirst):draw;this.practiceGoal=this.learning&&!this.starter?2:1;
+  this.practiceCounts=new Map(this.battleWords.map(w=>[w.id,this.learning&&!this.starter?Math.max(0,Math.min(2,Number(initialPractice[w.id])||0)):0]));
   if(this.learning&&[...this.practiceCounts.values()].every(n=>n===2))this.practiceCounts=new Map(this.battleWords.map(w=>[w.id,0]));
   this.completedIds=new Set(this.battleWords.filter(w=>this.practiceCounts.get(w.id)>=this.practiceGoal).map(w=>w.id));this.practiceDone=[...this.practiceCounts.values()].reduce((a,b)=>a+b,0);this.practiceTotal=this.battleWords.length*this.practiceGoal;this.extraPractice=new Set();this.campaignQueue=[];
-  if(this.learning)for(let pass=0;pass<2;pass++){
+  if(this.learning)for(let pass=0;pass<this.practiceGoal;pass++){
    const pending=this.battleWords.filter(w=>this.practiceCounts.get(w.id)<=pass);if(!pending.length)continue;
    const next=makeDeck(pending,rng,this.campaignQueue.at(-1)?.id??previousFirst);this.campaignQueue.push(...pending.map(()=>next()));
   }
   Object.assign(this,{status:'playing',hp:100,shield:0,energy:2,power:0,round:1,turn:0,correct:0,errors:0,misses:0,blocks:0,combo:0,maxCombo:0,score:0,elapsed:0,spell:'strike',progress:0,revision:0,notice:'',outcome:'',lastWrong:null});this.stats=new Map();this.beginRound();
  }
- get learning(){return ['campaign','duel'].includes(this.kind);}
+ get starter(){return this.kind==='starter'||this.kind==='starter-timed';}
+ get learning(){return this.starter||['campaign','duel'].includes(this.kind);}
+ get untimed(){return this.kind==='review'||this.kind==='starter';}
  get counterDamage(){return this.learning?LEARNING_RULES.counter[this.encounter]:this.enemy.counter+(this.kind==='endless'?this.round-1:0);}
  get timeoutDamage(){return this.learning?LEARNING_RULES.promptPenaltyCap:22;}
  get enemy(){return ENCOUNTERS[this.encounter];}
  beginRound(){this.enemyMax=this.learning?this.campaignQueue.length*12:this.enemy.hp+(this.round-1)*16;this.enemyHp=this.enemyMax;this.turn=0;this.next();}
  scheduleReview(){
-  if(!this.learning||this.extraPractice.has(this.target.id))return;
+  if(!this.learning||this.starter||this.extraPractice.has(this.target.id))return;
   this.extraPractice.add(this.target.id);this.campaignQueue.push(this.target.word);this.practiceTotal++;
  }
  finishPractice(){
@@ -43,7 +45,7 @@ export class Duel{
  }
  completePresentation(){
   this.practiceDone++;
-  if(!this.campaignQueue.some(w=>w.id===this.target.id))this.completedIds.add(this.target.id);
+  if((this.practiceCounts.get(this.target.id)||0)>=this.practiceGoal)this.completedIds.add(this.target.id);
  }
  next(){
   if(this.status!=='playing')return;if(this.learning&&!this.campaignQueue.length){this.finishPractice();return;}const w=this.learning?this.campaignQueue.shift():this.deck();this.target={id:w.id,label:clean(this.mode==='zhuyin'?w.z:this.mode==='traditional'?w.t:w.s),input:clean(w.keys),word:w};
@@ -72,7 +74,7 @@ export class Duel{
   // Practice defines the finish. Spells cannot end early or create HP grinding.
   const canFinish=finalSeal&&this.battleWords.every(w=>(this.practiceCounts.get(w.id)||0)>=this.practiceGoal);
   damage=canFinish?this.enemyHp:Math.min(damage,Math.max(0,this.enemyHp-(sealed?Math.min(this.enemyHp,Math.max(1,this.campaignQueue.length*6)):0)));
-  this.lastAction={spell,defending:this.defending,finisher:canFinish,enemyDamage:damage,heroDamage:0,blocked:0,heal:Math.max(0,this.hp-hpBeforeSpell),counter:false};this.enemyHp=Math.max(0,this.enemyHp-damage);this.notice=`${this.defending?'Đỡ đòn thành công':'Triệu hồi thành công'} · đối thủ −${damage} HP`;if(this.targetHadError)this.notice+=' · Đã sửa đúng. Mỗi từ chỉ có tối đa 1 lượt luyện thêm trong trận.';
+  this.lastAction={spell,defending:this.defending,finisher:canFinish,enemyDamage:damage,heroDamage:0,blocked:0,heal:Math.max(0,this.hp-hpBeforeSpell),counter:false};this.enemyHp=Math.max(0,this.enemyHp-damage);this.notice=`${this.defending?'Đỡ đòn thành công':'Triệu hồi thành công'} · đối thủ −${damage} HP`;if(this.targetHadError&&!this.starter)this.notice+=' · Đã sửa đúng. Mỗi từ chỉ có tối đa 1 lượt luyện thêm trong trận.';
   if(this.defending){this.blocks++;this.score+=30;}
   if(finalSeal){this.finishPractice();return;}
   if(this.enemyHp===0){
@@ -85,7 +87,7 @@ export class Duel{
   if(!this.defending){const before=this.hp,shieldBefore=this.shield;this.hurt(this.counterDamage);this.lastAction.counter=true;this.lastAction.heroDamage=before-this.hp;this.lastAction.blocked=shieldBefore-this.shield;this.notice+=this.hp<before?` · bạn −${before-this.hp} HP`:' · khiên đã đỡ đòn';}
   if(this.status==='playing')this.next();this.revision++;
  }
- tick(dt){if(this.status!=='playing'||!Number.isFinite(dt)||dt<=0)return;this.elapsed+=dt;if(this.kind==='review')return;this.remaining=Math.max(0,this.remaining-dt);if(this.remaining===0){this.misses++;this.combo=0;const stat=this.stats.get(this.target.id);stat.wrong++;stat.missed++;const damage=this.learning?Math.max(0,this.timeoutDamage-this.promptPenalty):this.timeoutDamage;this.notice=`Hết giờ · đối thủ gây ${damage} sát thương`;this.hurt(damage);if(this.learning){this.scheduleReview();this.completePresentation();}if(this.status==='playing')this.next();this.revision++;}}
+ tick(dt){if(this.status!=='playing'||!Number.isFinite(dt)||dt<=0)return;this.elapsed+=dt;if(this.untimed)return;this.remaining=Math.max(0,this.remaining-dt);if(this.remaining===0){this.misses++;this.combo=0;const stat=this.stats.get(this.target.id);stat.wrong++;stat.missed++;const damage=this.learning?Math.max(0,this.timeoutDamage-this.promptPenalty):this.timeoutDamage;this.notice=`Hết giờ · đối thủ gây ${damage} sát thương`;this.hurt(damage);if(this.learning){this.scheduleReview();this.completePresentation();}if(this.status==='playing')this.next();this.revision++;}}
  reward(kind){if(this.status!=='reward'||!['heal','power','shield'].includes(kind))return false;if(kind==='heal')this.hp=Math.min(100,this.hp+25);if(kind==='power')this.power+=3;if(kind==='shield')this.shield=Math.min(30,this.shield+20);this.round++;this.status='playing';if(this.kind==='endless')this.beginRound();else this.next();return true;}
  setSeconds(value){const n=Number(value);if(!Number.isInteger(n)||n<1||n>60)return false;this.seconds=n;if(this.status==='playing'||this.status==='paused')this.remaining=n;this.revision++;return true;}
  pause(){if(this.status==='playing'){this.status='paused';this.revision++;}}
